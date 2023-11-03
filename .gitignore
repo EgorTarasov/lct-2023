@@ -1,3 +1,7 @@
+# Hidden files such as .env .DS_STORE .vs code and so on
+.*
+!/.gitignore
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
