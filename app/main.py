@@ -36,7 +36,7 @@ def create_app():
         description="Сервис онбординга сотрудников",
         version="0.0.1",
         lifespan=lifespan,
-        prefix="/api",
+        docs_url="/api/docs",
     )
 
     _app.add_middleware(
@@ -47,7 +47,7 @@ def create_app():
         allow_headers=["*"],
     )
 
-    _app.include_router(main.router)
+    _app.include_router(main.router, prefix="/api")
 
     return _app
 
@@ -55,7 +55,7 @@ def create_app():
 app = create_app()
 
 
-@app.get("/")
+@app.get("/api")
 async def root():
     return {"message": "Hello from Котики МИСИС!"}
 
