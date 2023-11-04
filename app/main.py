@@ -7,18 +7,20 @@ import logging
 from app.api import main
 from app.config import config
 from app.core.sql import Sql
+from app.models.base import Base
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
-    Sql(
+    sql = Sql(
         pg_user=config.postgres_user,
         pg_password=config.postgres_password,
         pg_host=config.postgres_host,
         pg_db=config.postgres_db,
         pg_port=config.postgres_port,
     )
+    Base.metadata.create_all(bind=sql.get_engine())
     yield
 
     # shutdown
