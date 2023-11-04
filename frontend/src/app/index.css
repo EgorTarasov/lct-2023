@@ -6,13 +6,17 @@ main:focus {
   outline: 0;
 }
 
-:is(a, button, input, textarea, summary) {
+body {
+  --color-primary: #2C55DE;
+}
+
+:is(a, button, textarea, summary) {
     --outline-size: max(2px, 0.08em);
     --outline-style: solid;
     --outline-color: currentColor;
 }
 
-:is(a, button, input, textarea, summary):focus-visible {
+:is(a, button, textarea, summary):focus-visible {
     outline:
       var(--outline-size)
       var(--outline-style)
