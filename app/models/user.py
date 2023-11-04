@@ -4,7 +4,11 @@ from sqlalchemy import ForeignKey, Integer, Text
 from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
-from . import Base
+from .base import Base
+from .interest import interest_user
+
+if tp.TYPE_CHECKING:
+    from .interest import SqlInterest
 
 
 class UserCreate(BaseModel):
@@ -48,3 +52,6 @@ class SqlUser(Base):
     role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"), nullable=False)
 
     user_role = relationship("SqlRole")
+    interests: Mapped[list["SqlInterest"]] = relationship(
+        secondary=interest_user, back_populates="users"
+    )

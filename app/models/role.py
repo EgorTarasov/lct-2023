@@ -4,7 +4,7 @@ from sqlalchemy.orm import mapped_column, Mapped
 
 from pydantic import BaseModel, Field, ConfigDict
 
-from . import Base
+from .base import Base
 
 
 class RoleCreate(BaseModel):

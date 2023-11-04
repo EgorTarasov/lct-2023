@@ -13,6 +13,7 @@ credentials_exception = HTTPException(
 
 
 async def get_current_user(access_token: str = Depends(oauth2_scheme)) -> UserTokenData:
+    # TODO: verify token
     try:
         return JWTEncoder.decode_access_token(access_token)
     except Exception as e:
