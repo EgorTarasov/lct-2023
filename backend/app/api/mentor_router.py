@@ -1,11 +1,10 @@
 """
-@get получение не незначеных сотрудников
+@get получение неназначенных сотрудников
 @post назначение сотрудника ментору
 """
 
 
 import logging
-import stat
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 

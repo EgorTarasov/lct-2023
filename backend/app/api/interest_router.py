@@ -12,7 +12,7 @@ from app.models.interest import InterestDto
 from app.controllers.interest_controller import InterestController
 from app.core.sql import Sql
 
-router = APIRouter(prefix="/interest", tags=["user", "interest"])
+router = APIRouter(prefix="/interest", tags=["interest"])
 
 
 @router.get("/", response_model=list[InterestDto])
