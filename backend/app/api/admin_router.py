@@ -29,9 +29,7 @@ async def register_new_user(file: UploadFile = File(...),
             kondrandr2004+2@yandex.ru, Кондратьев Сергей Антонович
     """
     df = pd.read_csv(file.file)
-    # users = zip(df['ФИО'], df['Почта'])
     for index, user in df.iterrows():
-        print(user["ФИО"], user["Почта"])
         password = PasswordManager.generate_password()
         data = {
             "name": user["ФИО"],
