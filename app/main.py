@@ -4,12 +4,19 @@ from contextlib import asynccontextmanager
 
 from app.api import main
 from app.config import config
+from app.core.sql import Sql
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
-
+    Sql(
+        pg_user=config.postgres_user,
+        pg_password=config.postgres_password,
+        pg_host=config.postgres_host,
+        pg_db=config.postgres_db,
+        pg_port=config.postgres_port,
+    )
     yield
 
     # shutdown
@@ -46,9 +53,7 @@ async def root():
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(
-        'app.main:app',
-        host=config.server_host,
-        port=config.server_port,
-        reload=True
+        "app.main:app", host=config.server_host, port=config.server_port, reload=True
     )
