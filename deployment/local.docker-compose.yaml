@@ -5,18 +5,18 @@ services:
     image: postgres:15
     restart: always
     env_file:
-      - ../.env
+      - ../backend/.env
     volumes:
       - ../docker/data:/var/lib/postgresql/data
     ports:
         - "5432:5432"
   backend:
     build:
-      context: ../
-      dockerfile: deployment/Dockerfile
+      context: ../backend/
+      dockerfile: Dockerfile
     restart: always
     env_file:
-      - ../.env
+      - ../backend/.env
     environment:
       - POSTGRES_HOST=db
     depends_on:
