@@ -1,74 +1,79 @@
-import { twMerge } from "tailwind-merge";
-import ClearSvg from "@/assets/clear.svg";
-import React from "react";
+import React, { useState } from "react";
 
-interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
-  appearance?: "primary" | "accent";
-  onChange?: (text: string) => void;
-  error?: boolean;
-  allowClear?: boolean;
-  icon?: JSX.Element;
-  label?: string;
-  multiline?: boolean;
+interface Props {
+    name: string;
+    error?: string;
+    disabled?: boolean;
+    clearable?: boolean;
+    onChange: (value: string) => void;
 }
 
-export const Input: React.FC<InputProps> = ({
-  appearance = "primary",
-  onChange,
-  className,
-  error,
-  icon,
-  allowClear,
-  label,
-  multiline,
-  ...rest
-}) => {
-  return (
-    <div className={twMerge("w-full flex justify-center flex-col gap-1 relative", className)}>
-      {label && (
-        <label className="text-text-secondary text-sm" htmlFor={rest.id}>
-          {label}
-        </label>
-      )}
-      {icon && <div className="absolute left-3 pointer-events-none">{icon}</div>}
-      {multiline ? (
-        <textarea
-          className={twMerge(
-            "w-full shadow-none box-border h-40 focus:shadow-md transition-colors duration-200 px-3 py-3 rounded-md border-[1px] border-border-primary placeholder:text-text-secondary text-sm outline-none",
-            icon ? "pl-14" : "",
-            allowClear ? "pr-12" : "",
-            appearance === "primary" ? "bg-input-bg hover:bg-input-hover focus:bg-input-hover" : "",
-            error ? "border-status-error" : "",
-            rest.disabled ? "bg-input-disabled hover:bg-input-disabled" : ""
-          )}
-          onChange={(e) => onChange?.(e.target.value)}
-          value={rest.value}
-          placeholder={rest.placeholder}
-          name={rest.name}
-        />
-      ) : (
-        <input
-          className={twMerge(
-            "w-full shadow-none box-border focus:shadow-md transition-all duration-200 px-3 h-10 rounded-md border-[1px] border-border-primary placeholder:text-text-secondary text-sm outline-none",
-            icon ? "pl-10" : "",
-            allowClear ? "pr-12" : "",
-            appearance === "primary"
-              ? "bg-input-bg hover:bg-input-hover focus:bg-input-hover"
-              : "bg-bg-primary hover:bg-bg-secondary focus:bg-bg-secondary",
-            error ? "border-status-error" : "",
-            rest.disabled ? "bg-input-disabled hover:bg-input-disabled" : ""
-          )}
-          onChange={(e) => onChange?.(e.target.value)}
-          {...rest}
-        />
-      )}
-      {allowClear && rest.value && (
-        <button
-          className="absolute w-5 text-gray-500/50 right-4 focus:outline-none hover:text-gray-500/80"
-          onClick={() => onChange?.("")}>
-          <ClearSvg />
-        </button>
-      )}
-    </div>
-  );
+const TextInput: React.FC<Props> = ({ name, error, disabled, clearable, onChange }) => {
+    const [value, setValue] = useState("");
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(event.target.value);
+        onChange(event.target.value);
+    };
+
+    const handleClear = () => {
+        setValue("");
+        onChange("");
+    };
+
+    const inputStyle = `form-input block w-full px-3 py-1.5 text-base font-normal ${
+        disabled ? "text-gray-500" : "text-gray-700"
+    } bg-white bg-clip-padding border ${
+        error ? "border-red-500" : "border-gray-300"
+    } rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white ${
+        disabled ? "" : "focus:border-blue-600 focus:outline-none"
+    } relative bg-gray-50`;
+
+    const labelStyle = `mb-2 text-sm font-medium ${
+        error ? "text-red-600" : disabled ? "text-gray-500" : "text-gray-900"
+    }`;
+
+    return (
+        <div className="flex flex-col mb-4">
+            <label htmlFor={name} className={labelStyle}>
+                {name}
+            </label>
+            <div className="relative">
+                <input
+                    type="text"
+                    id={name}
+                    name={name}
+                    value={value}
+                    onChange={handleChange}
+                    className={inputStyle}
+                    disabled={disabled}
+                    aria-invalid={!!error}
+                    aria-describedby={error ? `${name}-error` : undefined}
+                />
+                {clearable && value && !disabled && (
+                    <button
+                        onClick={handleClear}
+                        type="button"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                        aria-label="Очистить поле">
+                        ✖
+                    </button>
+                )}
+                {error && (
+                    <span className="absolute inset-y-0 right-0 pr-3 flex items-center text-red-500">
+            <span role="img" aria-label="Ошибка">
+              ⚠️
+            </span>
+          </span>
+                )}
+            </div>
+            {error && (
+                <span id={`${name}-error`} className="text-xs text-red-600">
+          {error}
+        </span>
+            )}
+        </div>
+    );
 };
+
+export default TextInput;
