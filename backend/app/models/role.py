@@ -1,6 +1,5 @@
 from sqlalchemy import Integer, Text, JSON
-from sqlalchemy.orm import mapped_column, Mapped
-
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 from pydantic import BaseModel, Field, ConfigDict
 

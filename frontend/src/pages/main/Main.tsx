@@ -1,4 +1,5 @@
 import { Button, DialogBase } from "@/ui";
+import DropdownMultiple from "@/ui/DropdownMultiple";
 import { useState } from "react";
 
 export const MainPage = () => {
