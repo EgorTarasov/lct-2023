@@ -5,6 +5,8 @@ import logging
 from email.mime.text import MIMEText
 import typing as tp
 
+from app.config import config
+
 
 class EmailService:
     def __init__(
@@ -62,7 +64,6 @@ class EmailService:
 
     # def __del__(self):
     #     self._server.quit()
-
     async def send_mailing(
         self,
         to: str,
@@ -70,7 +71,7 @@ class EmailService:
         template: str,
         data: dict[str, tp.Any],
     ) -> None:
-        print("sending")
+        print("sending", to, subject, template, data)
         """Отправка письма через SMTP
 
         Args:
@@ -97,3 +98,9 @@ class EmailService:
             print(e)
             logging.error(f"Can't send email: {e}")
             raise e
+
+
+def get_mail_service() -> EmailService:
+    service = EmailService(mail_user=config.mail_user, mail_password=config.mail_password)
+    # TODO сделать менеджер контекста
+    yield service
