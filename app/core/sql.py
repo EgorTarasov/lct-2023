@@ -41,4 +41,5 @@ class Sql:
             yield db
 
     def get_connection_uri(self) -> str:
+        print(f"postgresql://{self._user}:{self._password}@{self._host}:{self._port}/{self._db}")
         return f"postgresql://{self._user}:{self._password}@{self._host}:{self._port}/{self._db}"

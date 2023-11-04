@@ -27,8 +27,6 @@ async def get_user_by_email(db: Session, email: str) -> SqlUser:
     print(email)
     user = db.query(SqlUser).where(SqlUser.email == email).one_or_none()
     if user:
-
         return user
-
     else:
         raise Exception("User not found")
