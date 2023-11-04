@@ -1,3 +1,4 @@
+from sys import prefix
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -35,6 +36,7 @@ def create_app():
         description="Сервис онбординга сотрудников",
         version="0.0.1",
         lifespan=lifespan,
+        prefix="/api",
     )
 
     _app.add_middleware(
