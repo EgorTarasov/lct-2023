@@ -5,35 +5,18 @@ export default {
     screens: {
       sm: 640
     },
-    extend: {},
-  },
-  plugins: [
-    require("tailwindcss-themer")({
-      defaultTheme: {
-        extend: {
-          colors: {
-            button: {
-              primary: {
-                bg: "red"
-              }
-            }
-          },
-        }
-      },
-      themes: [
-        {
-          name: "greenTheme",
-          extend: {
-            colors: {
-              button: {
-                primary: {
-                  bg: "green"
-                }
-              }
-            }
+    extend: {
+      colors: {
+        error: "#F20000",
+        text: {
+          primary: "#1D1D1D"
+        },
+        button: {
+          primary: {
+            bg: "red"
           }
         }
-      ]
-    })
-  ],
+      },
+    },
+  },
 }
