@@ -7,9 +7,12 @@ export default {
     },
     extend: {
       colors: {
+        primary: "var(--color-primary)",
         error: "#F20000",
         text: {
           primary: "#1D1D1D"
+        },
+        input: {
         },
         button: {
           primary: {
