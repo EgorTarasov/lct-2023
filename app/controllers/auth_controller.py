@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.auth import AuthService, JWTEncoder
+from app.auth import PasswordManager, JWTEncoder
 
 
 from app.models.user import UserCreate, UserDto, UserLogin
@@ -13,7 +13,7 @@ class AuthController:
 
     async def create_user(self, payload: UserCreate) -> UserDto | None:
 
-        payload.password = AuthService.hash_password(payload.password)
+        payload.password = PasswordManager.hash_password(payload.password)
         try:
             await crud.user.create_user(self.db, payload)
         except Exception as e:
@@ -23,11 +23,11 @@ class AuthController:
         user = await crud.user.get_user_by_email(self.db, payload.email)
         if not user:
             raise Exception("User not found")
-        if not AuthService.verify_password(payload.password, user.password):
+        if not PasswordManager.verify_password(payload.password, user.password):
             raise Exception("Incorrect password")
         return Token(
-            access_token=JWTEncoder.create_jwt_token(
-                {"email": user.email, "role_id": user.role_id}
+            access_token=JWTEncoder.create_access_token(
+                user.id, user.email, user.role_id
             ),
             token_type="bearer",
         )
