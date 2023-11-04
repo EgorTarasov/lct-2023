@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+import logging
 
 from app.api import main
 from app.config import config
@@ -23,6 +24,12 @@ async def lifespan(app: FastAPI):
 
 
 def create_app():
+    # setup logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+    )
+
     _app = FastAPI(
         title="Котики МИСИС",
         description="Сервис онбординга сотрудников",

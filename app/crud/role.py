@@ -6,6 +6,7 @@ async def create_role(db: Session, payload: RoleCreate) -> RoleDto:
     role = SqlRole(**payload.model_dump())
     db.add(role)
     db.commit()
+    db.refresh(role)
     return RoleDto.model_validate(role)
 
 
