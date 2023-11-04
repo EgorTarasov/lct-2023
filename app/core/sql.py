@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
-from app.models import Base
-from app.config import config
+import sqlalchemy
+from sqlalchemy.orm import sessionmaker
+from app.models.base import Base
 
 
 class Sql:
@@ -31,8 +31,10 @@ class Sql:
             self.get_connection_uri(),
             pool_pre_ping=True,
         )
-        Base.metadata.create_all(bind=self.engine)
         self.db_session = sessionmaker(bind=self.engine)
+
+    def get_engine(self):
+        return self.engine
 
     @classmethod
     def get_session(cls):
