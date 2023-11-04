@@ -47,7 +47,7 @@ async def register_new_user(file: UploadFile = File(...),
                                                        last_name=last_name, middle_name=middle_name, first_name=first_name,
                                                        gender="Male"))
             try:
-                await mail_service.send_mailing(to=user[1], subject="Регистрация на сервисе для адаптации",
+                await mail_service.send_mailing(to=user["Почта"], subject="Регистрация на сервисе для адаптации",
                                                 template="test.jinja", data=data)
             except Exception as e:
                 print(e)
