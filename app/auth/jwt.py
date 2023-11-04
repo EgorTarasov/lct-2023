@@ -25,8 +25,8 @@ class UserTokenData(NamedTuple):
 class JWTEncoder:
     @staticmethod
     def create_jwt_token(
-        data: dict[str, str | dt.datetime | int],
-        expires_delta: dt.timedelta = dt.timedelta(minutes=config.jwt_expires_in),
+            data: dict[str, str | dt.datetime | int],
+            expires_delta: dt.timedelta = dt.timedelta(minutes=config.jwt_expires_in),
     ):
         to_encode = data.copy()
         to_encode["exp"] = dt.datetime.utcnow() + expires_delta
@@ -40,12 +40,12 @@ class JWTEncoder:
 
     @staticmethod
     def create_access_token(
-        user_id: int,
-        email: str,
-        role_id: int,
-        expires_delta: dt.timedelta = dt.timedelta(
-            minutes=config.access_token_expire_minutes
-        ),
+            user_id: int,
+            email: str,
+            role_id: int,
+            expires_delta: dt.timedelta = dt.timedelta(
+                minutes=config.access_token_expire_minutes
+            ),
     ) -> str:
         to_encode = {
             "user_id": user_id,

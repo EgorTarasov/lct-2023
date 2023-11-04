@@ -7,6 +7,7 @@ import logging
 from app.api import main
 from app.config import config
 from app.core.sql import Sql
+from app.mailing import EmailService
 
 
 @asynccontextmanager

@@ -12,7 +12,7 @@ class UserCreate(BaseModel):
     last_name: str = Field(..., min_length=2, max_length=50)
     middle_name: str = Field(None, min_length=2, max_length=50)
     email: EmailStr = Field(..., min_length=5, max_length=50)
-    password: str = Field(..., min_length=8, max_length=50)
+    password: str = Field(..., min_length=8, max_length=100)
     gender: str = Field(None, min_length=1, max_length=10)
     role_id: int = Field(..., ge=1)
 
