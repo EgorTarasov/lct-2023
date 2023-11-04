@@ -20,6 +20,11 @@ class Sql:
         self._db = pg_db
         self._connect()
 
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(cls, "instance"):
+            cls.instance = super(Sql, cls).__new__(cls)
+        return cls.instance
+
     def _connect(self) -> None:
         """Connect to the postgresql database"""
         self.engine = create_engine(
@@ -29,19 +34,11 @@ class Sql:
         Base.metadata.create_all(bind=self.engine)
         self.db_session = sessionmaker(bind=self.engine)
 
-    def get_session(self):
+    @classmethod
+    def get_session(cls):
         """Dependency for fastapi"""
-        with self.db_session() as db:
+        with cls.instance.db_session() as db:
             yield db
 
     def get_connection_uri(self) -> str:
         return f"postgresql://{self._user}:{self._password}@{self._host}:{self._port}/{self._db}"
-
-
-db = Sql(
-    config.postgres_user,
-    config.postgres_password,
-    config.postgres_host,
-    config.postgres_db,
-    config.postgres_port,
-)

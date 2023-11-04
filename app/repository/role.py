@@ -7,8 +7,6 @@ from app.models.role import Role, RoleCreate, RoleDto
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import Query
 
-from app.core.sql import db
-
 
 class AbstractRoleRepo(abc.ABC):
     @abc.abstractmethod
@@ -21,6 +19,12 @@ class AbstractRoleRepo(abc.ABC):
         role_id: int | None = None,
         name: str | None = None,
     ) -> RoleDto:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    async def get_roles(
+        self,
+    ) -> list[RoleDto]:
         raise NotImplementedError
 
 
@@ -46,3 +50,9 @@ class SqlRoleRepo(AbstractRoleRepo):
             query = query.filter(Role.name == name)
         db_role = query.first()
         return RoleDto.model_validate(db_role)
+
+    async def get_roles(
+        self,
+    ) -> list[RoleDto]:
+        db_roles = self.session.query(Role).all()
+        return [RoleDto.model_validate(db_role) for db_role in db_roles]

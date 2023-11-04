@@ -1,28 +1,30 @@
-from app.auth import AuthController, JWTEncoder
+from sqlalchemy.orm import Session
+from app.auth import AuthService, JWTEncoder
 
 from app.repository import AbstractUserRepo
 from app.models.user import UserCreate, UserDto, UserLogin
 from app.models.token import Token
+from app.repository.user import SqlUserRepo
 
 
-class Service:
-    async def create_user(
-        self, user_repo: AbstractUserRepo, payload: UserCreate
-    ) -> UserDto | None:
-        payload.password = AuthController.hash_password(payload.password)
+class AuthController:
+    def __init__(self, db: Session) -> None:
+        self.db = db
 
+    async def create_user(self, payload: UserCreate) -> UserDto | None:
+        user_repo = SqlUserRepo(self.db)
+        payload.password = AuthService.hash_password(payload.password)
         try:
             await user_repo.create_user(payload)
         except Exception as e:
             raise e
 
-    async def authenticate_user(
-        self, user_repo: AbstractUserRepo, payload: UserLogin
-    ) -> Token:
+    async def authenticate_user(self, payload: UserLogin) -> Token:
+        user_repo = SqlUserRepo(self.db)
         user = await user_repo.get_user(email=payload.email)
         if not user:
             raise Exception("User not found")
-        if not AuthController.verify_password(payload.password, user.password):
+        if not AuthService.verify_password(payload.password, user.password):
             raise Exception("Incorrect password")
         return Token(
             access_token=JWTEncoder.create_jwt_token(
@@ -30,7 +32,3 @@ class Service:
             ),
             token_type="bearer",
         )
-
-
-def get_auth_service() -> Service:
-    return Service()

@@ -1,2 +1,2 @@
 from .jwt import JWTEncoder
-from .security import AuthController
+from .security import AuthService
