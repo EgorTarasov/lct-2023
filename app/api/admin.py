@@ -24,9 +24,9 @@ async def register_new_user(file: UploadFile = File(...),
             CSV файл с кодировкой UTF-8, в котором существует колонки - Почта и ФИО
             Пример файла:
             Почта,ФИО
-            ktest@ds.com, Константинопольский Константин Константинович
-            kondrandr2004+1@yandex.com, Кондратьев Андрей Антонович
-            kondrandr2004+2@yandex.com, Кондратьев Сергей Антонович
+            test@gmail.com, Константинопольский Константин Константинович
+            kondrandr2004+1@yandex.ru, Кондратьев Андрей Антонович
+            kondrandr2004+2@yandex.ru, Кондратьев Сергей Антонович
     """
     df = pd.read_csv(file.file)
     # users = zip(df['ФИО'], df['Почта'])

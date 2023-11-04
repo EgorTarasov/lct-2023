@@ -19,6 +19,6 @@ class PasswordManager:
 
     @classmethod
     def generate_password(cls, length: int = config.password_length) -> str:
-        alphabet = string.ascii_letters + string.digits + string.punctuation
+        alphabet = string.ascii_letters + string.digits
         password = ''.join(secrets.choice(alphabet) for _ in range(length))
         return password
