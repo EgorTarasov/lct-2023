@@ -47,4 +47,4 @@ class SqlUser(Base):
     password: Mapped[str] = mapped_column(Text, nullable=False)
     role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"), nullable=False)
 
-    user_role = relationship("Role")
+    user_role = relationship("SqlRole")

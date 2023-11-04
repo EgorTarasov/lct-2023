@@ -1,6 +1,7 @@
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from app.auth.security import AuthService
 
 from app.models.user import UserLogin, UserCreate
 from app.models.token import Token
@@ -30,8 +31,12 @@ async def login(
 @router.post("/register")
 async def register(
     user_data: UserCreate,
+    token: str = Depends(
+        AuthService.oauth2_scheme
+    ),  # TODO: получать данные пользователя из jwt вместо токена
     db: Session = Depends(Sql.get_session),
 ):
+    print(token)
     user = await AuthController(db).create_user(user_data)
     if not user:
         raise HTTPException(status_code=400, detail="User already exists")
