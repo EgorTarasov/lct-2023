@@ -1,34 +1,36 @@
-from jose import jwt, JWTError
-from starlette import status
-from fastapi import HTTPException, Depends
+from app.auth import AuthController, JWTEncoder
 
-from app.security import verify_password
+from app.repository import AbstractUserRepo
+from app.models.user import UserCreate, UserDto, UserLogin
+from app.models.token import Token
 
 
-# async def authenticate_user(self, user: UserBase) -> User:
-#     db_user = await self.user_service.get_user_by_email(user.email)
-#     if not db_user:
-#         raise HTTPException(status_code=400, detail="Пользователь с такой почтой не существует")
-#     if not verify_password(user.password, db_user.hashed_password):
-#         raise HTTPException(status_code=400, detail="Неверная пара почта/пароль")
-#     return db_user
-#
-#
-# async def get_current_user(self, token: str) -> User:
-#     credentials_exception = HTTPException(
-#         status_code=status.HTTP_401_UNAUTHORIZED,
-#         detail="Could not validate credentials",
-#         headers={"WWW-Authenticate": "Bearer"},
-#     )
-#     try:
-#         payload = jwt.decode(token, config.jwt_secret_key, algorithms=[config.hash_algorithm])
-#         email: str = payload.get("sub")
-#         if email is None:
-#             raise credentials_exception
-#         token_data = TokenData(email=email)
-#     except JWTError:
-#         raise credentials_exception
-#     user = await self.user_service.get_user_by_email(token_data.email)
-#     if user is None:
-#         raise credentials_exception
-#     return user
+class Service:
+    async def create_user(
+        self, user_repo: AbstractUserRepo, payload: UserCreate
+    ) -> UserDto | None:
+        payload.password = AuthController.hash_password(payload.password)
+
+        try:
+            await user_repo.create_user(payload)
+        except Exception as e:
+            raise e
+
+    async def authenticate_user(
+        self, user_repo: AbstractUserRepo, payload: UserLogin
+    ) -> Token:
+        user = await user_repo.get_user(email=payload.email)
+        if not user:
+            raise Exception("User not found")
+        if not AuthController.verify_password(payload.password, user.password):
+            raise Exception("Incorrect password")
+        return Token(
+            access_token=JWTEncoder.create_jwt_token(
+                {"email": user.email, "role_id": user.role_id}
+            ),
+            token_type="bearer",
+        )
+
+
+def get_auth_service() -> Service:
+    return Service()
