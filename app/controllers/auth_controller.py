@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session
 from app.auth import AuthService, JWTEncoder
 
-from app.repository import AbstractUserRepo
+
 from app.models.user import UserCreate, UserDto, UserLogin
 from app.models.token import Token
-from app.repository.user import SqlUserRepo
+from app import crud
 
 
 class AuthController:
@@ -12,16 +12,15 @@ class AuthController:
         self.db = db
 
     async def create_user(self, payload: UserCreate) -> UserDto | None:
-        user_repo = SqlUserRepo(self.db)
+
         payload.password = AuthService.hash_password(payload.password)
         try:
-            await user_repo.create_user(payload)
+            await crud.user.create_user(self.db, payload)
         except Exception as e:
             raise e
 
     async def authenticate_user(self, payload: UserLogin) -> Token:
-        user_repo = SqlUserRepo(self.db)
-        user = await user_repo.get_user(email=payload.email)
+        user = await crud.user.get_user_by_email(self.db, payload.email)
         if not user:
             raise Exception("User not found")
         if not AuthService.verify_password(payload.password, user.password):

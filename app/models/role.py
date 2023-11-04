@@ -20,7 +20,7 @@ class RoleDto(BaseModel):
     permissions: dict = Field(..., min_length=1, max_length=50)
 
 
-class Role(Base):
+class SqlRole(Base):
     __tablename__ = "roles"
 
     id: Mapped[int] = mapped_column(Integer, autoincrement=True, primary_key=True)

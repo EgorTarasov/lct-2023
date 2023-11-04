@@ -35,7 +35,7 @@ class UserDto(BaseModel):
     role_id: int = Field(..., ge=1)
 
 
-class User(Base):
+class SqlUser(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(Integer, autoincrement=True, primary_key=True)

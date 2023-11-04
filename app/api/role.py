@@ -14,7 +14,6 @@ router = APIRouter(prefix="/roles", tags=["roles"])
 @router.post("/", response_model=RoleDto, status_code=status.HTTP_201_CREATED)
 async def create_role(
     role_data: RoleCreate,
-    # user_data: str = Depends(AuthService.oauth2_scheme),
     db: Session = Depends(Sql.get_session),
 ):
     # print(user_data)
@@ -26,7 +25,6 @@ async def create_role(
 
 @router.get("/", response_model=list[RoleDto], status_code=status.HTTP_200_OK)
 async def get_roles(
-    # user_data: str = Depends(AuthService.oauth2_scheme),
     db: Session = Depends(Sql.get_session),
 ):
     try:
