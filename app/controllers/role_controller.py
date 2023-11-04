@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.role import RoleCreate, RoleDto
-from app.repository import SqlRoleRepo
+from app import crud
 
 
 class RoleController:
@@ -9,12 +9,12 @@ class RoleController:
 
     async def create_role(self, payload: RoleCreate) -> RoleDto | None:
         try:
-            return await SqlRoleRepo(self.db).create_role(payload)
+            return await crud.role.create_role(self.db, payload)
         except Exception as e:
             raise e
 
     async def get_avaliable_roles(self) -> list[RoleDto]:
         try:
-            return await SqlRoleRepo(self.db).get_roles()
+            return await crud.role.get_roles(self.db)
         except Exception as e:
             raise e
