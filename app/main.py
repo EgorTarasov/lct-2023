@@ -36,6 +36,7 @@ def create_app():
         description="Сервис онбординга сотрудников",
         version="0.0.1",
         lifespan=lifespan,
+        openapi_url="/api/openapi.json",
         docs_url="/api/docs",
     )
 
