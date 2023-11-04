@@ -2,6 +2,9 @@
 export default {
   content: ["./src/**/*.{html,tsx}"],
   theme: {
+    screens: {
+      sm: 640
+    },
     extend: {},
   },
   plugins: [
