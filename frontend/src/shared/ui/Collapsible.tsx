@@ -15,9 +15,9 @@ const Collapsible = ({
         <>
           <Disclosure.Button
             className={
-              "w-full gap-3 flex items-center p-3 justify-between h-15 border-b border-text-primary/10"
+              "w-full gap-3 flex items-center py-3 px-4 justify-between h-15 border-b border-text-primary/10"
             }>
-            <h3 className="font-medium text-xl">{title}</h3>
+            <h2 className="font-medium text-xl">{title}</h2>
             <ChevronSvg
               className={twMerge(
                 "transform transition-transform duration-200 w-6 h-6 text-text-primary",
@@ -25,7 +25,7 @@ const Collapsible = ({
               )}
             />
           </Disclosure.Button>
-          <Disclosure.Panel className="p-3">{children}</Disclosure.Panel>
+          <Disclosure.Panel className="py-3">{children}</Disclosure.Panel>
         </>
       )}
     </Disclosure>

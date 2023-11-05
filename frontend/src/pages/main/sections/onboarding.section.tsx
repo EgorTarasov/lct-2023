@@ -33,7 +33,7 @@ export const OnBoardingSection: FCVM<MainPageViewModel> = (vm) => {
   return (
     <section className="flex flex-col" aria-label={"Список ваших задач по онбордингу"}>
       <Collapsible title={"Онбординг"}>
-        <ul className="flex flex-col gap-4">
+        <ul className="flex flex-col first:pt-0 first:pb-0">
           {MocData.map((item) => (
             <li key={item.id}>
               <SectionItem
@@ -56,17 +56,12 @@ const SectionItem = (x: IMocData) => {
   return (
     <article
       className={twMerge(
-        "flex items-center justify-between w-full h-full",
-        x.isCompleted ? "opacity-60" : ""
+        "flex items-center justify-between w-full h-full py-2 px-4 transition-colors hover:bg-text-primary/5",
+        x.isCompleted && "opacity-60"
       )}
       aria-label={statusText}>
-      <div className="flex items-center gap-2">
-        <span className="sr-only">{statusText}</span>
-        {x.isCompleted ? (
-          <CheckOn width={24} aria-hidden="true" />
-        ) : (
-          <CheckOff width={24} aria-hidden="true" />
-        )}
+      <div className="flex items-center gap-2" aria-hidden="true">
+        {x.isCompleted ? <CheckOn width={24} /> : <CheckOff width={24} />}
         <span className="text-sm">{x.title}</span>
       </div>
       <NavLink to={x.link} aria-label={`Перейти к материалам по теме ${x.title}`}>

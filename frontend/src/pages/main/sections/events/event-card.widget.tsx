@@ -9,6 +9,7 @@ import LightningIcon from "@/assets/lightning.svg";
 import MarkerIcon from "@/assets/marker.svg";
 import { twMerge } from "tailwind-merge";
 import { Link, useNavigate } from "react-router-dom";
+import { convertDate, convertMinutes } from "@/utils/dateConverters";
 
 interface EventCardProps {
   item: EventDto.Item;
@@ -39,32 +40,6 @@ const IconText = ({
   </li>
 );
 
-const convertDate = (date: Date) => {
-  // dd.mm в hh:mm
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-
-  return `${day < 10 ? "0" + day : day}.${month < 10 ? "0" + month : month} в ${
-    hours < 10 ? "0" + hours : hours
-  }:${minutes < 10 ? "0" + minutes : minutes}`;
-};
-
-const convertMinutes = (minutes: number, screenReader?: boolean) => {
-  // h ч m мин
-  const hours = Math.floor(minutes / 60);
-  const min = minutes % 60;
-  const hoursText = screenReader ? "часов" : "ч";
-  const minText = screenReader ? "минут" : "мин";
-
-  const result = [`${hours} ${hoursText}`];
-  if (min !== 0) {
-    result.push(`${min} ${minText}`);
-  }
-  return result.join(" ");
-};
-
 export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick }) => {
   const { illustration: Icon, locale } = useMemo(() => getEventMap(item.category), [item]);
   const ariaLabel = useMemo(
@@ -83,7 +58,7 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick }) => {
         <Link
           to={`/events/${item.id}`}
           aria-label={ariaLabel}
-          className={"text-lg leading-none after:inset-0 after:content-[' '] after:absolute"}>
+          className={"text-lg w-fit leading-none after:inset-0 after:content-[' '] after:absolute"}>
           {item.title}
         </Link>
         <ul className="flex flex-wrap gap-2 my-3">
