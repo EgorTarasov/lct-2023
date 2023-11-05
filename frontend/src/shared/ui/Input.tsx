@@ -46,7 +46,7 @@ export const Input: React.FC<InputProps> = ({
         <input
           className={twMerge(
             "w-full p-3 h-11",
-            "outline-none transition-colors border border-text-primary/20 group-hover:border-text-primary/60 focus:border-primary rounded-lg", // primary
+            "outline-none transition-colors border border-text-primary/20 group-hover:border-text-primary/60 focus:!border-primary rounded-lg", // primary
             (allowClear || icon) && "pr-10",
             (error || errorText) && "border-error",
             rest.disabled

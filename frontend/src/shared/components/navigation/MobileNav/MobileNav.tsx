@@ -2,19 +2,17 @@ import { useEffect, useState } from "react";
 import NavIcon from "./assets/nav.svg";
 import { NavLink } from "react-router-dom";
 import { routesConfig } from "../../../../app";
+import { useEscape } from "@/hooks/useEscape";
 
 export const MobileNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  useEscape(() => setIsMenuOpen(false));
   const currentRoute = routesConfig.find((route) => route.path === location.pathname);
 
   useEffect(() => {
-    //DISABLE SCROLL
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = isMenuOpen ? "hidden" : "auto";
   }, [isMenuOpen]);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
