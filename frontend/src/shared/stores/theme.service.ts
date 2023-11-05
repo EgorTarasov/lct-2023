@@ -8,6 +8,7 @@ interface exampleStyleConfig {
     fontName: string;
     link: string;
   };
+  companyName: string;
   logoUrl: string;
 }
 
@@ -17,6 +18,7 @@ const exampleStyleConfig: exampleStyleConfig = {
     fontName: "SF Pro Display",
     link: "https://fonts.cdnfonts.com/css/sf-pro-display"
   },
+  companyName: "PROSCOM",
   logoUrl: logo
 };
 

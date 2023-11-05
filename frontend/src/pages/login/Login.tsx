@@ -1,15 +1,14 @@
-import { Button } from "@/ui";
+import { Button, Logo } from "@/ui";
 import { Input } from "@/ui/Input";
 import { FormEvent, useState } from "react";
 import TelegramIcon from "@/assets/telegram.svg";
 import { AuthService } from "@/stores/auth.service.ts";
 import { AuthDto } from "api/models/auth.model.ts";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ThemeService } from "@/stores/theme.service.ts";
 import { observer } from "mobx-react-lite";
 import { MOCK_USER } from "@/constants/mocks";
-import EyeOpenIcon from "./assets/eye-open.svg";
-import EyeClosedIcon from "./assets/eye-closed.svg";
+import { PasswordField } from "@/components/fields/PasswordField";
 
 export const Login = observer(() => {
   const navigate = useNavigate();
@@ -48,11 +47,7 @@ export const Login = observer(() => {
     <div className={"w-full h-full flex items-center justify-center"}>
       <div className={"w-[300px] p-5"}>
         <div className={"mb-5 w-full flex items-center justify-center"}>
-          <img
-            src={ThemeService.themeConfig?.logoUrl}
-            alt={"Логотип"}
-            className={"w-[200px] h-auto"}
-          />
+          <Logo />
         </div>
         <div className={"h-5 flex"}>
           {showError && <span className={"text-error text-sm"}>Неверный логин или пароль</span>}
@@ -75,7 +70,7 @@ export const Login = observer(() => {
             onChange={handleUsernameChange}
           />
           <div className={"flex flex-col flex-end gap-1"}>
-            <Input
+            <PasswordField
               disabled={isLoading}
               label={"Пароль"}
               required
@@ -86,36 +81,15 @@ export const Login = observer(() => {
               aria-label={"Пароль"}
               placeholder={"Введите пароль"}
               onChange={handlePasswordChange}
-              onIconClick={() => setRevealPassword((v) => !v)}
-              icon={
-                revealPassword ? (
-                  <EyeClosedIcon
-                    role={"button"}
-                    tabIndex={-1}
-                    type="button"
-                    title="Скрыть пароль"
-                    aria-label={"Скрыть пароль"}
-                  />
-                ) : (
-                  <EyeOpenIcon
-                    role={"button"}
-                    title="Показать пароль"
-                    type="button"
-                    aria-label={"Показать пароль"}
-                  />
-                )
-              }
-              type={revealPassword ? "text" : "password"}
             />
             <div className={"flex items-center justify-end"}>
-              <button
-                type={"button"}
-                aria-label={"Забыли пароль?"}
+              <Link
+                to="/reset-password"
                 className={
                   "text-text-primary/60 text-sm hover:text-text-primary transition-colors duration-200"
                 }>
                 Забыли пароль?
-              </button>
+              </Link>
             </div>
           </div>
           <Button disabled={isLoading} type="submit">
