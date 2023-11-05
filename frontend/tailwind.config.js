@@ -3,7 +3,7 @@ export default {
   content: ["./src/**/*.{html,tsx}"],
   theme: {
     screens: {
-      sm: 640
+      sm: "640px"
     },
     extend: {
       colors: {
