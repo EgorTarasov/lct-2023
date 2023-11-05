@@ -68,7 +68,9 @@ class EmailService:
         template: str,
         data: dict[str, tp.Any],
     ) -> None:
-        logging.debug("sending", to, subject, template, data)
+        logging.debug(
+            f"sending, to: {to}, subject: {subject}, template: {template}, data: {data}"
+        )
         """Отправка письма через SMTP
 
         Args:
