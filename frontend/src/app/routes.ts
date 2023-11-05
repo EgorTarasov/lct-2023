@@ -38,7 +38,7 @@ export const routes: RouteType[] = [
     path: "/events/:id",
     component: withAuth(MainPage),
     title: "События",
-    showInNav: true
+    showInNav: false
   },
   {
     path: "/me",
