@@ -1,6 +1,8 @@
 import { Button, DialogBase } from "@/ui";
 import DropdownMultiple from "@/ui/DropdownMultiple";
+import { Input } from "@/ui/Input";
 import { useState } from "react";
+import Chevron from "@/assets/chevron.svg";
 
 export const MainPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -15,6 +17,7 @@ export const MainPage = () => {
         title="Подтверждение">
         <h1>Вы уверены?</h1>
       </DialogBase>
+      <Input errorText="Треш" placeholder="Значение" label="Название" />
     </>
   );
 };

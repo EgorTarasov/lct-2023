@@ -1,15 +1,16 @@
 import { twMerge } from "tailwind-merge";
-import ClearSvg from "@/assets/clear.svg";
-import React from "react";
+// import ClearSvg from "@/assets/clear.svg"; WTF IS TRIGGERING TS ERROR
+import React, { useEffect } from "react";
 
-interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
-  appearance?: "primary" | "accent";
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+  appearance?: "primary";
   onChange?: (text: string) => void;
   error?: boolean;
+  errorText?: string | null;
   allowClear?: boolean;
   icon?: JSX.Element;
+  onIconClick?: () => void;
   label?: string;
-  multiline?: boolean;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -17,58 +18,62 @@ export const Input: React.FC<InputProps> = ({
   onChange,
   className,
   error,
+  errorText,
   icon,
+  onIconClick,
   allowClear,
   label,
-  multiline,
   ...rest
 }) => {
+  useEffect(() => {
+    if (icon && !onIconClick) {
+      console.error(
+        "Input: icon is set but onIconClick is not. Use it for accessibility purposes!"
+      );
+    }
+  }, []);
+
   return (
-    <div className={twMerge("w-full flex justify-center flex-col gap-1 relative", className)}>
+    <div className={twMerge("w-full flex flex-col", className)}>
       {label && (
-        <label className="text-text-secondary text-sm" htmlFor={rest.id}>
+        <label
+          className={twMerge("text-primary/60 mb-2", (error || errorText) && "text-error")}
+          htmlFor={rest.id ?? rest.name}>
           {label}
         </label>
       )}
-      {icon && <div className="absolute left-3 pointer-events-none">{icon}</div>}
-      {multiline ? (
-        <textarea
-          className={twMerge(
-            "w-full shadow-none box-border h-40 focus:shadow-md transition-colors duration-200 px-3 py-3 rounded-md border-[1px] border-border-primary placeholder:text-text-secondary text-sm outline-none",
-            icon ? "pl-14" : "",
-            allowClear ? "pr-12" : "",
-            appearance === "primary" ? "bg-input-bg hover:bg-input-hover focus:bg-input-hover" : "",
-            error ? "border-status-error" : "",
-            rest.disabled ? "bg-input-disabled hover:bg-input-disabled" : ""
-          )}
-          onChange={(e) => onChange?.(e.target.value)}
-          value={rest.value}
-          placeholder={rest.placeholder}
-          name={rest.name}
-        />
-      ) : (
+      <div className="w-full group flex relative items-center">
         <input
           className={twMerge(
-            "w-full shadow-none box-border focus:shadow-md transition-all duration-200 px-3 h-10 rounded-md border-[1px] border-border-primary placeholder:text-text-secondary text-sm outline-none",
-            icon ? "pl-10" : "",
-            allowClear ? "pr-12" : "",
-            appearance === "primary"
-              ? "bg-input-bg hover:bg-input-hover focus:bg-input-hover"
-              : "bg-bg-primary hover:bg-bg-secondary focus:bg-bg-secondary",
-            error ? "border-status-error" : "",
-            rest.disabled ? "bg-input-disabled hover:bg-input-disabled" : ""
+            "w-full p-3 h-11",
+            "outline-none transition-colors border border-text-primary/20 group-hover:border-text-primary/60 focus:border-primary rounded-lg", // primary
+            (allowClear || icon) && "pr-10",
+            (error || errorText) && "border-error",
+            rest.disabled
+              ? "bg-text-primary/5 group-hover:bg-text-primary/5 text-text-primary/20"
+              : ""
           )}
           onChange={(e) => onChange?.(e.target.value)}
           {...rest}
         />
-      )}
-      {allowClear && rest.value && (
-        <button
-          className="absolute w-5 text-gray-500/50 right-4 focus:outline-none hover:text-gray-500/80"
-          onClick={() => onChange?.("")}>
-          <ClearSvg />
-        </button>
-      )}
+        {allowClear && rest.value && !rest.disabled && (
+          <button
+            type="button"
+            className="absolute w-5 right-3 text-text-primary/60 hover:text-text-primary"
+            onClick={() => onChange?.("")}>
+            x
+          </button>
+        )}
+        {icon && !allowClear && (
+          <button
+            type="button"
+            onClick={onIconClick}
+            className="absolute right-1 p-2 w-10 text-text-primary/60 hover:text-text-primary">
+            {icon}
+          </button>
+        )}
+      </div>
+      {errorText && <span className="text-error mt-1">{errorText}</span>}
     </div>
   );
 };
