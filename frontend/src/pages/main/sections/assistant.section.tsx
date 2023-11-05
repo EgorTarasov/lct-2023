@@ -2,7 +2,7 @@ import { FCVM } from "@/utils/fcvm";
 import { MainPageViewModel } from "../main.vm";
 import SendIcon from "@/assets/send.svg";
 import ChatBotIcon from "@/assets/chatBot.svg";
-import { useState } from "react";
+import { useId, useState } from "react";
 
 const mocData = [
   "Какие у меня есть льготы?",
@@ -10,14 +10,18 @@ const mocData = [
   "Расскажи про корпоративную культуру!"
 ];
 export const AssistantSection: FCVM<MainPageViewModel> = ({ vm }) => {
+  const assistantId = useId();
   const [inputValue, setInputValue] = useState("");
 
   return (
     <section className="flex flex-col px-4 py-3 bg-primary gap-4" aria-label="Цифровой наставник">
-      <h2 className="text-2xl font-bold text-white">Цифровой наставник</h2>
+      <label htmlFor={assistantId} className="text-2xl font-bold text-white">
+        Цифровой наставник
+      </label>
       <div className="flex bg-white rounded-xl p-3 items-center max-h-12">
         <ChatBotIcon className="h-8 w-8" aria-hidden="true" focusable="false" />
         <input
+          id={assistantId}
           className="w-full h-8 font-medium text-base text-black ml-2 focus:outline-none"
           placeholder="Введите вопрос"
           aria-label="Введите ваш вопрос здесь"
