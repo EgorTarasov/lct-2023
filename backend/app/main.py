@@ -7,7 +7,6 @@ from app.api import main
 from app.config import config
 from app.core.sql import Sql
 from app.models.base import Base
-from app.scheduler import Scheduler, scheduler
 
 
 @asynccontextmanager
@@ -23,8 +22,6 @@ async def lifespan(app: FastAPI):
     )
 
     Base.metadata.create_all(bind=sql.get_engine())
-
-    scheduler = Scheduler(sql.get_engine())
 
     yield
 
