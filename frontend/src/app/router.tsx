@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { Login, MainPage } from "../pages";
+import { Login, MainPage, ResetPassword } from "../pages";
 import PrivateRoute from "@/hoc/PrivateRoute.tsx";
 
 export default () => (
@@ -21,6 +21,7 @@ export default () => (
     <Route path="/shop" element={<MainPage />} />
     <Route path="/contacts" element={<MainPage />} />
     <Route path="/login" element={<Login />} />
+    <Route path="/reset-password" element={<ResetPassword />} />
     <Route path="*" element={<Navigate to="/" />} />
   </Routes>
 );

@@ -2,7 +2,7 @@ import { twMerge } from "tailwind-merge";
 // import ClearSvg from "@/assets/clear.svg"; WTF IS TRIGGERING TS ERROR
 import React, { useEffect } from "react";
 
-interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   appearance?: "primary";
   onChange?: (text: string) => void;
   error?: boolean;
@@ -45,7 +45,7 @@ export const Input: React.FC<InputProps> = ({
       <div className="w-full group flex relative items-center">
         <input
           className={twMerge(
-            "w-full p-3",
+            "w-full p-3 h-11",
             "outline-none transition-colors border border-text-primary/20 group-hover:border-text-primary/60 focus:border-primary rounded-lg", // primary
             (allowClear || icon) && "pr-10",
             (error || errorText) && "border-error",
