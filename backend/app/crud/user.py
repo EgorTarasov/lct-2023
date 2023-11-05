@@ -84,3 +84,5 @@ async def assign_mentee(db: Session, mentor_id: int, mentee_id: int) -> list[Use
     )
 
     return [UserDto.model_validate(obj) for obj in mentees]
+
+

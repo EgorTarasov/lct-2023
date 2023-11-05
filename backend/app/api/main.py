@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api import auth_router
+from app.api import auth_router, task_router
 from app.api import role_router
 from app.api import user_router
 from app.api import interest_router
@@ -15,4 +15,5 @@ router.include_router(user_router.router)
 router.include_router(interest_router.router)
 router.include_router(mentor_router.router)
 router.include_router(admin_router.router)
+router.include_router(task_router.router)
 
