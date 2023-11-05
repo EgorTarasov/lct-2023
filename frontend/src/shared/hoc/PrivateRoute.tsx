@@ -25,7 +25,7 @@ const PrivateRoute: React.FC<React.PropsWithChildren<unknown>> = observer(({ chi
   );
 });
 
-export const withPrivateRoute = (Component: React.FC<unknown>) => {
+export const withAuth = (Component: React.FC<unknown>) => {
   return () => (
     <PrivateRoute>
       <Component />

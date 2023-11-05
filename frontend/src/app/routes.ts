@@ -1,4 +1,4 @@
-import { withPrivateRoute } from "@/hoc/PrivateRoute";
+import { withAuth } from "@/hoc/PrivateRoute";
 import { ComponentType } from "react";
 import { Login, MainPage, ResetPassword } from "../pages";
 
@@ -11,32 +11,32 @@ export interface RouteType {
 export const privateRoutes = [
   {
     path: "/",
-    component: withPrivateRoute(MainPage),
+    component: withAuth(MainPage),
     title: "Главная"
   },
   {
     path: "/tasks",
-    component: withPrivateRoute(MainPage),
+    component: withAuth(MainPage),
     title: "Задания"
   },
   {
     path: "/events",
-    component: withPrivateRoute(MainPage),
+    component: withAuth(MainPage),
     title: "События"
   },
   {
     path: "/me",
-    component: withPrivateRoute(MainPage),
+    component: withAuth(MainPage),
     title: "Профиль"
   },
   {
     path: "/shop",
-    component: withPrivateRoute(MainPage),
+    component: withAuth(MainPage),
     title: "Магазин"
   },
   {
     path: "/contacts",
-    component: withPrivateRoute(MainPage),
+    component: withAuth(MainPage),
     title: "Контакты"
   }
 ];
