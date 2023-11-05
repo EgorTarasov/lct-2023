@@ -1,5 +1,6 @@
 import { Disclosure } from "@headlessui/react";
 import ChevronSvg from "@/assets/chevron2.svg";
+import { twMerge } from "tailwind-merge";
 
 const Collapsible = ({
   title,
@@ -18,10 +19,10 @@ const Collapsible = ({
             }>
             <h3 className="font-medium text-xl">{title}</h3>
             <ChevronSvg
-              className="transform transition-transform duration-200 w-6 h-6 text-text-primary"
-              style={{
-                transform: open ? "rotate(180deg)" : "rotate(0deg)"
-              }}
+              className={twMerge(
+                "transform transition-transform duration-200 w-6 h-6 text-text-primary",
+                !open && "rotate-180"
+              )}
             />
           </Disclosure.Button>
           <Disclosure.Panel className="px-4 py-3">{children}</Disclosure.Panel>
