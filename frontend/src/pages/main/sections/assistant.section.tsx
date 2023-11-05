@@ -23,7 +23,11 @@ export const AssistantSection: FCVM<MainPageViewModel> = ({ vm }) => {
           e.preventDefault();
         }}
         className="flex bg-white rounded-xl p-3 items-center max-h-12">
-        <ChatBotIcon className="h-8 w-8" aria-hidden="true" focusable="false" />
+        <ChatBotIcon
+          className="h-8 w-8"
+          aria-label="На картинке портрет человека в костюме, в роли цифрового наставника"
+          focusable="false"
+        />
         <input
           id={assistantId}
           className="w-full h-8 font-medium text-base text-black ml-2 focus:outline-none"
@@ -36,17 +40,21 @@ export const AssistantSection: FCVM<MainPageViewModel> = ({ vm }) => {
           <SendIcon className="w-6 h-6" aria-hidden="true" focusable="false" />
         </button>
       </form>
-      <div className="flex flex-col gap-3">
+      <ul className="flex flex-col gap-3">
         {mocData.map((item, index) => (
-          <button
-            key={index}
-            onClick={() => setInputValue(item)}
-            className="px-3 py-1 border rounded-tr-xl rounded-br-xl rounded-bl-xl w-fit text-white bg-primary focus-visible:bg-white focus-visible:text-primary"
-            aria-label={`Спросить про ${item}`}>
-            {item}
-          </button>
+          <li key={index}>
+            <button
+              onClick={() => {
+                setInputValue(item);
+                document.getElementById(assistantId)!.focus();
+              }}
+              className="px-3 py-1 border rounded-tr-xl rounded-br-xl rounded-bl-xl w-fit text-white bg-primary focus-visible:bg-white focus-visible:text-primary"
+              aria-label={`Спросить про ${item}`}>
+              {item}
+            </button>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 };
