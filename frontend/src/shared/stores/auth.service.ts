@@ -6,22 +6,24 @@ import { makeAutoObservable } from "mobx";
 type AuthStatus = "loading" | "anonymous" | "authorized" | "unfinished";
 
 class AuthServiceViewModel {
-  public status: AuthStatus = "loading";
+  public status: AuthStatus = "anonymous";
   public item: AuthDto.Item | null = null;
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  async login() {
-    this.status = "loading";
+  public async login(username: string, password: string) {
+    if (!username || !password) return false;
     try {
-      const res = await AuthEndpoint.login("misis.larek.deda@mail.ru", "Test123456");
-      this.status = "authorized";
-      this.item = res;
+      const response = await AuthEndpoint.login(username, password);
+      if (response) {
+        this.status = "authorized";
+        return true;
+      }
+      return false;
     } catch {
-      this.status = "anonymous";
-      this.item = null;
+      return false;
     }
   }
 

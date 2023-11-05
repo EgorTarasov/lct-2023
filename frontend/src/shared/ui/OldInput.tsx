@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
-import ClearSvg from "@/assets/clear.svg";
-import React, { ChangeEvent, useCallback, useMemo } from "react";
+// import ClearSvg from "@/assets/clear.svg"; WTF IS TRIGGERING TS ERROR
+import React from "react";
 
 interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   appearance?: "primary";
@@ -49,7 +49,7 @@ export const OldInput: React.FC<InputProps> = ({
         <button
           className="absolute w-5 right-3 text-text-primary/60 hover:text-text-primary"
           onClick={() => onChange?.("")}>
-          <ClearSvg />
+          x
         </button>
       )}
       {icon && !allowClear && (

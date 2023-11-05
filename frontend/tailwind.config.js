@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {import("tailwindcss").Config} */
 export default {
   content: ["./src/**/*.{html,tsx}"],
   theme: {
@@ -16,10 +16,11 @@ export default {
         },
         button: {
           primary: {
-            bg: "red"
+            bg: "#2C55DE",
+            text: "#FFFFFF"
           }
         }
-      },
-    },
-  },
-}
+      }
+    }
+  }
+};
