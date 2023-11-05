@@ -15,7 +15,7 @@ const Collapsible = ({
         <>
           <Disclosure.Button
             className={
-              "w-full gap-3 flex items-center px-4 py-3 justify-between h-15 border-b border-text-primary/10"
+              "w-full gap-3 flex items-center p-3 justify-between h-15 border-b border-text-primary/10"
             }>
             <h3 className="font-medium text-xl">{title}</h3>
             <ChevronSvg
@@ -25,7 +25,7 @@ const Collapsible = ({
               )}
             />
           </Disclosure.Button>
-          <Disclosure.Panel className="px-4 py-3">{children}</Disclosure.Panel>
+          <Disclosure.Panel className="p-3">{children}</Disclosure.Panel>
         </>
       )}
     </Disclosure>

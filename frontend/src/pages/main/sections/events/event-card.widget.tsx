@@ -8,6 +8,7 @@ import CalendarIcon from "@/assets/calendar.svg";
 import LightningIcon from "@/assets/lightning.svg";
 import MarkerIcon from "@/assets/marker.svg";
 import { twMerge } from "tailwind-merge";
+import { Link, useNavigate } from "react-router-dom";
 
 interface EventCardProps {
   item: EventDto.Item;
@@ -48,20 +49,39 @@ const convertDate = (date: Date) => {
   }:${minutes < 10 ? "0" + minutes : minutes}`;
 };
 
-const convertMinutes = (minutes: number) => {
+const convertMinutes = (minutes: number, screenReader?: boolean) => {
   // h ч m мин
   const hours = Math.floor(minutes / 60);
   const min = minutes % 60;
+  const hoursText = screenReader ? "часов" : "ч";
+  const minText = screenReader ? "минут" : "мин";
 
-  return `${hours} ч ${min === 0 ? "" : `${min} мин`} `;
+  const result = [`${hours} ${hoursText}`];
+  if (min !== 0) {
+    result.push(`${min} ${minText}`);
+  }
+  return result.join(" ");
 };
 
 export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick }) => {
+  const navigate = useNavigate();
   const { illustration: Icon, locale } = useMemo(() => getEventMap(item.category), [item]);
+  const ariaLabel = useMemo(
+    () =>
+      `Открыть мероприятие ${item.title}, которое пройдет ${convertDate(item.date)} в ${
+        item.location
+      } и будет длиться ${convertMinutes(item.durationMin, true)}`,
+    [item]
+  );
+
   return (
-    <div className="flex flex-col w-52 rounded-2xl border border-text-primary/20">
+    <div
+      onClick={() => navigate(`/events/${item.id}`)}
+      aria-label={ariaLabel}
+      tabIndex={0}
+      className="flex flex-col w-52 rounded-2xl border border-text-primary/20">
       <Icon className="text-primary" />
-      <div className="flex flex-col m-4 mt-3">
+      <div className="flex flex-col m-4 mt-3" aria-hidden>
         <span className={`text-sm text-event-${item.category}`}>{locale}</span>
         <h4 className="text-lg leading-none">{item.title}</h4>
         <div className="flex flex-wrap gap-2 my-3">
@@ -74,7 +94,14 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick }) => {
           <IconText icon={LightningIcon} iconPrimary text={item.points.toString()} alt="Баллы" />
           <IconText icon={MarkerIcon} text={item.location} alt="Место проведения" />
         </div>
-        <Button appearance="secondary">Записаться</Button>
+        <Button
+          appearance="secondary"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRegisterClick();
+          }}>
+          Записаться
+        </Button>
       </div>
     </div>
   );

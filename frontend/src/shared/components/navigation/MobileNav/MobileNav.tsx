@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import NavIcon from "./assets/nav.svg";
 import { NavLink } from "react-router-dom";
 import { useEscape } from "@/hooks/useEscape";
-import { privateRoutes, routes } from "../../../../app/routes";
+import { routes } from "../../../../app/routes";
 import { Dialog } from "@headlessui/react";
 
 export const MobileNav = () => {
@@ -42,13 +42,15 @@ export const MobileNav = () => {
               </button>
             </div>
             <ul className="p-4">
-              {privateRoutes.map((item) => (
-                <li key={item.path} className="border-b border-nav-text">
-                  <NavLink to={item.path} onClick={toggleMenu} className="block py-2">
-                    {item.title}
-                  </NavLink>
-                </li>
-              ))}
+              {routes
+                .filter((p) => p.showInNav)
+                .map((item) => (
+                  <li key={item.path} className="border-b border-nav-text">
+                    <NavLink to={item.path} onClick={toggleMenu} className="block py-2">
+                      {item.title}
+                    </NavLink>
+                  </li>
+                ))}
             </ul>
           </div>
         </Dialog.Panel>
