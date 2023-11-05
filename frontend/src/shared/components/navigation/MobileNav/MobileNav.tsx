@@ -20,7 +20,7 @@ export const MobileNav = () => {
   };
 
   return (
-    <nav>
+    <nav className="sticky top-0 z-50 w-full bg-nav-background">
       <div className="flex items-center">
         <button
           id="nav-button"
@@ -32,17 +32,15 @@ export const MobileNav = () => {
           <NavIcon
             aria-hidden="true"
             focusable="false"
-            className="w-10 h-10 text-white animate-fade-in animate-200ms"
+            className="w-10 h-10 text-nav-text animate-fade-in animate-200ms"
           />
         </button>
-        <h1 className="text-xl font-normal text-text-primary">{currentRoute?.title || ""}</h1>
+        <h1 className="text-xl font-normal text-nav-text">{currentRoute?.title || ""}</h1>
       </div>
       {isMenuOpen && (
-        <div id="mobile-menu" className="fixed inset-0 z-40 bg-white">
+        <div id="mobile-menu" className="fixed inset-0 z-40 bg-nav-background">
           <div className="flex justify-end p-4">
-            <button
-              onClick={toggleMenu}
-              className="p-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+            <button onClick={toggleMenu} className="p-2">
               <span className="sr-only">Закрыть меню</span>
               <NavIcon aria-hidden="true" focusable="false" className="w-10 h-10 text-primary" />
             </button>
@@ -51,7 +49,7 @@ export const MobileNav = () => {
             {routesConfig
               .filter((route) => route.isPrivate)
               .map((item) => (
-                <li key={item.path} className="border-b border-text-primary">
+                <li key={item.path} className="border-b border-nav-text">
                   <NavLink to={item.path} onClick={toggleMenu} className="block py-2">
                     {item.title}
                   </NavLink>
