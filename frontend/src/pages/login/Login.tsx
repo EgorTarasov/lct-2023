@@ -60,7 +60,7 @@ export const Login = observer(() => {
             <OldInput
               label={"Пароль"}
               type={"password"}
-              autoComplete={"password"}
+              autoComplete={"current-password"}
               name={"password"}
               value={authData.password}
               error={showError}
