@@ -1,5 +1,4 @@
-from sys import prefix
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
@@ -8,10 +7,12 @@ from app.api import main
 from app.config import config
 from app.core.sql import Sql
 from app.models.base import Base
+from app.scheduler import Scheduler, scheduler
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    global scheduler
     # startup
     sql = Sql(
         pg_user=config.postgres_user,
@@ -20,7 +21,11 @@ async def lifespan(app: FastAPI):
         pg_db=config.postgres_db,
         pg_port=config.postgres_port,
     )
+
     Base.metadata.create_all(bind=sql.get_engine())
+
+    scheduler = Scheduler(sql.get_engine())
+
     yield
 
     # shutdown
@@ -29,7 +34,7 @@ async def lifespan(app: FastAPI):
 def create_app():
     # setup logging
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.DEBUG,
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
     )
 
@@ -49,6 +54,13 @@ def create_app():
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    # @_app.middleware("http")
+    # async def add_process_time_header(request: Request, call_next):
+    #     request.__setattr__("scheduler", scheduler)
+    #     response = await call_next(request)
+
+    #     return response
 
     _app.include_router(main.router, prefix="/api")
 
