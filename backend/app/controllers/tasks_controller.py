@@ -11,10 +11,13 @@ class TaskController:
         self.db = db
 
     async def get_tasks(self, user_id: int) -> list[TaskDto]:
-        return await crud.task.get_tasks(self.db, user_id)
+        user_tasks = await crud.task.get_tasks(self.db, user_id)
+        return [TaskDto.model_validate(obj) for obj in user_tasks]
 
     async def get_tasks_for_mentor(self, mentor_id: int) -> list[TaskDto]:
-        return await crud.task.get_tasks_for_mentor(self.db, mentor_id)
+        mentor_tasks = await crud.task.get_tasks_for_mentor(self.db, mentor_id)
+        return [TaskDto.model_validate(obj) for obj in mentor_tasks]
 
     async def create_task(self, payload: TaskCreate, mentor_id: int) -> TaskDto | None:
-        return await crud.task.create_task(self.db, payload, mentor_id)
+        new_task = await crud.task.create_task(self.db, payload, mentor_id)
+        return TaskDto.model_validate(new_task)

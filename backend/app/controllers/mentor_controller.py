@@ -10,10 +10,14 @@ class MentorController:
         self.db = db
 
     async def get_mentees(self, user: UserTokenData) -> list[UserDto]:
-        return await crud.user.get_mentee(self.db)
+        mentees = await crud.user.get_mentee(self.db)
+        return [UserDto.model_validate(obj) for obj in mentees]
 
     async def get_assigned_mentees(self, mentor_id: int) -> list[UserDto]:
-        return await crud.user.get_assigned_mentees(self.db, mentor_id)
+        assigned_mentees = await crud.user.get_assigned_mentees(self.db, mentor_id)
+
+        return [UserDto.model_validate(obj) for obj in assigned_mentees]
 
     async def assign_mentee(self, mentor_id: int, mentee_id: int) -> list[UserDto]:
-        return await crud.user.assign_mentee(self.db, mentor_id, mentee_id)
+        assigned_mentees = await crud.user.assign_mentee(self.db, mentor_id, mentee_id)
+        return [UserDto.model_validate(obj) for obj in assigned_mentees]
