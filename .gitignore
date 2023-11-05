@@ -1,0 +1,7 @@
+docker/
+.vscode/
+.idea/
+venv/
+.mypy_cache/
+.pytest_cache/
+project/
