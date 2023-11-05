@@ -83,7 +83,7 @@ const App = observer(() => {
 
   if (!ThemeService.isLoaded)
     return <div className={"w-full h-full flex items-center justify-center"}>⏳Загрузка...</div>;
-  console.log("render", location.key);
+
   return (
     <SwitchTransition>
       <CSSTransition key={location.key} classNames="fade" timeout={150} unmountOnExit>
