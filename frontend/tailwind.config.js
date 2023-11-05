@@ -1,39 +1,25 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {import("tailwindcss").Config} */
 export default {
   content: ["./src/**/*.{html,tsx}"],
   theme: {
     screens: {
       sm: 640
     },
-    extend: {},
-  },
-  plugins: [
-    require("tailwindcss-themer")({
-      defaultTheme: {
-        extend: {
-          colors: {
-            button: {
-              primary: {
-                bg: "red"
-              }
-            }
-          },
-        }
-      },
-      themes: [
-        {
-          name: "greenTheme",
-          extend: {
-            colors: {
-              button: {
-                primary: {
-                  bg: "green"
-                }
-              }
-            }
+    extend: {
+      colors: {
+        primary: "var(--color-primary)",
+        onPrimary: "var(--color-onPrimary)",
+        error: "#F20000",
+        text: {
+          primary: "#1D1D1D"
+        },
+        input: {
+        },
+        button: {
+          primary: {
           }
         }
-      ]
-    })
-  ],
-}
+      }
+    }
+  }
+};
