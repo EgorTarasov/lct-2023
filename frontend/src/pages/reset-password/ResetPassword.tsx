@@ -1,9 +1,8 @@
-// get token from query string, router-dom
 import { PasswordField } from "@/components/fields/PasswordField";
 import { useQuery } from "@/hooks/useQuery";
 import { Button, Logo } from "@/ui";
 import { Input } from "@/ui/Input";
-import { FormEvent, useCallback, useEffect, useMemo } from "react";
+import { FormEvent, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 
 export const ResetPassword = () => {
@@ -13,8 +12,8 @@ export const ResetPassword = () => {
   const handleFormSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
-      const { newPassword, email } = e.target as typeof e.target & {
-        newPassword?: { value: string };
+      const { "new-password": newPassword, email } = e.target as typeof e.target & {
+        "new-password"?: { value: string };
         email?: { value: string };
       };
       console.log(newPassword?.value, email?.value);
@@ -34,11 +33,17 @@ export const ResetPassword = () => {
               label="Новый пароль"
               autoComplete="new-password"
               placeholder="********"
+              required
               name="new-password"
-              id="newPassword"
             />
           ) : (
-            <Input label="Почта" name="email" type="email" placeholder="name@company.com" />
+            <Input
+              label="Почта"
+              required
+              name="email"
+              type="email"
+              placeholder="name@company.com"
+            />
           )}
           <Button className="mt-6">{token ? "Сменить пароль" : "Сбросить пароль"}</Button>
         </form>
