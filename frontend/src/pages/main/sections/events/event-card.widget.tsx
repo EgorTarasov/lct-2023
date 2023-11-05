@@ -26,15 +26,17 @@ const IconText = ({
   alt: string;
   iconPrimary?: boolean;
 }) => (
-  <div className="flex" aria-label={alt}>
+  <li className="flex" aria-label={`${alt}: ${text}`}>
     <Icon
       className={twMerge("min-w-[16px]", iconPrimary ? "text-primary" : "text-text-primary/60")}
       aria-hidden="true"
       width={16}
       height={16}
     />
-    <span className="ml-1 text-sm leading-none">{text}</span>
-  </div>
+    <span className="ml-1 text-sm leading-none" aria-hidden="true">
+      {text}
+    </span>
+  </li>
 );
 
 const convertDate = (date: Date) => {
@@ -64,27 +66,27 @@ const convertMinutes = (minutes: number, screenReader?: boolean) => {
 };
 
 export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick }) => {
-  const navigate = useNavigate();
   const { illustration: Icon, locale } = useMemo(() => getEventMap(item.category), [item]);
   const ariaLabel = useMemo(
     () =>
-      `Открыть мероприятие ${item.title}, которое пройдет ${convertDate(item.date)} в ${
+      `Мероприятие ${item.title}, которое пройдет ${convertDate(item.date)} по адресу "${
         item.location
-      } и будет длиться ${convertMinutes(item.durationMin, true)}`,
+      }" и будет длиться ${convertMinutes(item.durationMin, true)}`,
     [item]
   );
 
   return (
-    <div
-      onClick={() => navigate(`/events/${item.id}`)}
-      aria-label={ariaLabel}
-      tabIndex={0}
-      className="flex flex-col w-52 rounded-2xl border border-text-primary/20">
+    <li className="flex flex-col w-52 rounded-2xl border border-text-primary/20">
       <Icon className="text-primary" />
-      <div className="flex flex-col m-4 mt-3" aria-hidden>
+      <div className="flex flex-col m-4 mt-3">
         <span className={`text-sm text-event-${item.category}`}>{locale}</span>
-        <h4 className="text-lg leading-none">{item.title}</h4>
-        <div className="flex flex-wrap gap-2 my-3">
+        <Link
+          to={`/events/${item.id}`}
+          aria-label={ariaLabel}
+          className={"text-lg leading-none after:inset-0 after:content-[' '] after:absolute"}>
+          {item.title}
+        </Link>
+        <ul className="flex flex-wrap gap-2 my-3">
           <IconText icon={CalendarIcon} text={convertDate(item.date)} alt="Дата проведения" />
           <IconText
             icon={ClockIcon}
@@ -93,8 +95,9 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick }) => {
           />
           <IconText icon={LightningIcon} iconPrimary text={item.points.toString()} alt="Баллы" />
           <IconText icon={MarkerIcon} text={item.location} alt="Место проведения" />
-        </div>
+        </ul>
         <Button
+          className="relative z-10"
           appearance="secondary"
           onClick={(e) => {
             e.stopPropagation();
@@ -103,6 +106,6 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick }) => {
           Записаться
         </Button>
       </div>
-    </div>
+    </li>
   );
 };
