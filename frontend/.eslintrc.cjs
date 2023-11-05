@@ -29,6 +29,7 @@ module.exports = {
         endOfLine: "auto"
       }
     ],
+    "react/prop-types": "off",
     "@typescript-eslint/no-unused-vars": "warn",
     "no-unused-vars": "off",
     "no-undef": "off",
