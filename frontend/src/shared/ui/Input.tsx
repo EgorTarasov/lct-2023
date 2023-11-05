@@ -1,79 +1,63 @@
-import React, { useState } from "react";
+import { twMerge } from "tailwind-merge";
+// import ClearSvg from "@/assets/clear.svg"; WTF IS TRIGGERING TS ERROR
+import React from "react";
 
-interface Props {
-  name: string;
-  error?: string;
-  disabled?: boolean;
-  clearable?: boolean;
-  onChange: (value: string) => void;
+interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+  appearance?: "primary";
+  onChange?: (text: string) => void;
+  error?: boolean;
+  errorText?: string | null;
+  allowClear?: boolean;
+  icon?: JSX.Element;
+  label?: string;
 }
 
-const TextInput: React.FC<Props> = ({ name, error, disabled, clearable, onChange }) => {
-  const [value, setValue] = useState("");
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
-    onChange(event.target.value);
-  };
-
-  const handleClear = () => {
-    setValue("");
-    onChange("");
-  };
-
-  const inputStyle = `form-input block w-full px-3 py-1.5 text-base font-normal ${
-    disabled ? "text-gray-500" : "text-gray-700"
-  } bg-white bg-clip-padding border ${
-    error ? "border-red-500" : "border-gray-300"
-  } rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white ${
-    disabled ? "" : "focus:border-blue-600 focus:outline-none"
-  } relative bg-gray-50`;
-
-  const labelStyle = `mb-2 text-sm font-medium ${
-    error ? "text-red-600" : disabled ? "text-gray-500" : "text-gray-900"
-  }`;
-
-  return (
-    <div className="flex flex-col mb-4">
-      <label htmlFor={name} className={labelStyle}>
-        {name}
+export const Input: React.FC<InputProps> = ({
+  appearance = "primary",
+  onChange,
+  className,
+  error,
+  errorText,
+  icon,
+  allowClear,
+  label,
+  ...rest
+}) => (
+  <div className={twMerge("w-full flex flex-col", className)}>
+    {label && (
+      <label
+        className={twMerge("text-primary/60 mb-2", (error || errorText) && "text-error")}
+        htmlFor={rest.id ?? rest.name}>
+        {label}
       </label>
-      <div className="relative">
-        <input
-          type="text"
-          id={name}
-          name={name}
-          value={value}
-          onChange={handleChange}
-          className={inputStyle}
-          disabled={disabled}
-          aria-invalid={!!error}
-          aria-describedby={error ? `${name}-error` : undefined}
-        />
-        {clearable && value && !disabled && (
-          <button
-            onClick={handleClear}
-            type="button"
-            className="absolute inset-y-0 right-0 pr-3 flex items-center"
-            aria-label="Очистить поле">
-            ✖
-          </button>
+    )}
+    <div className="w-full group flex relative items-center">
+      <input
+        className={twMerge(
+          "w-full p-3",
+          "outline-none transition-colors border border-text-primary/20 group-hover:border-text-primary/60 focus:border-primary rounded-lg", // primary
+          (allowClear || icon) && "pr-10",
+          (error || errorText) && "border-error",
+          rest.disabled
+            ? "bg-text-primary/5 group-hover:bg-text-primary/5 text-text-primary/20"
+            : ""
         )}
-        {error && (
-          <span className="absolute inset-y-0 right-0 pr-3 flex items-center text-red-500">
-            <span role="img" aria-label="Ошибка">
-              ⚠️
-            </span>
-          </span>
-        )}
-      </div>
-      {error && (
-        <span id={`${name}-error`} className="text-xs text-red-600">
-          {error}
-        </span>
+        onChange={(e) => onChange?.(e.target.value)}
+        {...rest}
+      />
+      {allowClear && rest.value && !rest.disabled && (
+        <button
+          className="absolute w-5 right-3 text-text-primary/60 hover:text-text-primary"
+          onClick={() => onChange?.("")}>
+          x
+        </button>
+      )}
+      {icon && !allowClear && (
+        <button className="absolute right-1 p-2 w-10 text-text-primary/60 hover:text-text-primary">
+          {icon}
+        </button>
       )}
     </div>
-  );
-};
-
-export default TextInput;
+    {errorText && <span className="text-error mt-1">{errorText}</span>}
+  </div>
+);

@@ -9,9 +9,7 @@ const App = observer(() => {
     return <div className={"w-full h-full flex items-center justify-center"}>⏳Загрузка...</div>;
   return (
     <BrowserRouter>
-      <main id="content" tabIndex={-1} className={"w-full h-full"}>
-        <Router />
-      </main>
+      <Router />
     </BrowserRouter>
   );
 });

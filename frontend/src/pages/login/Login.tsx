@@ -1,5 +1,5 @@
 import { Button } from "@/ui";
-import { OldInput } from "@/ui/OldInput.tsx";
+import { Input } from "@/ui/Input";
 import { FormEvent, useState } from "react";
 import TelegramIcon from "@/assets/telegram.svg";
 import { AuthService } from "@/stores/auth.service.ts";
@@ -7,21 +7,31 @@ import { AuthDto } from "api/models/auth.model.ts";
 import { useNavigate } from "react-router-dom";
 import { ThemeService } from "@/stores/theme.service.ts";
 import { observer } from "mobx-react-lite";
+import { MOCK_USER } from "@/constants/mocks";
 
 export const Login = observer(() => {
   const navigate = useNavigate();
   const [showError, setShowError] = useState<boolean>(false);
-  const [authData, setAuthData] = useState<AuthDto.Login>({
-    username: "misis.larek.deda@mail.ru",
-    password: "Test123456"
-  });
+  const [authData, setAuthData] = useState<AuthDto.Login>(MOCK_USER);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const isSuccess = await AuthService.login(authData.username, authData.password);
-    if (isSuccess) {
-      setShowError(false);
-      navigate("/");
-    } else setShowError(true);
+
+    setIsLoading(true);
+    setShowError(false);
+    try {
+      const isSuccess = await AuthService.login(authData.username, authData.password);
+      if (isSuccess) {
+        navigate("/");
+      } else {
+        setShowError(true);
+      }
+    } catch {
+      setShowError(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handlePasswordChange = (value: string) => {
@@ -44,10 +54,15 @@ export const Login = observer(() => {
         <div className={"h-5 flex"}>
           {showError && <span className={"text-error text-sm"}>Неверный логин или пароль</span>}
         </div>
-        <form onSubmit={handleFormSubmit} className={"flex flex-col gap-3"}>
-          <OldInput
+        <form
+          onSubmit={handleFormSubmit}
+          aria-label="Два поля: почта и пароль, либо вход через Telegram"
+          className={"flex flex-col gap-3"}>
+          <Input
+            disabled={isLoading}
             label={"Логин"}
-            type={"text"}
+            type="email"
+            required
             aria-label={"Почта"}
             autoComplete={"email"}
             name={"email"}
@@ -57,9 +72,11 @@ export const Login = observer(() => {
             onChange={handleUsernameChange}
           />
           <div className={"flex-col flex-end gap-1"}>
-            <OldInput
+            <Input
+              disabled={isLoading}
               label={"Пароль"}
               type={"password"}
+              required
               autoComplete={"current-password"}
               name={"password"}
               value={authData.password}
@@ -79,11 +96,14 @@ export const Login = observer(() => {
               </button>
             </div>
           </div>
-          <Button type={"submit"}>Войти</Button>
+          <Button disabled={isLoading} type="submit">
+            Войти
+          </Button>
           <Button
+            disabled={isLoading}
             appearance={"secondary"}
             type={"button"}
-            aria-label={"Войти через Telegram"}
+            aria-label={"Вход через Telegram"}
             className={"flex items-center justify-center gap-1 text-text-primary/60"}>
             <TelegramIcon className={"w-5 h-5"} aria-hidden="true" /> Войти через Telegram
           </Button>
