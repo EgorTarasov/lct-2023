@@ -19,10 +19,9 @@
     "noUnusedLocals": false,
     "noFallthroughCasesInSwitch": true,
 
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/shared/*"],
-      "api/*": ["src/api/*"]
+      "@/*": ["./src/shared/*"],
+      "api/*": ["./src/api/*"],
     },
 
   },

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import NavIcon from "./assets/nav.svg";
 import { NavLink } from "react-router-dom";
-import { routesConfig } from "../../../../app";
 import { useEscape } from "@/hooks/useEscape";
+import { privateRoutes, routes } from "../../../../app/routes";
 
 export const MobileNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   useEscape(() => setIsMenuOpen(false));
-  const currentRoute = routesConfig.find((route) => route.path === location.pathname);
+  const currentRoute = routes.find((route) => route.path === location.pathname);
 
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "auto";
@@ -44,15 +44,13 @@ export const MobileNav = () => {
             </button>
           </div>
           <ul className="p-4">
-            {routesConfig
-              .filter((route) => route.isPrivate)
-              .map((item) => (
-                <li key={item.path} className="border-b border-nav-text">
-                  <NavLink to={item.path} onClick={toggleMenu} className="block py-2">
-                    {item.title}
-                  </NavLink>
-                </li>
-              ))}
+            {privateRoutes.map((item) => (
+              <li key={item.path} className="border-b border-nav-text">
+                <NavLink to={item.path} onClick={toggleMenu} className="block py-2">
+                  {item.title}
+                </NavLink>
+              </li>
+            ))}
           </ul>
         </div>
       )}
