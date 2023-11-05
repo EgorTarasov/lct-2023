@@ -17,7 +17,4 @@ class TaskController:
         return await crud.task.get_tasks_for_mentor(self.db, mentor_id)
 
     async def create_task(self, payload: TaskCreate, mentor_id: int) -> TaskDto | None:
-        try:
-            return await crud.task.create_task(self.db, payload, mentor_id)
-        except Exception as e:
-            raise e
+        return await crud.task.create_task(self.db, payload, mentor_id)
