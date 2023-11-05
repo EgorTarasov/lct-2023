@@ -1,6 +1,9 @@
-import api from "api/utils/api";
-
 export namespace AuthDto {
+  export interface Login {
+    username: string;
+    password: string;
+  }
+
   export interface Result {
     access_token: string;
   }
