@@ -1,8 +1,7 @@
 import { Button, Checkbox, DialogBase } from "@/ui";
-import DropdownMultiple from "@/ui/DropdownMultiple";
 import { Input } from "@/ui/Input";
 import { useState } from "react";
-import Chevron from "@/assets/chevron.svg";
+import Collapsible from "@/ui/Collapsible.tsx";
 
 export const MainPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -20,6 +19,19 @@ export const MainPage = () => {
       </DialogBase>
       <Input errorText="Треш" placeholder="Значение" label="Название" />
       <Checkbox checked={checked} setChecked={setChecked} altText="Поменять режим" />
+      <Collapsible title="Список">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <label htmlFor="reals">Посмотреть рилсы</label>
+            <Checkbox
+              checked={checked}
+              setChecked={setChecked}
+              altText="Посомтреть рилсы"
+              id="reals"
+            />
+          </div>
+        </div>
+      </Collapsible>
     </>
   );
 };
