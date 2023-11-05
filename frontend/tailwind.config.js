@@ -8,6 +8,7 @@ export default {
     extend: {
       colors: {
         primary: "var(--color-primary)",
+        onPrimary: "var(--color-onPrimary)",
         error: "#F20000",
         text: {
           primary: "#1D1D1D"
@@ -16,8 +17,6 @@ export default {
         },
         button: {
           primary: {
-            bg: "#2C55DE",
-            text: "#FFFFFF"
           }
         }
       }

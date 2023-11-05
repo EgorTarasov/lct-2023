@@ -40,7 +40,7 @@ export class ThemeServiceViewModel {
       link.rel = "stylesheet";
       link.href = exampleStyleConfig.font.link;
       document.head.appendChild(link);
-      document.body.style.fontFamily = exampleStyleConfig.font.fontName;
+      document.body.style.fontFamily = `${exampleStyleConfig.font.fontName}, Arial, sans-serif`;
       this.isLoaded = true;
       console.log("this.isLoaded", this.isLoaded);
     }, LOADING_TIME);
