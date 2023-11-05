@@ -44,10 +44,11 @@ async def register_new_user(file: UploadFile = File(...),
             await crud.user.create_user(db, UserCreate(email=user["Почта"], password=hashed_password, role_id=1,
                                                        last_name=last_name, middle_name=middle_name, first_name=first_name,
                                                        gender="Male"))
-            try:
-                await mail_service.send_mailing(to=user["Почта"], subject="Регистрация на сервисе для адаптации",
-                                                template="test.jinja", data=data)
-            except Exception as e:
-                print(e)
-                logging.error(f"Can't send email to {user['Почта']}: {e}")
+            # TODO отправить письмо на почту
+            # try:
+            #     await mail_service.send_mailing(to=user["Почта"], subject="Регистрация на сервисе для адаптации",
+            #                                     template="test.jinja", data=data)
+            # except Exception as e:
+            #     print(e)
+            #     logging.error(f"Can't send email to {user['Почта']}: {e}")
     return True
