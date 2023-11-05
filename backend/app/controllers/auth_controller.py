@@ -15,7 +15,7 @@ class AuthController:
 
         payload.password = PasswordManager.hash_password(payload.password)
         try:
-            await crud.user.create_user(self.db, payload)
+            return await crud.user.create_user(self.db, payload)
         except Exception as e:
             raise e
 

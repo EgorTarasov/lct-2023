@@ -17,6 +17,7 @@ class TaskType(str, Enum):
     work = "Работа"
     meeting = "Собрание"
     event = "Мероприятие"
+    education = "Обучение"
 
 
 class TaskCreate(BaseModel):
@@ -64,7 +65,7 @@ class SqlTask(Base):
     mentee_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     mentor_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
 
-    mentee: Mapped[SqlUser] = relationship("User", foreign_keys=[mentee_id])
-    mentor: Mapped[SqlUser] = relationship("User", foreign_keys=[mentor_id])
+    mentee: Mapped[SqlUser] = relationship("SqlUser", foreign_keys=[mentee_id])
+    mentor: Mapped[SqlUser] = relationship("SqlUser", foreign_keys=[mentor_id])
 
     # user = relationship("User", back_populates="user_role")
