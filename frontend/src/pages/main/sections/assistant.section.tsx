@@ -4,6 +4,11 @@ import SendIcon from "@/assets/send.svg";
 import ChatBotIcon from "@/assets/chatBot.svg";
 import { useState } from "react";
 
+const mocData = [
+  "Какие у меня есть льготы?",
+  "Какой у меня режим работы?",
+  "Расскажи про корпоративную культуру!"
+];
 export const AssistantSection: FCVM<MainPageViewModel> = ({ vm }) => {
   const [inputValue, setInputValue] = useState("");
 
@@ -24,24 +29,15 @@ export const AssistantSection: FCVM<MainPageViewModel> = ({ vm }) => {
         </button>
       </div>
       <div className="flex flex-col gap-3">
-        <button
-          onClick={() => setInputValue("Какие у меня есть льготы?")}
-          className="px-3 py-1 border rounded-tr-xl rounded-br-xl rounded-bl-xl w-fit text-white bg-primary focus:bg-white focus:text-primary"
-          aria-label="Узнать о льготах">
-          <p className="text-base">Какие у меня есть льготы?</p>
-        </button>
-        <button
-          onClick={() => setInputValue("Какой у меня режим работы?")}
-          className="px-3 py-1 border rounded-tr-xl rounded-br-xl rounded-bl-xl w-fit text-white bg-primary focus:bg-white focus:text-primary"
-          aria-label="Узнать режим работы">
-          <p className="text-base">Какой у меня режим работы?</p>
-        </button>
-        <button
-          onClick={() => setInputValue("Расскажи про корпоративную культуру!")}
-          className="px-3 py-1 border rounded-tr-xl rounded-br-xl rounded-bl-xl w-fit text-white bg-primary focus:bg-white focus:text-primary"
-          aria-label="Узнать о корпоративной культуре">
-          <p className="text-base">Расскажи про корпоративную культуру!</p>
-        </button>
+        {mocData.map((item, index) => (
+          <button
+            key={index}
+            onClick={() => setInputValue(item)}
+            className="px-3 py-1 border rounded-tr-xl rounded-br-xl rounded-bl-xl w-fit text-white bg-primary focus:bg-white focus:text-primary"
+            aria-label={`Спросить про ${item}`}>
+            <p className="text-base">{item}</p>
+          </button>
+        ))}
       </div>
     </section>
   );
