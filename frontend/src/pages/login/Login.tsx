@@ -8,12 +8,15 @@ import { useNavigate } from "react-router-dom";
 import { ThemeService } from "@/stores/theme.service.ts";
 import { observer } from "mobx-react-lite";
 import { MOCK_USER } from "@/constants/mocks";
+import EyeOpenIcon from "./assets/eye-open.svg";
+import EyeClosedIcon from "./assets/eye-closed.svg";
 
 export const Login = observer(() => {
   const navigate = useNavigate();
   const [showError, setShowError] = useState<boolean>(false);
   const [authData, setAuthData] = useState<AuthDto.Login>(MOCK_USER);
   const [isLoading, setIsLoading] = useState(false);
+  const [revealPassword, setRevealPassword] = useState(false);
 
   const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -71,11 +74,10 @@ export const Login = observer(() => {
             placeholder={"Введите почту"}
             onChange={handleUsernameChange}
           />
-          <div className={"flex-col flex-end gap-1"}>
+          <div className={"flex flex-col flex-end gap-1"}>
             <Input
               disabled={isLoading}
               label={"Пароль"}
-              type={"password"}
               required
               autoComplete={"current-password"}
               name={"password"}
@@ -84,8 +86,28 @@ export const Login = observer(() => {
               aria-label={"Пароль"}
               placeholder={"Введите пароль"}
               onChange={handlePasswordChange}
+              onIconClick={() => setRevealPassword((v) => !v)}
+              icon={
+                revealPassword ? (
+                  <EyeClosedIcon
+                    role={"button"}
+                    tabIndex={-1}
+                    type="button"
+                    title="Скрыть пароль"
+                    aria-label={"Скрыть пароль"}
+                  />
+                ) : (
+                  <EyeOpenIcon
+                    role={"button"}
+                    title="Показать пароль"
+                    type="button"
+                    aria-label={"Показать пароль"}
+                  />
+                )
+              }
+              type={revealPassword ? "text" : "password"}
             />
-            <div className={"flex items-center gap-1 justify-end"}>
+            <div className={"flex items-center justify-end"}>
               <button
                 type={"button"}
                 aria-label={"Забыли пароль?"}
