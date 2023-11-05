@@ -30,7 +30,7 @@ const MocData: IMocData[] = [
 ];
 export const OnBoardingSection: FCVM<MainPageViewModel> = (vm) => {
   return (
-    <section className="flex flex-col" aria-description={"Список ваших задач по онбордингу"}>
+    <section className="flex flex-col" aria-label={"Список ваших задач по онбордингу"}>
       <Collapsible title={"Онбординг"}>
         <ul className="flex flex-col gap-4">
           {MocData.map((item) => (
