@@ -2,7 +2,7 @@ export const MockEvents: EventDto.Item[] = [
   {
     id: 0,
     category: "education",
-    title: "Дизайн-митап",
+    title: "Книжный клуб",
     date: new Date(Date.now()),
     durationMin: 120,
     points: 12,
@@ -12,17 +12,17 @@ export const MockEvents: EventDto.Item[] = [
   {
     id: 0,
     category: "art",
-    title: "Караоке",
+    title: "Трекинговый поход",
     date: new Date(Date.now()),
-    durationMin: 125,
-    points: 20,
-    location: "Синий зал главного корпуса",
+    durationMin: 800,
+    points: 45,
+    location: "Национальный парк «Угра»",
     imgSrc: null
   },
   {
     id: 0,
     category: "charity",
-    title: "Донат ВС РФ",
+    title: "Zero Waste День",
     date: new Date(Date.now()),
     durationMin: 75,
     points: 20,

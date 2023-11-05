@@ -2,6 +2,7 @@ import { withAuth } from "@/hoc/PrivateRoute";
 import { ComponentType } from "react";
 import { Login, MainPage, ResetPassword } from "../pages";
 import { ProfilePage } from "../pages/profile/profile.page.tsx";
+import { EventsPage } from "../pages/events/events.page.tsx";
 
 export interface RouteType {
   path: string;
@@ -30,14 +31,14 @@ export const routes: RouteType[] = [
   },
   {
     path: "/events",
-    component: withAuth(MainPage),
-    title: "События",
+    component: withAuth(EventsPage),
+    title: "Мероприятия",
     showInNav: true
   },
   {
     path: "/events/:id",
-    component: withAuth(MainPage),
-    title: "События",
+    component: withAuth(EventsPage),
+    title: "Мероприятия",
     showInNav: false
   },
   {

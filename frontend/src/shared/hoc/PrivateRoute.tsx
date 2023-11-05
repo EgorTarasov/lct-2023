@@ -5,6 +5,7 @@ import { AuthService } from "@/stores/auth.service.ts";
 import { DesktopHeading, MobileNav } from "@/components/navigation";
 import { SkipToContent } from "@/components/SkipToContent";
 import { routes } from "../../app/routes";
+import { Footer } from "@/components/footer.tsx";
 
 const PrivateRoute: React.FC<React.PropsWithChildren<unknown>> = observer(({ children }) => {
   const { status } = AuthService;
@@ -18,9 +19,10 @@ const PrivateRoute: React.FC<React.PropsWithChildren<unknown>> = observer(({ chi
 
       <MobileNav />
       <DesktopHeading />
-      <main id="content" tabIndex={-1} className={"flex-1"}>
+      <main id="content" tabIndex={-1} className={"flex-1 min-h-full h-max-content"}>
         {children}
       </main>
+      <Footer />
     </>
   );
 });
