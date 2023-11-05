@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
 
-from app.api import main
+from app.api import main_router
 from app.config import config
 from app.core.sql import Sql
 from app.models.base import Base
@@ -50,7 +50,7 @@ def create_app():
         allow_headers=["*"],
     )
 
-    _app.include_router(main.router, prefix="/api")
+    _app.include_router(main_router.router, prefix="/api")
 
     return _app
 

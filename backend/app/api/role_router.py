@@ -11,7 +11,7 @@ from app.core.sql import Sql
 from app.controllers.role_controller import RoleController
 
 
-router = APIRouter(prefix="/roles", tags=["roles"])
+router = APIRouter(prefix="/role", tags=["role"])
 
 
 @router.post("/", response_model=RoleDto, status_code=status.HTTP_201_CREATED)

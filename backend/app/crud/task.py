@@ -14,12 +14,12 @@ async def create_task(db: Session, payload: TaskCreate, mentor_id) -> SqlTask:
 
 
 async def get_tasks(db: Session, user_id: int) -> list[SqlTask]:
-    """Получение пользователя по id"""
+    """Получение задач пользователя"""
     tasks = db.query(SqlTask).where(SqlTask.mentee_id == user_id).all()
     return tasks
 
 
 async def get_tasks_for_mentor(db: Session, mentor_id: int) -> list[SqlTask]:
-    """Получение пользователя по id"""
+    """Получение задач подопечных ментора"""
     tasks = db.query(SqlTask).filter(SqlTask.mentor_id == mentor_id).all()
     return tasks

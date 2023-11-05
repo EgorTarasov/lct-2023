@@ -35,7 +35,7 @@ class TaskCreate(BaseModel):
 class TaskDto(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int = Field(..., alias="id")
+    id: int = Field(...)
     name: str = Field(...)
     mentee_id: int = Field(...)
     deadline: dt.datetime = Field(...)
