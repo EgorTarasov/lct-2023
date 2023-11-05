@@ -2,7 +2,7 @@ import { FCVM } from "@/utils/fcvm";
 import { MainPageViewModel } from "../main.vm";
 import Collapsible from "@/ui/Collapsible.tsx";
 import Chevron from "@/assets/chevron2.svg";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import CheckOn from "@/assets/check-on.svg";
 import CheckOff from "@/assets/check-off.svg";
@@ -51,10 +51,11 @@ export const OnBoardingSection: FCVM<MainPageViewModel> = (vm) => {
 };
 
 const SectionItem = (x: IMocData) => {
-  const statusText = x.isCompleted ? "Задача выполнена" : "Задача не выполнена";
+  const statusText = `Задача ${x.title},${x.isCompleted ? " не" : ""} выполненная`;
 
   return (
-    <article
+    <NavLink
+      to={x.link}
       className={twMerge(
         "flex items-center justify-between w-full h-full py-2 px-4 transition-colors hover:bg-text-primary/5",
         x.isCompleted && "opacity-60"
@@ -64,9 +65,7 @@ const SectionItem = (x: IMocData) => {
         {x.isCompleted ? <CheckOn width={24} /> : <CheckOff width={24} />}
         <span className="text-sm">{x.title}</span>
       </div>
-      <NavLink to={x.link} aria-label={`Перейти к материалам по теме ${x.title}`}>
-        <Chevron width={24} className="transform90" />
-      </NavLink>
-    </article>
+      <Chevron width={24} className="transform90" aria-hidden="true" />
+    </NavLink>
   );
 };
