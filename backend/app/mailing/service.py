@@ -38,14 +38,13 @@ class EmailService:
             loader=jinja2.FileSystemLoader(templates_path)
         )
         self._server = self._create_connection()
-        print(self._server)
 
     def _create_connection(self) -> smtplib.SMTP_SSL:
 
         server = smtplib.SMTP_SSL(self._host, self._port)
         try:
             reply = server.login(self.__user, self.__password)
-            print(reply)
+            logging.debug(reply)
         except Exception as e:
             logging.error(f"Can't connect to mail server: {e}")
             raise e
@@ -62,16 +61,14 @@ class EmailService:
             cls.instance = super(EmailService, cls).__new__(cls)
         return cls.instance
 
-    # def __del__(self):
-    #     self._server.quit()
-    async def send_mailing(
+    def send_mailing(
         self,
         to: str,
         subject: str,
         template: str,
         data: dict[str, tp.Any],
     ) -> None:
-        print("sending", to, subject, template, data)
+        logging.debug("sending", to, subject, template, data)
         """Отправка письма через SMTP
 
         Args:
@@ -95,12 +92,14 @@ class EmailService:
             if send_errs:
                 logging.error(send_errs)
         except Exception as e:
-            print(e)
             logging.error(f"Can't send email: {e}")
+
             raise e
 
 
 def get_mail_service() -> EmailService:
-    service = EmailService(mail_user=config.mail_user, mail_password=config.mail_password)
+    service = EmailService(
+        mail_user=config.mail_user, mail_password=config.mail_password
+    )
     # TODO сделать менеджер контекста
     yield service
