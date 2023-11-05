@@ -40,10 +40,7 @@ export const MobileNav = () => {
         <Dialog open={isMenuOpen} onClose={toggleMenu}>
           <Dialog.Panel>
             <Dialog.Title>Навигационное меню</Dialog.Title>
-            <div
-              id="mobile-menu"
-              className="fixed inset-0 z-40 bg-nav-background"
-              aria-hidden="true">
+            <div id="mobile-menu" className="fixed inset-0 z-40 bg-nav-background">
               <div className="flex justify-end p-4">
                 <button onClick={toggleMenu} className="p-2">
                   <span className="sr-only">Закрыть меню</span>

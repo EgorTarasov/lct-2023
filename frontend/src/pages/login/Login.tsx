@@ -15,7 +15,6 @@ export const Login = observer(() => {
   const [showError, setShowError] = useState<boolean>(false);
   const [authData, setAuthData] = useState<AuthDto.Login>(MOCK_USER);
   const [isLoading, setIsLoading] = useState(false);
-  const [revealPassword, setRevealPassword] = useState(false);
 
   const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
