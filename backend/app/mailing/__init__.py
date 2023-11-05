@@ -1,1 +1,1 @@
-from .service import EmailService
+from .client import EmailClient
