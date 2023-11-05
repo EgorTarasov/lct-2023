@@ -1,7 +1,6 @@
 import typing as tp
 
 from sqlalchemy import ForeignKey, Integer, Text
-from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from .base import Base
@@ -60,10 +59,10 @@ class SqlUser(Base):
     mentors: Mapped[list["SqlUser"]] = relationship(
         secondary=mentor_mentee,
         foreign_keys=[mentor_mentee.c.mentor_id],
-        back_populates="mentees"
+        back_populates="mentees",
     )
     mentees: Mapped[list["SqlUser"]] = relationship(
         secondary=mentor_mentee,
         foreign_keys=[mentor_mentee.c.mentee_id],
-        back_populates="mentors"
+        back_populates="mentors",
     )

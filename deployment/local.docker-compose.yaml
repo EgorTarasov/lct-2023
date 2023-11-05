@@ -14,12 +14,42 @@ services:
     build:
       context: ../backend/
       dockerfile: Dockerfile
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
     restart: always
     env_file:
       - ../backend/.env
     environment:
       - POSTGRES_HOST=db
+      - RABBITMQ_HOST=rabbitmq
     depends_on:
       - db
     ports:
       - "8000:8000"
+    
+  rabbitmq:
+    image: rabbitmq:3.10.7-management
+    hostname: rabbitmq
+    restart: always
+    env_file:
+      - ../backend/.env
+    environment:
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
+    volumes:
+      - ./docker/rabbitmq:/var/lib/rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672
+  worker:
+    build:
+      context: ../backend/
+      dockerfile: Dockerfile
+    command: celery -A app.worker.celery worker --loglevel=info
+    volumes:
+      - ./project:/usr/src/app
+    env_file:
+      - ../backend/.env
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - backend
+      - rabbitmq

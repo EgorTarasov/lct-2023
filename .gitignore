@@ -1,7 +1,7 @@
+.idea
+.mypy_cache
+.pytest_cache
+.vscode
 docker/
-.vscode/
-.idea/
+node_modules/
 venv/
-.mypy_cache/
-.pytest_cache/
-project/

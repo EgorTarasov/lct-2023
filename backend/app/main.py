@@ -1,5 +1,4 @@
-from sys import prefix
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
@@ -12,6 +11,7 @@ from app.models.base import Base
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    global scheduler
     # startup
     sql = Sql(
         pg_user=config.postgres_user,
@@ -20,7 +20,9 @@ async def lifespan(app: FastAPI):
         pg_db=config.postgres_db,
         pg_port=config.postgres_port,
     )
+
     Base.metadata.create_all(bind=sql.get_engine())
+
     yield
 
     # shutdown
@@ -29,7 +31,7 @@ async def lifespan(app: FastAPI):
 def create_app():
     # setup logging
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.DEBUG,
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
     )
 

@@ -1,3 +1,4 @@
+import logging
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -24,19 +25,16 @@ async def login(
         return token
     except Exception as e:
         # FIXME: обработать 500 ошибку
-        print(e)
+        logging.error(e)
         raise HTTPException(status_code=400, detail="Incorrect email or password")
 
 
 @router.post("/register")
 async def register(
     user_data: UserCreate,
-    # token: str = Depends(
-    #     oauth2_scheme
-    # ),  # TODO: получать данные пользователя из jwt вместо токена
     db: Session = Depends(Sql.get_session),
 ):
-    # print(token)
+
     user = await AuthController(db).create_user(user_data)
     if not user:
         raise HTTPException(status_code=400, detail="User already exists")
