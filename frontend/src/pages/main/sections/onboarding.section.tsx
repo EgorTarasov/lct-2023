@@ -2,7 +2,7 @@ import { FCVM } from "@/utils/fcvm";
 import { MainPageViewModel } from "../main.vm";
 import Collapsible from "@/ui/Collapsible.tsx";
 import Chevron from "@/assets/chevron2.svg";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import CheckOn from "@/assets/check-on.svg";
 import CheckOff from "@/assets/check-off.svg";
@@ -28,6 +28,7 @@ const MocData: IMocData[] = [
     link: "/tasks/design-principles"
   }
 ];
+
 export const OnBoardingSection: FCVM<MainPageViewModel> = (vm) => {
   return (
     <section className="flex flex-col" aria-label={"Список ваших задач по онбордингу"}>
@@ -50,28 +51,21 @@ export const OnBoardingSection: FCVM<MainPageViewModel> = (vm) => {
 };
 
 const SectionItem = (x: IMocData) => {
-  // Визуальный индикатор для скринридеров
-  const statusText = x.isCompleted ? "Задача выполнена" : "Задача не выполнена";
+  const statusText = x.isCompleted ? "выполненной задаче" : "не выполненной задаче";
 
   return (
-    <article
+    <Link
+      to={x.link}
+      aria-label={`Перейти к ${statusText} по теме ${x.title}`}
       className={twMerge(
         "flex items-center justify-between w-full h-full",
-        x.isCompleted ? "opacity-60" : ""
-      )}
-      aria-label={statusText}>
-      <div className="flex items-center gap-2">
-        <span className="sr-only">{statusText}</span>
-        {x.isCompleted ? (
-          <CheckOn width={24} aria-hidden="true" />
-        ) : (
-          <CheckOff width={24} aria-hidden="true" />
-        )}
+        x.isCompleted && "opacity-60"
+      )}>
+      <div className="flex items-center gap-2" aria-hidden="true">
+        {x.isCompleted ? <CheckOn width={24} /> : <CheckOff width={24} />}
         <span className="text-sm">{x.title}</span>
       </div>
-      <NavLink to={x.link} aria-label={`Перейти к материалам по теме ${x.title}`}>
-        <Chevron width={24} className="transform rotate-90" aria-hidden="true" />
-      </NavLink>
-    </article>
+      <Chevron width={24} className="transform" />
+    </Link>
   );
 };

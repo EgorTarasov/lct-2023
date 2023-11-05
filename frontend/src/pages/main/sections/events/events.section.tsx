@@ -16,7 +16,7 @@ export const EventsSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
 
   return (
     <section className="flex flex-col w-full">
-      <div className="flex justify-between items-center mx-3">
+      <div className="flex justify-between items-center mx-4 mt-6">
         <h2 className="font-medium text-xl">Мероприятия</h2>
         <Link
           to="/events"
@@ -27,6 +27,7 @@ export const EventsSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
       <Separator className="my-3" />
       <Swiper
         className={cl.swiper}
+        spaceBetween={8}
         slidesPerView="auto"
         mousewheel
         modules={[Mousewheel]}
@@ -34,7 +35,7 @@ export const EventsSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
         onSwiper={(swiper) => console.log(swiper)}>
         <ul>
           {vm.events.map((v, i) => (
-            <SwiperSlide key={i} className="ml-2">
+            <SwiperSlide key={i}>
               <EventCard item={v} onRegisterClick={() => console.log(v.id)} />
             </SwiperSlide>
           ))}

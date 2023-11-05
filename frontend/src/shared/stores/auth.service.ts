@@ -6,7 +6,7 @@ import { makeAutoObservable } from "mobx";
 type AuthStatus = "loading" | "anonymous" | "authorized" | "unfinished";
 
 class AuthServiceViewModel {
-  public status: AuthStatus = "anonymous";
+  public status: AuthStatus = "authorized";
   public item: AuthDto.Item | null = null;
 
   constructor() {

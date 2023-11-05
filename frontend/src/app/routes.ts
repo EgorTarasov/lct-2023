@@ -7,18 +7,21 @@ export interface RouteType {
   path: string;
   component: ComponentType;
   title: string;
+  showInNav?: boolean;
 }
 
-export const privateRoutes = [
+export const routes: RouteType[] = [
   {
     path: "/",
     component: withAuth(MainPage),
-    title: "Главная"
+    title: "Главная",
+    showInNav: true
   },
   {
     path: "/tasks",
     component: withAuth(MainPage),
-    title: "Задания"
+    title: "Задания",
+    showInNav: true
   },
   {
     path: "tasks/:id",
@@ -28,27 +31,33 @@ export const privateRoutes = [
   {
     path: "/events",
     component: withAuth(MainPage),
-    title: "События"
+    title: "События",
+    showInNav: true
+  },
+  {
+    path: "/events/:id",
+    component: withAuth(MainPage),
+    title: "События",
+    showInNav: true
   },
   {
     path: "/me",
     component: withAuth(ProfilePage),
-    title: "Профиль"
+    title: "Профиль",
+    showInNav: true
   },
   {
     path: "/shop",
     component: withAuth(MainPage),
-    title: "Магазин"
+    title: "Магазин",
+    showInNav: true
   },
   {
     path: "/contacts",
     component: withAuth(MainPage),
-    title: "Контакты"
-  }
-];
-
-export const routes: RouteType[] = [
-  ...privateRoutes,
+    title: "Контакты",
+    showInNav: true
+  },
   {
     path: "/login",
     component: Login,
