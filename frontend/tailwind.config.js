@@ -18,11 +18,19 @@ export default {
         text: {
           primary: "#1D1D1D"
         },
-        input: {},
-        button: {
-          primary: {}
+        event: {
+          sport: "#EB5284",
+          education: "#2C55DE",
+          art: "#7B2CBF",
+          charity: "#FF6400"
         }
       }
     }
-  }
+  },
+  safelist: [
+    "text-event-sport",
+    "text-event-education",
+    "text-event-art",
+    "text-event-charity"
+  ]
 };
