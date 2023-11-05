@@ -32,7 +32,7 @@ async def get_user_by_email(db: Session, email: str) -> SqlUser:
         raise Exception("User not found")
 
 
-async def get_mentee(db: Session) -> list[UserDto]:
+async def get_mentee(db: Session) -> list[SqlUser]:
     # получить сприсок пользователей без менторов
     # select users which are not in mentor_mentee table as mentees
     result = (
@@ -41,10 +41,10 @@ async def get_mentee(db: Session) -> list[UserDto]:
         .filter(SqlUser.role_id == 1)
         .all()
     )
-    return [UserDto.model_validate(obj) for obj in result]
+    return result
 
 
-async def get_assigned_mentees(db: Session, mentor_id: int):
+async def get_assigned_mentees(db: Session, mentor_id: int) -> list[SqlUser]:
     """
     SELECT
             users.id,
@@ -63,10 +63,10 @@ async def get_assigned_mentees(db: Session, mentor_id: int):
         .all()
     )
 
-    return [UserDto.model_validate(obj) for obj in mentees]
+    return mentees
 
 
-async def assign_mentee(db: Session, mentor_id: int, mentee_id: int) -> list[UserDto]:
+async def assign_mentee(db: Session, mentor_id: int, mentee_id: int) -> list[SqlUser]:
     mentor = db.query(SqlUser).where(SqlUser.id == mentor_id).one_or_none()
     if not mentor:
         raise Exception("Mentor not found")
@@ -83,6 +83,4 @@ async def assign_mentee(db: Session, mentor_id: int, mentee_id: int) -> list[Use
         .all()
     )
 
-    return [UserDto.model_validate(obj) for obj in mentees]
-
-
+    return mentees
