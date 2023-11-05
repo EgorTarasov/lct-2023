@@ -21,7 +21,7 @@ const Collapsible = ({
             <ChevronSvg
               className={twMerge(
                 "transform transition-transform duration-200 w-6 h-6 text-text-primary",
-                !open && "rotate-180"
+                open ? "-rotate-90" : "rotate-90"
               )}
             />
           </Disclosure.Button>

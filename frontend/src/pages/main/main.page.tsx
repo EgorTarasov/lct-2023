@@ -5,11 +5,12 @@ import Collapsible from "@/ui/Collapsible.tsx";
 import { AssistantSection } from "./sections/assistant.section";
 import { MainPageViewModel } from "./main.vm";
 import { OnBoardingSection } from "./sections/onboarding.section";
-import { EventsSection } from "./sections/events.section";
+import { EventsSection } from "./sections/events/events.section";
 import { LearningSection } from "./sections/learning.section";
+import { observer } from "mobx-react-lite";
 
-export const MainPage = () => {
-  const vm = useState(() => new MainPageViewModel());
+export const MainPage = observer(() => {
+  const [vm] = useState(() => new MainPageViewModel());
 
   return (
     <div className="flex flex-col">
@@ -19,4 +20,4 @@ export const MainPage = () => {
       <LearningSection vm={vm} />
     </div>
   );
-};
+});

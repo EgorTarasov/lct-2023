@@ -1,0 +1,9 @@
+.swiper {
+    width: 100%;
+    :global(.swiper-wrapper) {
+        width: fit-content;
+    }
+    :global(.swiper-slide) {
+        width: fit-content;
+    }
+}
