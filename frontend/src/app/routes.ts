@@ -1,6 +1,7 @@
 import { withAuth } from "@/hoc/PrivateRoute";
 import { ComponentType } from "react";
 import { Login, MainPage, ResetPassword } from "../pages";
+import { ProfilePage } from "../pages/profile/profile.page.tsx";
 
 export interface RouteType {
   path: string;
@@ -20,13 +21,18 @@ export const privateRoutes = [
     title: "Задания"
   },
   {
+    path: "tasks/:id",
+    component: withAuth(MainPage),
+    title: "Задания"
+  },
+  {
     path: "/events",
     component: withAuth(MainPage),
     title: "События"
   },
   {
     path: "/me",
-    component: withAuth(MainPage),
+    component: withAuth(ProfilePage),
     title: "Профиль"
   },
   {
