@@ -7,21 +7,24 @@ import "swiper/css/mousewheel";
 import { A11y, Keyboard, Mousewheel, Navigation } from "swiper/modules";
 import cl from "./swiper.module.scss";
 import { ReactNode } from "react";
-import { NavigationOptions, SwiperOptions } from "swiper/types";
+import { A11yOptions, NavigationOptions, SwiperOptions } from "swiper/types";
 
 export const HorizontalCarousel = ({
   children,
   navigation,
-  slidesPerView
+  slidesPerView,
+  a11y
 }: {
   children: JSX.Element[];
   navigation?: NavigationOptions;
   slidesPerView?: SwiperOptions["slidesPerView"];
+  a11y?: A11yOptions;
 }) => {
   return (
     <Swiper
       className={cl.swiper}
       spaceBetween={8}
+      a11y={a11y}
       slidesPerView={slidesPerView ?? "auto"}
       keyboard
       mousewheel

@@ -22,10 +22,17 @@ export const LearningSection: FCVM<MainPageViewModel> = ({ vm }) => {
         <Separator className="my-3" />
       </div>
       <HorizontalCarousel
+        a11y={{
+          prevSlideMessage: "Предыдущие задачи",
+          nextSlideMessage: "Следующие задачи",
+          containerMessage: "Список задач",
+          firstSlideMessage: "Первая страница",
+          lastSlideMessage: "Последняя страница"
+        }}
         slidesPerView={1}
         navigation={{
-          nextEl: `#${leftControlId}`,
-          prevEl: `#${rightControlId}`,
+          prevEl: `#${CSS.escape(leftControlId)}`,
+          nextEl: `#${CSS.escape(rightControlId)}`,
           enabled: true
         }}>
         <div className="h-[400px] bg-red-200 w-full">Test</div>
