@@ -48,12 +48,12 @@ export const Login = observer(() => {
           <OldInput
             label={"Логин"}
             type={"text"}
-            aria-label={"Логин"}
-            autoComplete={"username"}
-            name={"login"}
+            aria-label={"Почта"}
+            autoComplete={"email"}
+            name={"email"}
             value={authData.username}
             error={showError}
-            placeholder={"Введите логин"}
+            placeholder={"Введите почту"}
             onChange={handleUsernameChange}
           />
           <div className={"flex-col flex-end gap-1"}>
