@@ -1,12 +1,6 @@
-"""
-@post добавление данных из телеграма
-@post добавление увлечений сотрудника
-"""
-
 import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from app.auth.dependency import get_current_user
 
 from app.models.interest import InterestDto
 from app.controllers.interest_controller import InterestController
