@@ -1,17 +1,10 @@
 import { FCVM } from "@/utils/fcvm";
 import { MainPageViewModel } from "../../main.vm";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/a11y";
-import "swiper/css/keyboard";
-import "swiper/css/mousewheel";
 import { Separator } from "@/ui/Separator";
 import ChevronIcon from "@/assets/chevron2.svg";
 import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { EventCard } from "./event-card.widget";
-import { A11y, Keyboard, Mousewheel } from "swiper/modules";
-import cl from "./swiper.module.scss";
 import { HorizontalCarousel } from "@/components/swiper/HorizontalCarousel";
 
 export const EventsSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
@@ -28,13 +21,16 @@ export const EventsSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
         </Link>
       </div>
       <Separator className="my-3" />
-      <HorizontalCarousel>
-        {vm.events.map((v, i) => (
-          <SwiperSlide key={i}>
-            <EventCard item={v} onRegisterClick={() => console.log(v.id)} />
-          </SwiperSlide>
-        ))}
-      </HorizontalCarousel>
+      <ul>
+        <HorizontalCarousel
+          mousewheel={{
+            forceToAxis: true
+          }}>
+          {vm.events.map((v, i) => (
+            <EventCard key={i} item={v} onRegisterClick={() => console.log(v.id)} />
+          ))}
+        </HorizontalCarousel>
+      </ul>
     </section>
   );
 });

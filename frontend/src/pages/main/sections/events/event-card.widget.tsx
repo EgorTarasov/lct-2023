@@ -10,6 +10,7 @@ import MarkerIcon from "@/assets/marker.svg";
 import { twMerge } from "tailwind-merge";
 import { Link, useNavigate } from "react-router-dom";
 import { convertDate, convertMinutes } from "@/utils/dateConverters";
+import { IconText } from "@/ui/IconText";
 
 interface EventCardProps {
   item: EventDto.Item;
@@ -17,35 +18,11 @@ interface EventCardProps {
   wide?: boolean;
 }
 
-const IconText = ({
-  icon: Icon,
-  text,
-  alt,
-  iconPrimary
-}: {
-  icon: React.FC<HTMLProps<SVGElement>>;
-  text: string;
-  alt: string;
-  iconPrimary?: boolean;
-}) => (
-  <li className="flex" aria-label={`${alt}: ${text}`}>
-    <Icon
-      className={twMerge("min-w-[16px]", iconPrimary ? "text-primary" : "text-text-primary/60")}
-      aria-hidden="true"
-      width={16}
-      height={16}
-    />
-    <span className="ml-1 text-sm leading-none" aria-hidden="true">
-      {text}
-    </span>
-  </li>
-);
-
 export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) => {
   const { illustration: Icon, locale } = useMemo(() => getEventMap(item.category), [item]);
   const ariaLabel = useMemo(
     () =>
-      `Мероприятие ${item.title}, которое пройдет ${convertDate(item.date)} по адресу "${
+      `Мероприятие ${item.title}, которое пройдет ${convertDate(item.deadline)} по адресу "${
         item.location
       }" и будет длиться ${convertMinutes(item.durationMin, true)}`,
     [item]
@@ -67,7 +44,7 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) =
           {item.title}
         </Link>
         <ul className="flex flex-wrap gap-2 my-3">
-          <IconText icon={CalendarIcon} text={convertDate(item.date)} alt="Дата проведения" />
+          <IconText icon={CalendarIcon} text={convertDate(item.deadline)} alt="Дата проведения" />
           <IconText
             icon={ClockIcon}
             text={convertMinutes(item.durationMin)}

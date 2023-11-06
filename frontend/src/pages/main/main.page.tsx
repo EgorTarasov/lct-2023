@@ -6,7 +6,7 @@ import { AssistantSection } from "./sections/assistant.section";
 import { MainPageViewModel } from "./main.vm";
 import { OnBoardingSection } from "./sections/onboarding.section";
 import { EventsSection } from "./sections/events/events.section";
-import { LearningSection } from "./sections/learning.section";
+import { CourseSection } from "./sections/course/course.section";
 import { observer } from "mobx-react-lite";
 
 export const MainPage = observer(() => {
@@ -17,7 +17,7 @@ export const MainPage = observer(() => {
       <AssistantSection vm={vm} />
       <OnBoardingSection vm={vm} />
       <EventsSection vm={vm} />
-      <LearningSection vm={vm} />
+      <CourseSection vm={vm} />
     </div>
   );
 });

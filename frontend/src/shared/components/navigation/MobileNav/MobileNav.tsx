@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import NavIcon from "./assets/nav.svg";
 import { NavLink, useLocation } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
@@ -20,7 +20,7 @@ export const MobileNav = () => {
   };
 
   return (
-    <nav className="sticky block sm:hidden top-0 z-10 w-full bg-nav-background flex justify-between items-center px-4 py-2 shadow">
+    <nav className="sticky sm:hidden top-0 z-10 w-full bg-nav-background flex justify-between items-center px-3 py-2 shadow">
       <div className="flex items-center">
         <button
           id="nav-button"
@@ -49,8 +49,8 @@ export const MobileNav = () => {
       <Dialog open={isMenuOpen} onClose={toggleMenu} className="relative z-40">
         <Dialog.Panel>
           <Dialog.Title>Навигационное меню</Dialog.Title>
-          <div id="mobile-menu" className="fixed inset-0 z-40 bg-nav-background">
-            <div className="flex justify-between px-4 py-2 items-center">
+          <div id="mobile-menu" className="appear fixed inset-0 z-40 bg-nav-background">
+            <div className="flex justify-between px-3 py-2 items-center">
               <div className="flex items-center">
                 <button onClick={toggleMenu} className="p-1">
                   <span className="sr-only">Закрыть меню</span>
@@ -72,20 +72,19 @@ export const MobileNav = () => {
                 </NavLink>
               </div>
             </div>
-            <ul className="px-4">
+            <ul className="px-4 gap-1 flex flex-col">
               {routes
                 .filter((route) => route.showInNav)
                 .map((item) => (
                   <li
                     key={item.path}
-                    className={twMerge(
-                      "border-b border-nav-text py-3",
-                      item.path === currentRoute?.path ? "text-primary" : ""
-                    )}>
+                    className={
+                      item.path === currentRoute?.path ? "text-primary" : "text-text-primary/80"
+                    }>
                     <NavLink
                       to={item.path}
                       onClick={toggleMenu}
-                      className="flex items-center justify-between">
+                      className="flex items-center justify-between border-b border-nav-text py-3">
                       {item.title}
                       {item.path !== currentRoute?.path && <ChevronIcon className="w-6 h-6" />}
                     </NavLink>

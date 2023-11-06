@@ -32,5 +32,5 @@ export default {
     "text-event-education",
     "text-event-art",
     "text-event-charity"
-  ]
+  ],
 };
