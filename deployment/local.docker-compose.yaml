@@ -25,7 +25,6 @@ services:
       - db
     ports:
       - "8000:8000"
-    
   rabbitmq:
     image: rabbitmq:3.10.7-management
     hostname: rabbitmq
@@ -37,8 +36,20 @@ services:
     volumes:
       - ./docker/rabbitmq:/var/lib/rabbitmq
     ports:
-      - 15672:15672
-      - 5672:5672
+      - "15672:15672"
+      - "5672:5672"
+  minio:
+    image: quay.io/minio/minio
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    container_name: minio
+    env_file:
+      - ../backend/.env
+    volumes:
+      - ./docker/minio/data:/data
+
+    command: server /data --console-address ":9090"
   worker:
     build:
       context: ../backend/

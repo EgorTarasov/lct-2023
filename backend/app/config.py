@@ -35,6 +35,11 @@ class Config(BaseSettings):
     rabbitmq_host: str = "localhost"
     rabbitmq_port: int = 5672
 
+    minio_root_user: str = ""
+    minio_root_password: str = ""
+    s3_minio_access_key: str = ""
+    s3_minio_secret_key: str = ""
+
     @property
     def rabbitmq_url(self) -> str:
         return f"amqp://{config.rabbitmq_default_user}:{config.rabbitmq_default_pass}@{config.rabbitmq_host}:{config.rabbitmq_port}"
