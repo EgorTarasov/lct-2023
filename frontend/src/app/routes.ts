@@ -5,6 +5,7 @@ import { ProfilePage } from "../pages/profile/profile.page.tsx";
 import { EventsPage } from "../pages/events/events.page.tsx";
 import { EducationPage } from "../pages/education/education.page.tsx";
 import { TasksPage } from "../pages/tasks/tasks.page.tsx";
+import { ShopPage } from "../pages/shop/shop.page.tsx";
 
 export interface RouteType {
   path: string;
@@ -62,9 +63,15 @@ export const routes: RouteType[] = [
   },
   {
     path: "/shop",
-    component: withAuth(MainPage),
+    component: withAuth(ShopPage),
     title: "Магазин",
     showInNav: true
+  },
+  {
+    path: "/shop/:id",
+    component: withAuth(ShopPage),
+    title: "Магазин",
+    showInNav: false
   },
   {
     path: "/contacts",

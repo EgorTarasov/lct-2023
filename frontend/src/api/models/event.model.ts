@@ -11,7 +11,7 @@ export const MockEvents: EventDto.Item[] = [
   },
   {
     id: 0,
-    category: "art",
+    category: "sport",
     title: "Трекинговый поход",
     deadline: new Date(Date.now()),
     durationMin: 800,
