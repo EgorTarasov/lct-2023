@@ -1,7 +1,7 @@
 import { MockCourses } from "api/models/course.model.ts";
 import { Input } from "@/ui/Input.tsx";
 import SearchIcon from "@/assets/search.svg";
-import { Chip } from "@/ui/chips.tsx";
+import { Chip } from "@/ui";
 import { useState } from "react";
 import { CourseCard } from "@/components/cards/course-card.widget";
 
