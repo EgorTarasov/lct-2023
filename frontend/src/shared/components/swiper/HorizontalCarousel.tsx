@@ -6,8 +6,8 @@ import "swiper/css/navigation";
 import "swiper/css/mousewheel";
 import { A11y, Keyboard, Mousewheel, Navigation } from "swiper/modules";
 import cl from "./swiper.module.scss";
-import { FC, ReactNode } from "react";
-import { A11yOptions, NavigationOptions, SwiperOptions } from "swiper/types";
+import { FC } from "react";
+import { SwiperOptions } from "swiper/types";
 
 interface HorizontalCarouselProps extends SwiperOptions {
   children: JSX.Element[];

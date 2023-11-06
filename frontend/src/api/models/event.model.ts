@@ -3,7 +3,7 @@ export const MockEvents: EventDto.Item[] = [
     id: 0,
     category: "education",
     title: "Книжный клуб",
-    date: new Date(Date.now()),
+    deadline: new Date(Date.now()),
     durationMin: 120,
     points: 12,
     location: "Синий зал главного корпуса",
@@ -13,7 +13,7 @@ export const MockEvents: EventDto.Item[] = [
     id: 0,
     category: "art",
     title: "Трекинговый поход",
-    date: new Date(Date.now()),
+    deadline: new Date(Date.now()),
     durationMin: 800,
     points: 45,
     location: "Национальный парк «Угра»",
@@ -23,7 +23,7 @@ export const MockEvents: EventDto.Item[] = [
     id: 0,
     category: "charity",
     title: "Zero Waste День",
-    date: new Date(Date.now()),
+    deadline: new Date(Date.now()),
     durationMin: 75,
     points: 20,
     location: "Синий зал главного корпуса",
@@ -38,7 +38,7 @@ export namespace EventDto {
     id: number;
     category: EventType;
     title: string;
-    date: Date;
+    deadline: Date;
     durationMin: number;
     points: number;
     location: string;
