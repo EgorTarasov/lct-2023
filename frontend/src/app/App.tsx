@@ -37,7 +37,7 @@ const App = observer(() => {
       )}
       <SkipToContent />
       <DesktopLayout>
-        <main id="content" tabIndex={-1} className={"relative z-0 h-full w-full overflow-hidden"}>
+        <main id="content" tabIndex={-1} className={"relative z-0 h-max w-full overflow-hidden"}>
           <SwitchTransition>
             <CSSTransition key={location.key} classNames="fade" timeout={150} unmountOnExit>
               <Routes location={location}>
