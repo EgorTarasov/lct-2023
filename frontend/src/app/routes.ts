@@ -3,6 +3,7 @@ import { ComponentType } from "react";
 import { Login, MainPage, ResetPassword } from "../pages";
 import { ProfilePage } from "../pages/profile/profile.page.tsx";
 import { EventsPage } from "../pages/events/events.page.tsx";
+import { EducationPage } from "../pages/education/education.page.tsx";
 
 export interface RouteType {
   path: string;
@@ -19,15 +20,16 @@ export const routes: RouteType[] = [
     showInNav: true
   },
   {
-    path: "/tasks",
-    component: withAuth(MainPage),
-    title: "Задания",
+    path: "/education",
+    component: withAuth(EducationPage),
+    title: "Обучение",
     showInNav: true
   },
   {
-    path: "tasks/:id",
-    component: withAuth(MainPage),
-    title: "Задания"
+    path: "education/:id",
+    component: withAuth(EducationPage),
+    title: "Обучение",
+    showInNav: false
   },
   {
     path: "/events",
