@@ -1,4 +1,4 @@
-import { ComponentType } from "react";
+import { ComponentType, ReactElement } from "react";
 import { Login, MainPage, ResetPassword } from "../pages";
 import { ProfilePage } from "../pages/profile/profile.page.tsx";
 import { EventsPage } from "../pages/events/events.page.tsx";
@@ -6,6 +6,7 @@ import { EducationPage } from "../pages/education/education.page.tsx";
 import { TasksPage } from "../pages/tasks/tasks.page.tsx";
 import { ShopPage } from "../pages/shop/shop.page.tsx";
 import { StaffPage } from "../pages/staff/staff.page.tsx";
+import { PrivateRoute } from "@/hoc/PrivateRoute.tsx";
 
 export interface RouteType {
   path: string;
@@ -13,86 +14,130 @@ export interface RouteType {
   title: string;
   showInNav?: boolean;
 }
-
+// This looks bad we're sorry
 export const routes: RouteType[] = [
   {
     path: "/",
-    component: MainPage,
+    component: () => (
+      <PrivateRoute>
+        <MainPage />
+      </PrivateRoute>
+    ),
     title: "Главная",
     showInNav: true
   },
   {
     path: "/education",
-    component: EducationPage,
+    component: () => (
+      <PrivateRoute>
+        <EducationPage />
+      </PrivateRoute>
+    ),
     title: "Обучение",
     showInNav: true
   },
   {
     path: "/education/:id",
-    component: EducationPage,
+    component: () => (
+      <PrivateRoute>
+        <EducationPage />
+      </PrivateRoute>
+    ),
     title: "Обучение",
     showInNav: false
   },
   {
     path: "/tasks",
-    component: TasksPage,
+    component: () => (
+      <PrivateRoute>
+        <TasksPage />
+      </PrivateRoute>
+    ),
     title: "Задания",
     showInNav: true
   },
   {
     path: "/tasks/:id",
-    component: TasksPage,
+    component: () => (
+      <PrivateRoute>
+        <TasksPage />
+      </PrivateRoute>
+    ),
     title: "Задания"
   },
   {
     path: "/staff",
-    component: StaffPage,
+    component: () => (
+      <PrivateRoute>
+        <StaffPage />
+      </PrivateRoute>
+    ),
     title: "Сотрудники",
     showInNav: true
   },
   {
     path: "/events",
-    component: EventsPage,
+    component: () => (
+      <PrivateRoute>
+        <EventsPage />
+      </PrivateRoute>
+    ),
     title: "Мероприятия",
     showInNav: true
   },
   {
     path: "/events/:id",
-    component: EventsPage,
+    component: () => (
+      <PrivateRoute>
+        <EventsPage />
+      </PrivateRoute>
+    ),
     title: "Мероприятия",
     showInNav: false
   },
   {
     path: "/me",
-    component: ProfilePage,
+    component: () => (
+      <PrivateRoute>
+        <ProfilePage />
+      </PrivateRoute>
+    ),
     title: "Профиль"
   },
   {
     path: "/shop",
-    component: ShopPage,
+    component: () => (
+      <PrivateRoute>
+        <ShopPage />
+      </PrivateRoute>
+    ),
     title: "Магазин",
     showInNav: true
   },
   {
     path: "/shop/:id",
-    component: ShopPage,
+    component: () => (
+      <PrivateRoute>
+        <ShopPage />
+      </PrivateRoute>
+    ),
     title: "Магазин",
     showInNav: false
   },
   {
     path: "/contacts",
-    component: MainPage,
+    component: () => <MainPage />,
     title: "Контакты",
     showInNav: true
   },
   {
     path: "/login",
-    component: Login,
+    component: () => <Login />,
     title: "Вход"
   },
   {
     path: "/reset-password",
-    component: ResetPassword,
+    component: () => <ResetPassword />,
     title: "Восстановление пароля"
   }
 ];
