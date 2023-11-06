@@ -10,7 +10,7 @@ router = APIRouter(prefix="/interest", tags=["interest"])
 
 
 @router.get("/", response_model=list[InterestDto])
-async def get_avaliable_interests(
+async def get_available_interests(
     db: Session = Depends(Sql.get_session),
 ):
     """Интересы / хобби доступные для выбора
