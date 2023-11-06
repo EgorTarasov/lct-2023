@@ -1,3 +1,4 @@
+from turtle import pos
 import typing as tp
 
 from sqlalchemy import ForeignKey, Integer, Text
@@ -50,8 +51,10 @@ class SqlUser(Base):
     gender: Mapped[str] = mapped_column(Text, nullable=True)
     password: Mapped[str] = mapped_column(Text, nullable=False)
     role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"), nullable=False)
+    position_id: Mapped[int] = mapped_column(ForeignKey("positions.id"), nullable=True)
 
     user_role = relationship("SqlRole")
+    position = relationship("SqlPosition", back_populates="users")
     interests: Mapped[list["SqlInterest"]] = relationship(
         secondary=interest_user, back_populates="users"
     )
