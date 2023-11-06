@@ -40,7 +40,7 @@ export const CourseCard = ({ item }: { item: CourseDto.Item }) => {
           item.isCompleted && "opacity-60"
         )}>
         <Icon className="text-primary" />
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-full">
           <h4 className="leading-5 text-lg">{item.title}</h4>
           <ul className="flex flex-wrap gap-2">
             <IconText
