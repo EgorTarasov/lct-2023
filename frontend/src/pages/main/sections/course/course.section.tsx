@@ -47,7 +47,7 @@ export const CourseSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
             enabled: true
           }}>
           {arrayChunk(vm.courses, 3).map((v, i) => (
-            <div className="flex flex-col gap-3" key={i}>
+            <div className="flex flex-col gap-3 my-1" key={i}>
               {v.map((course, j) => (
                 <CourseCard key={j} item={course} />
               ))}
