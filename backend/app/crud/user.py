@@ -33,7 +33,7 @@ async def get_user_by_email(db: Session, email: str) -> SqlUser:
 
 
 async def get_mentee(db: Session) -> list[SqlUser]:
-    # получить сприсок пользователей без менторов
+    # получить список пользователей без менторов
     # select users which are not in mentor_mentee table as mentees
     result = (
         db.query(SqlUser)

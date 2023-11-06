@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from ..models.course import SqlCourse, CourseCreate, CourseDto
+from ..models.position import SqlPosition
 
 
 async def create(db: Session, payload: CourseCreate) -> SqlCourse:
@@ -17,3 +18,20 @@ async def get(db: Session, course_id: int) -> SqlCourse:
     if not db_course:
         raise Exception("Course not found")
     return db_course
+
+
+async def get_all(db: Session) -> list[SqlCourse]:
+    db_courses = db.query(SqlCourse).all()
+    return db_courses
+
+
+async def get_for_position(db: Session, position_id: int) -> list[SqlCourse]:
+    db_position = db.query(SqlPosition).filter(SqlPosition.id == position_id).first()
+    if not db_position:
+        raise Exception("Такой позиции не существует")
+    return db_position.courses
+
+
+# async def get_for_user(db: Session, position_id: int) -> SqlCourse:
+#     db_courses = db.query(SqlCourse).filter(SqlCourse.id == position_id).all()
+#     return db_courses
