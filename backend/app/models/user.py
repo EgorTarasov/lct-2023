@@ -58,6 +58,9 @@ class SqlUser(Base):
     interests: Mapped[list["SqlInterest"]] = relationship(
         secondary=interest_user, back_populates="users"
     )
+    events: Mapped[list["SqlEvent"]] = relationship(
+        secondary="enrollments",
+    )
 
     mentors: Mapped[list["SqlUser"]] = relationship(
         secondary=mentor_mentee,
