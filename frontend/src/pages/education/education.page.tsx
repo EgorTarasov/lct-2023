@@ -1,9 +1,9 @@
 import { MockCourses } from "api/models/course.model.ts";
-import { CourseCard } from "../main/sections/course/course-card.widget.tsx";
 import { Input } from "@/ui/Input.tsx";
 import SearchIcon from "@/assets/search.svg";
 import { Chip } from "@/ui/chips.tsx";
 import { useState } from "react";
+import { CourseCard } from "@/components/cards/course-card.widget";
 
 enum Filter {
   All,
