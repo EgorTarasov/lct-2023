@@ -6,6 +6,7 @@ import { EventsPage } from "../pages/events/events.page.tsx";
 import { EducationPage } from "../pages/education/education.page.tsx";
 import { TasksPage } from "../pages/tasks/tasks.page.tsx";
 import { ShopPage } from "../pages/shop/shop.page.tsx";
+import { StaffPage } from "../pages/staff/staff.page.tsx";
 
 export interface RouteType {
   path: string;
@@ -28,7 +29,7 @@ export const routes: RouteType[] = [
     showInNav: true
   },
   {
-    path: "education/:id",
+    path: "/education/:id",
     component: withAuth(EducationPage),
     title: "Обучение",
     showInNav: false
@@ -40,9 +41,15 @@ export const routes: RouteType[] = [
     showInNav: true
   },
   {
-    path: "tasks/:id",
+    path: "/tasks/:id",
     component: withAuth(TasksPage),
     title: "Задания"
+  },
+  {
+    path: "/staff",
+    component: withAuth(StaffPage),
+    title: "Сотрудники",
+    showInNav: true
   },
   {
     path: "/events",
