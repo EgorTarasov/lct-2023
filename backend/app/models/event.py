@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from sqlalchemy import Text, Integer, ForeignKey, DateTime, Text
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 import datetime as dt
@@ -7,14 +7,17 @@ from app.models.base import Base
 
 
 class EventCreate(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     title: str
     description: str
     place: str
     type_id: int
+    starts_at: dt.datetime
 
 
 class EventDto(EventCreate):
     id: int
+    is_enrolled: bool = False
 
 
 class SqlEvent(Base):
@@ -24,6 +27,7 @@ class SqlEvent(Base):
     title: Mapped[str] = mapped_column(Text)
     description: Mapped[str] = mapped_column(Text)
     place: Mapped[str] = mapped_column(Text)
+    starts_at: Mapped[dt.datetime] = mapped_column(DateTime)
     type_id: Mapped[int] = mapped_column(ForeignKey("event_type.id"), nullable=False)
 
     event_type = relationship("SqlEventType")
@@ -34,6 +38,7 @@ class SqlEnrollment(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     created_at: Mapped[dt.datetime] = mapped_column(DateTime, default=dt.datetime.utcnow)
+
     event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
 
