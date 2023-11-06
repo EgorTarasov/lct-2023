@@ -16,8 +16,8 @@ export const Tabs: FC<{ tabs: Tab[]; className?: string }> = ({ tabs, className 
             key={i}
             className={({ selected }) =>
               twMerge(
-                "text-lg p-2 text-text-primary/60",
-                selected && "text-primary border-b border-primary"
+                "text-lg p-2 text-text-primary/60 border-b border-transparent",
+                selected && "text-primary border-primary"
               )
             }>
             {t.title}

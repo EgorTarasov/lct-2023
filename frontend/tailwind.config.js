@@ -3,7 +3,8 @@ export default {
   content: ["./src/**/*.{html,tsx}"],
   theme: {
     screens: {
-      sm: "640px"
+      sm: "640px",
+      desktop: "1024px"
     },
     extend: {
       colors: {

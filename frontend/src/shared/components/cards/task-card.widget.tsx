@@ -21,12 +21,12 @@ export const TaskCard = ({ item }: { item: TaskDto.Item }) => {
     <li>
       <Link
         to="/tasks/id"
-        className={twMerge("relative flex gap-3", item.isCompleted && "opacity-60")}>
-        <Checkbox className={textColor} disabled checked={item.isCompleted} ariaHidden />
+        className={twMerge("relative flex gap-3 items-start", item.isCompleted && "opacity-60")}>
+        <Checkbox className={`mt-1 ${textColor}`} disabled checked={item.isCompleted} ariaHidden />
         <div className="flex flex-col">
           <span className={textColor}>{locale}</span>
           <p className="text-lg leading-none">{item.title}</p>
-          <ul className="flex flex-wrap gap-2 mt-2">
+          <ul className="flex flex-wrap gap-2 mt-3">
             <IconText
               icon={isDeadlineClose ? FireIcon : CalendarIcon}
               text={convertDate(item.deadline)}
@@ -46,7 +46,7 @@ export const TaskCard = ({ item }: { item: TaskDto.Item }) => {
             <IconText icon={PointIcon} text={item.location} alt="" />
           </ul>
         </div>
-        <Chevron className="ml-auto" />
+        <Chevron className="ml-auto my-auto" />
       </Link>
     </li>
   );

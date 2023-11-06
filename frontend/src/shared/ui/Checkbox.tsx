@@ -30,10 +30,9 @@ export const Checkbox: FC<CheckboxProps> = ({
     checked={checked}
     onChange={setChecked}
     id={id}
+    className={twMerge("text-primary", className)}
     aria-hidden={ariaHidden ? "true" : "false"}>
     {altText && <span className="sr-only">{altText}</span>}
-    <span aria-hidden="true" className={twMerge("text-primary", className)}>
-      {checked ? <CheckOn width={size} /> : <CheckOff width={size} />}
-    </span>
+    <span aria-hidden="true">{checked ? <CheckOn width={size} /> : <CheckOff width={size} />}</span>
   </Switch>
 );
