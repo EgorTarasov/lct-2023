@@ -2,7 +2,6 @@ import { EventDto } from "api/models/event.model";
 import { FC, HTMLProps, useMemo } from "react";
 import { getEventMap } from "@/constants/event.map";
 import { Button } from "@/ui";
-// calendar, clock, lightning, marker
 import ClockIcon from "@/assets/clock.svg";
 import CalendarIcon from "@/assets/calendar.svg";
 import LightningIcon from "@/assets/lightning.svg";

@@ -21,7 +21,7 @@ export const MobileNav = () => {
 
   return (
     <nav className="sticky sm:hidden top-0 z-10 w-full bg-nav-background flex justify-between items-center px-3 py-2 shadow">
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <button
           id="nav-button"
           aria-expanded={isMenuOpen}

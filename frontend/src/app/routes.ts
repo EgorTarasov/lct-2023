@@ -4,6 +4,7 @@ import { Login, MainPage, ResetPassword } from "../pages";
 import { ProfilePage } from "../pages/profile/profile.page.tsx";
 import { EventsPage } from "../pages/events/events.page.tsx";
 import { EducationPage } from "../pages/education/education.page.tsx";
+import { TasksPage } from "../pages/tasks/tasks.page.tsx";
 
 export interface RouteType {
   path: string;
@@ -32,6 +33,17 @@ export const routes: RouteType[] = [
     showInNav: false
   },
   {
+    path: "/tasks",
+    component: withAuth(TasksPage),
+    title: "Задания",
+    showInNav: true
+  },
+  {
+    path: "tasks/:id",
+    component: withAuth(TasksPage),
+    title: "Задания"
+  },
+  {
     path: "/events",
     component: withAuth(EventsPage),
     title: "Мероприятия",
@@ -46,8 +58,7 @@ export const routes: RouteType[] = [
   {
     path: "/me",
     component: withAuth(ProfilePage),
-    title: "Профиль",
-    showInNav: true
+    title: "Профиль"
   },
   {
     path: "/shop",
