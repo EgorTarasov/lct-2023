@@ -54,10 +54,10 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) =
   return (
     <li
       className={twMerge(
-        "flex-col w-52 rounded-2xl border border-text-primary/20",
+        "flex-col w-52 rounded-2xl border border-text-primary/20 relative hover:shadow-sm",
         wide ? "w-full" : "w-52"
       )}>
-      <Icon className="text-primary" />
+      <Icon className="text-primary rounded-2xl" />
       <div className="flex flex-col m-4 mt-3">
         <span className={`text-sm text-event-${item.category}`}>{locale}</span>
         <Link
