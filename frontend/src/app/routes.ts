@@ -1,4 +1,3 @@
-import { withAuth } from "@/hoc/PrivateRoute";
 import { ComponentType } from "react";
 import { Login, MainPage, ResetPassword } from "../pages";
 import { ProfilePage } from "../pages/profile/profile.page.tsx";
@@ -18,71 +17,71 @@ export interface RouteType {
 export const routes: RouteType[] = [
   {
     path: "/",
-    component: withAuth(MainPage),
+    component: MainPage,
     title: "Главная",
     showInNav: true
   },
   {
     path: "/education",
-    component: withAuth(EducationPage),
+    component: EducationPage,
     title: "Обучение",
     showInNav: true
   },
   {
     path: "/education/:id",
-    component: withAuth(EducationPage),
+    component: EducationPage,
     title: "Обучение",
     showInNav: false
   },
   {
     path: "/tasks",
-    component: withAuth(TasksPage),
+    component: TasksPage,
     title: "Задания",
     showInNav: true
   },
   {
     path: "/tasks/:id",
-    component: withAuth(TasksPage),
+    component: TasksPage,
     title: "Задания"
   },
   {
     path: "/staff",
-    component: withAuth(StaffPage),
+    component: StaffPage,
     title: "Сотрудники",
     showInNav: true
   },
   {
     path: "/events",
-    component: withAuth(EventsPage),
+    component: EventsPage,
     title: "Мероприятия",
     showInNav: true
   },
   {
     path: "/events/:id",
-    component: withAuth(EventsPage),
+    component: EventsPage,
     title: "Мероприятия",
     showInNav: false
   },
   {
     path: "/me",
-    component: withAuth(ProfilePage),
+    component: ProfilePage,
     title: "Профиль"
   },
   {
     path: "/shop",
-    component: withAuth(ShopPage),
+    component: ShopPage,
     title: "Магазин",
     showInNav: true
   },
   {
     path: "/shop/:id",
-    component: withAuth(ShopPage),
+    component: ShopPage,
     title: "Магазин",
     showInNav: false
   },
   {
     path: "/contacts",
-    component: withAuth(MainPage),
+    component: MainPage,
     title: "Контакты",
     showInNav: true
   },
