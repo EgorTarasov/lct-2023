@@ -25,6 +25,20 @@ async def get_events(
         raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@router.get("/for-user", response_model=list[EventDto])
+async def get_events_for_user(
+        db: Session = Depends(Sql.get_session),
+        user: UserTokenData = Depends(get_current_user)
+):
+    """Список всех мероприятий для пользователя с полем, записан ли он на события или нет"""
+    try:
+        return await EventController(db).get_events(user.user_id)
+    except Exception as e:
+        # TODO: error messages
+        logging.error(e)
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 @router.post("/", response_model=EventDto)
 async def create_event(
         event_data: EventCreate,
@@ -33,9 +47,25 @@ async def create_event(
 ) -> EventDto:
     """Создание мероприятия ментором"""
     if user.role_id == 1:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Доступ запрещён")
     try:
         return await EventController(db).create_event(event_data)
     except Exception as e:
+        # TODO: error messages
         logging.error(e)
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@router.post("/enroll/{event_id}", response_model=bool)
+async def enroll_on_event(
+        event_id: int,
+        user: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session)
+) -> bool:
+    """Записаться на мероприятие"""
+    try:
+        return await EventController(db).enroll_on_event(event_id, user_id=user.user_id)
+    except Exception as e:
+        # TODO: error messages
+        logging.error(e)
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
