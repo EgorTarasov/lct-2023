@@ -1,6 +1,6 @@
 import { getCourseMap } from "@/constants/course.map";
 import { CourseDto } from "api/models/course.model";
-import { addDays, differenceInDays, isWithinInterval } from "date-fns";
+import { differenceInDays } from "date-fns";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import FireIcon from "@/assets/fire.svg";
@@ -26,15 +26,15 @@ const ProgressLine = ({ progress }: { progress: number }) => (
   </div>
 );
 
-export const CourseCard = ({ item }: { item: CourseDto.Item }) => {
+export const CourseCard = ({ item, wide }: { item: CourseDto.Item; wide?: boolean }) => {
   const { illustration: Icon, locale } = getCourseMap(item.type);
   const isDeadlineClose = useMemo(() => differenceInDays(new Date(), item.deadline) < 3, [item]);
   const isDeadlineExpired = useMemo(() => item.deadline < new Date(), [item]);
 
   return (
-    <li>
+    <li className={twMerge(wide && "w-full")}>
       <Link
-        to={`/tasks/${item.id}`}
+        to={`/education/${item.id}`}
         className={twMerge(
           "flex p-5 gap-3 rounded-2xl border border-text-primary/20 transition-shadow shadow-none hover:shadow-sm",
           item.isCompleted && "opacity-60"
