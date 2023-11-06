@@ -48,7 +48,7 @@ export const AssistantSection: FCVM<MainPageViewModel> = ({ vm }) => {
                 setInputValue(item);
                 document.getElementById(assistantId)!.focus();
               }}
-              className="px-3 py-1 border rounded-tr-xl rounded-br-xl rounded-bl-xl w-fit text-white bg-primary focus-visible:bg-white focus-visible:text-primary"
+              className="px-3 py-1 border rounded-tr-xl rounded-br-xl text-left rounded-bl-xl w-fit text-white bg-primary focus-visible:bg-white focus-visible:text-primary"
               aria-label={`Спросить про ${item}`}>
               {item}
             </button>

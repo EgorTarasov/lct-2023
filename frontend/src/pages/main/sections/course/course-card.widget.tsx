@@ -1,0 +1,63 @@
+import { getCourseMap } from "@/constants/course.map";
+import { CourseDto } from "api/models/course.model";
+import { addDays, differenceInDays, isWithinInterval } from "date-fns";
+import { useMemo } from "react";
+import { Link } from "react-router-dom";
+import FireIcon from "@/assets/fire.svg";
+import CalendarIcon from "@/assets/calendar.svg";
+import ClockIcon from "@/assets/clock.svg";
+import LightningIcon from "@/assets/lightning.svg";
+import { IconText } from "@/ui/IconText";
+import { convertDate } from "@/utils/dateConverters";
+import { twMerge } from "tailwind-merge";
+
+const ProgressLine = ({ progress }: { progress: number }) => (
+  <div
+    role="progressbar"
+    className="flex w-full h-1 bg-text-primary/20 rounded-full"
+    aria-label={`Прогресс: ${progress}%`}>
+    <span
+      aria-hidden="true"
+      className="bg-primary rounded-full"
+      style={{
+        width: `${progress}%`
+      }}
+    />
+  </div>
+);
+
+export const CourseCard = ({ item }: { item: CourseDto.Item }) => {
+  const { illustration: Icon, locale } = getCourseMap(item.type);
+  const isDeadlineClose = useMemo(() => differenceInDays(new Date(), item.deadline) < 3, [item]);
+  const isDeadlineExpired = useMemo(() => item.deadline < new Date(), [item]);
+
+  return (
+    <li>
+      <Link
+        to={`/tasks/${item.id}`}
+        className={twMerge(
+          "flex p-5 gap-3 rounded-2xl border border-text-primary/20 transition-shadow shadow-none hover:shadow-sm",
+          item.isCompleted && "opacity-60"
+        )}>
+        <Icon className="text-primary" />
+        <div className="flex flex-col gap-2">
+          <h4 className="leading-5 text-lg">{item.title}</h4>
+          <ul className="flex flex-wrap gap-2">
+            <IconText
+              icon={isDeadlineClose ? FireIcon : CalendarIcon}
+              alt="Дедлайн"
+              text={convertDate(item.deadline)}
+            />
+            <IconText
+              icon={ClockIcon}
+              alt="Время выполнения"
+              text={`${item.timeEstimateMin} мин`}
+            />
+            <IconText icon={LightningIcon} alt="Баллы" text={item.points.toString()} iconPrimary />
+          </ul>
+          <ProgressLine progress={item.progress} />
+        </div>
+      </Link>
+    </li>
+  );
+};
