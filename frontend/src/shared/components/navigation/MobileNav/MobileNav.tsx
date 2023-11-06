@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import NavIcon from "./assets/nav.svg";
 import { NavLink, useLocation } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
@@ -6,7 +6,6 @@ import { routes } from "../../../../app/routes.ts";
 import LightningIcon from "@/assets/lightning.svg";
 import UserIcon from "@/assets/user.svg";
 import ChevronIcon from "@/assets/chevron2.svg";
-import { twMerge } from "tailwind-merge";
 import CloseIcon from "@/assets/clear.svg";
 import { ThemeService } from "@/stores/theme.service.ts";
 
@@ -38,10 +37,12 @@ export const MobileNav = () => {
         <h1 className="text-xl font-normal text-nav-text">{currentRoute?.title || ""}</h1>
       </div>
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2" aria-label={"Ваша активность: 100%"}>
-          <LightningIcon className="w-6 h-6 text-primary" />
-          <span className="text-base text-text-primary">100</span>
-        </div>
+        <NavLink to={"/shop"} aria-label="Перейти в магазин">
+          <div className="flex items-center gap-2" aria-label={"Ваша баланс: 100"}>
+            <LightningIcon className="w-6 h-6 text-primary" />
+            <span className="text-base text-text-primary">100</span>
+          </div>
+        </NavLink>
         <NavLink to={"/me"} aria-label="Перейти в профиль">
           <UserIcon className="w-10 h-10 text-primary" />
         </NavLink>
