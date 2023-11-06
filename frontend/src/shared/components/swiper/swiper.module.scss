@@ -2,6 +2,7 @@
     width: 100%;
     padding-inline: 16px;
     padding-block: 1px;
+    overflow: hidden;
     :global(.swiper-wrapper) {
         width: fit-content;
     }

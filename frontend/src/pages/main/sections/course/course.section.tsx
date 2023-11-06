@@ -27,7 +27,7 @@ export const CourseSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
         </div>
         <Separator className="my-3" />
       </div>
-      <ul>
+      <ul className="grid">
         <HorizontalCarousel
           a11y={{
             prevSlideMessage: "Предыдущие задачи",

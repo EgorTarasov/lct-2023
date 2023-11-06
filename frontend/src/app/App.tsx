@@ -9,6 +9,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { SkipToContent } from "@/components/SkipToContent";
 import { DesktopHeading, MobileNav } from "@/components/navigation";
 import { Footer } from "@/components/footer";
+import cl from "./layout.module.scss";
 
 const App = observer(() => {
   const location = useLocation();
@@ -30,15 +31,15 @@ const App = observer(() => {
     return <div className={"w-full h-full flex items-center justify-center"}>⏳Загрузка...</div>;
 
   return (
-    <>
+    <div className={`${cl.layout} text-text-primary`}>
+      <SkipToContent />
       {!RoutesWithoutNav.includes(location.pathname) && (
         <>
           <MobileNav />
           <DesktopHeading />
         </>
       )}
-      <SkipToContent />
-      <main id="content" tabIndex={-1} className={"flex-1 h-max-content"}>
+      <main id="content" tabIndex={-1} className={"[grid-area:main] h-max-content"}>
         <SwitchTransition>
           <CSSTransition key={location.key} classNames="fade" timeout={150} unmountOnExit>
             <Routes location={location}>
@@ -49,7 +50,7 @@ const App = observer(() => {
         </SwitchTransition>
       </main>
       <Footer />
-    </>
+    </div>
   );
 });
 
