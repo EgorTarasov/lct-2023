@@ -28,7 +28,7 @@ export const DiveinSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
         </div>
         <Separator className="my-3" />
       </div>
-      <ul>
+      <ul className="grid">
         <HorizontalCarousel
           spaceBetween={16}
           a11y={{

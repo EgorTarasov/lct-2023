@@ -21,7 +21,7 @@ export const EventsSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
         </Link>
       </div>
       <Separator className="my-3" />
-      <ul>
+      <ul className="grid">
         <HorizontalCarousel
           mousewheel={{
             forceToAxis: true
