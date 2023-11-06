@@ -10,21 +10,7 @@ import LightningIcon from "@/assets/lightning.svg";
 import { IconText } from "@/ui/IconText";
 import { convertDate } from "@/utils/dateConverters";
 import { twMerge } from "tailwind-merge";
-
-const ProgressLine = ({ progress }: { progress: number }) => (
-  <div
-    role="progressbar"
-    className="flex w-full h-1 bg-text-primary/20 rounded-full"
-    aria-label={`Прогресс: ${progress}%`}>
-    <span
-      aria-hidden="true"
-      className="bg-primary rounded-full"
-      style={{
-        width: `${progress}%`
-      }}
-    />
-  </div>
-);
+import { ProgressLine } from "@/ui/ProgressLine.tsx";
 
 export const CourseCard = ({ item, wide }: { item: CourseDto.Item; wide?: boolean }) => {
   const { illustration: Icon, locale } = getCourseMap(item.type);
@@ -42,7 +28,7 @@ export const CourseCard = ({ item, wide }: { item: CourseDto.Item; wide?: boolea
         <Icon className="text-primary" />
         <div className="flex flex-col gap-2 w-full">
           <h4 className="leading-5 text-lg">{item.title}</h4>
-          <ul className="flex flex-wrap gap-2">
+          <ul className="flex flex-wrap gap-2 items-center">
             <IconText
               icon={isDeadlineClose ? FireIcon : CalendarIcon}
               alt="Дедлайн"
