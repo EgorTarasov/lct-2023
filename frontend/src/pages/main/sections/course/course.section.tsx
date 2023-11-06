@@ -6,7 +6,7 @@ import { IconButton } from "@/ui/IconButton";
 import { useId } from "react";
 import { Separator } from "@/ui/Separator";
 import { observer } from "mobx-react-lite";
-import { CourseCard } from "./course-card.widget";
+import { CourseCard } from "@/components/cards/course-card.widget";
 import { arrayChunk } from "@/utils/arrayChunk";
 
 export const CourseSection: FCVM<MainPageViewModel> = observer(({ vm }) => {

@@ -1,9 +1,9 @@
-import { EventCard } from "../main/sections/events/event-card.widget.tsx";
 import { MockEvents } from "api/models/event.model.ts";
 import { useState } from "react";
 import { Chip } from "@/ui/chips.tsx";
 import { Input } from "@/ui/Input.tsx";
 import SearchIcon from "@/assets/search.svg";
+import { EventCard } from "@/components/cards/event-card.widget";
 
 enum Filter {
   ForMe,

@@ -4,8 +4,8 @@ import { Separator } from "@/ui/Separator";
 import ChevronIcon from "@/assets/chevron2.svg";
 import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { EventCard } from "./event-card.widget";
 import { HorizontalCarousel } from "@/components/swiper/HorizontalCarousel";
+import { EventCard } from "@/components/cards/event-card.widget";
 
 export const EventsSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
   if (!vm.events) return null;
