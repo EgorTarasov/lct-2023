@@ -14,6 +14,9 @@ export interface RouteType {
   title: string;
   showInNav?: boolean;
 }
+
+export const RoutesWithoutNav = ["/contacts", "/login", "/reset-password"];
+
 // This looks bad we're sorry
 export const routes: RouteType[] = [
   {
