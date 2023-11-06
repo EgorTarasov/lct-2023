@@ -25,8 +25,8 @@ export const TaskCard = ({ item }: { item: TaskDto.Item }) => {
         <Checkbox className={textColor} disabled checked={item.isCompleted} ariaHidden />
         <div className="flex flex-col">
           <span className={textColor}>{locale}</span>
-          <p className="text-lg">{item.title}</p>
-          <ul className="flex flex-wrap gap-2">
+          <p className="text-lg leading-none">{item.title}</p>
+          <ul className="flex flex-wrap gap-2 mt-2">
             <IconText
               icon={isDeadlineClose ? FireIcon : CalendarIcon}
               text={convertDate(item.deadline)}

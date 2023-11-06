@@ -2,12 +2,12 @@ import { useState } from "react";
 import NavIcon from "./assets/nav.svg";
 import { NavLink, useLocation } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
-import { routes } from "../../../../app/routes.ts";
 import LightningIcon from "@/assets/lightning.svg";
 import UserIcon from "@/assets/user.svg";
 import ChevronIcon from "@/assets/chevron2.svg";
 import CloseIcon from "@/assets/clear.svg";
 import { ThemeService } from "@/stores/theme.service.ts";
+import { routes } from "../../../../app/routes";
 
 export const MobileNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
