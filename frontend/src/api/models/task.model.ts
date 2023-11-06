@@ -31,6 +31,17 @@ export const MockTasks: TaskDto.Item[] = [
     points: 20,
     location: "Синий зал главного корпуса",
     imgSrc: null
+  },
+  {
+    id: 0,
+    type: "education",
+    title: "Как проектировать интерфейсы",
+    isCompleted: false,
+    deadline: new Date(),
+    durationMin: 40,
+    points: 20,
+    location: "Синий зал главного корпуса",
+    imgSrc: null
   }
 ];
 

@@ -5,22 +5,28 @@ const TaskCategoryMap: Readonly<
     TaskDto.TaskType,
     {
       locale: string;
+      textColor: string;
     }
   >
 > = {
   education: {
+    textColor: "text-task-education",
     locale: "Обучение"
   },
   divein: {
+    textColor: "text-task-divein",
     locale: "Погружение"
   },
   event: {
+    textColor: "text-task-event",
     locale: "Мероприятие"
   },
   meeting: {
+    textColor: "text-task-meeting",
     locale: "Встреча"
   },
   work: {
+    textColor: "text-task-work",
     locale: "Работа"
   }
 };

@@ -12,6 +12,7 @@ interface CheckboxProps {
   id?: string;
   className?: string;
   disabled?: boolean;
+  ariaHidden?: boolean;
 }
 
 export const Checkbox: FC<CheckboxProps> = ({
@@ -21,9 +22,15 @@ export const Checkbox: FC<CheckboxProps> = ({
   size = 24,
   id,
   className,
-  disabled
+  disabled,
+  ariaHidden = false
 }) => (
-  <Switch disabled={disabled} checked={checked} onChange={setChecked} id={id}>
+  <Switch
+    disabled={disabled}
+    checked={checked}
+    onChange={setChecked}
+    id={id}
+    aria-hidden={ariaHidden ? "true" : "false"}>
     {altText && <span className="sr-only">{altText}</span>}
     <span aria-hidden="true" className={twMerge("text-primary", className)}>
       {checked ? <CheckOn width={size} /> : <CheckOff width={size} />}

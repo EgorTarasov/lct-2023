@@ -30,6 +30,7 @@ export const DiveinSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
       </div>
       <ul>
         <HorizontalCarousel
+          spaceBetween={16}
           a11y={{
             prevSlideMessage: "Предыдущие задачи",
             nextSlideMessage: "Следующие задачи",

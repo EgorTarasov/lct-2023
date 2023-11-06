@@ -41,7 +41,7 @@ export namespace EventDto {
     deadline: Date;
     durationMin: number;
     points: number;
-    location: string;
+    location?: string;
     imgSrc: string | null;
   }
 }
