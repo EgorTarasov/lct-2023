@@ -1,8 +1,10 @@
 export const MockTasks: TaskDto.Item[] = [
   {
     id: 0,
+    type: "divein",
     title: "Дизайн-митап",
-    date: new Date(Date.now()),
+    isCompleted: false,
+    deadline: new Date(),
     durationMin: 120,
     points: 12,
     location: "Синий зал главного корпуса",
@@ -10,8 +12,10 @@ export const MockTasks: TaskDto.Item[] = [
   },
   {
     id: 0,
+    type: "meeting",
     title: "Караоке",
-    date: new Date(Date.now()),
+    isCompleted: false,
+    deadline: new Date(),
     durationMin: 125,
     points: 20,
     location: "Синий зал главного корпуса",
@@ -19,8 +23,10 @@ export const MockTasks: TaskDto.Item[] = [
   },
   {
     id: 0,
-    title: "Донат ВС РФ",
-    date: new Date(Date.now()),
+    type: "work",
+    title: "Донат на твич",
+    isCompleted: true,
+    deadline: new Date(),
     durationMin: 75,
     points: 20,
     location: "Синий зал главного корпуса",
@@ -29,10 +35,14 @@ export const MockTasks: TaskDto.Item[] = [
 ];
 
 export namespace TaskDto {
+  export type TaskType = "education" | "divein" | "event" | "meeting" | "work";
+
   export interface Item {
     id: number;
     title: string;
-    date: Date;
+    deadline: Date;
+    type: TaskType;
+    isCompleted: boolean;
     durationMin: number;
     points: number;
     location: string;
