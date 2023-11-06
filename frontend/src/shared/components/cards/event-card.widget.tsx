@@ -18,7 +18,11 @@ interface EventCardProps {
 }
 
 export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) => {
-  const { illustration: Icon, locale } = useMemo(() => getEventMap(item.category), [item]);
+  const {
+    illustration: Icon,
+    locale,
+    textColor
+  } = useMemo(() => getEventMap(item.category), [item]);
   const ariaLabel = useMemo(
     () =>
       `Мероприятие ${item.title}, которое пройдет ${convertDate(item.deadline)} по адресу "${
@@ -35,7 +39,7 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) =
       )}>
       <Icon className="text-primary rounded-2xl" />
       <div className="flex flex-col m-4 mt-3">
-        <span className={`text-sm text-event-${item.category}`}>{locale}</span>
+        <span className={`text-sm ${textColor}`}>{locale}</span>
         <Link
           to={`/events/${item.id}`}
           aria-label={ariaLabel}
@@ -50,7 +54,9 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) =
             alt="Продолжительность"
           />
           <IconText icon={LightningIcon} iconPrimary text={item.points.toString()} alt="Баллы" />
-          <IconText icon={MarkerIcon} text={item.location} alt="Место проведения" />
+          {item.location && (
+            <IconText icon={MarkerIcon} text={item.location} alt="Место проведения" />
+          )}
         </ul>
         <Button
           className="relative z-10"

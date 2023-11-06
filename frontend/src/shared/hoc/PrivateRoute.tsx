@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Navigate } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 import { AuthService } from "@/stores/auth.service.ts";
 import { DesktopHeading, MobileNav } from "@/components/navigation";
 import { SkipToContent } from "@/components/SkipToContent";
@@ -26,11 +26,3 @@ const PrivateRoute: React.FC<React.PropsWithChildren<unknown>> = observer(({ chi
     </>
   );
 });
-
-export const withAuth = (Component: React.FC<unknown>) => {
-  return () => (
-    <PrivateRoute>
-      <Component />
-    </PrivateRoute>
-  );
-};

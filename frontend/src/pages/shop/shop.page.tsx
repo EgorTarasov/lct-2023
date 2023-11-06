@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Input } from "@/ui/Input.tsx";
 import SearchIcon from "@/assets/search.svg";
-import { Chip } from "@/ui/Chip.tsx";
+import { Chip } from "@/ui";
 
 enum Filter {
   All,
