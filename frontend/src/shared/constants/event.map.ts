@@ -15,7 +15,7 @@ const EventCategoryMap: Readonly<
   >
 > = {
   art: {
-    illustration: SportEvent,
+    illustration: ArtEvent,
     locale: "Творчество"
   },
   charity: {
@@ -27,7 +27,7 @@ const EventCategoryMap: Readonly<
     locale: "Обучение"
   },
   sport: {
-    illustration: ArtEvent,
+    illustration: SportEvent,
     locale: "Спорт"
   }
 };

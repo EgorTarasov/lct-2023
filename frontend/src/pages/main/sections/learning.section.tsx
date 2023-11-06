@@ -25,10 +25,14 @@ export const LearningSection: FCVM<MainPageViewModel> = ({ vm }) => {
         a11y={{
           prevSlideMessage: "Предыдущие задачи",
           nextSlideMessage: "Следующие задачи",
-          containerMessage: "Список задач",
+          containerMessage: "Список задач, 3 на страницу",
           firstSlideMessage: "Первая страница",
           lastSlideMessage: "Последняя страница"
         }}
+        mousewheel={{
+          forceToAxis: true
+        }}
+        keyboard={false}
         slidesPerView={1}
         navigation={{
           prevEl: `#${CSS.escape(leftControlId)}`,
