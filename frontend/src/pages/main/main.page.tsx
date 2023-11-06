@@ -5,6 +5,7 @@ import { OnBoardingSection } from "./sections/onboarding.section";
 import { EventsSection } from "./sections/events/events.section";
 import { CourseSection } from "./sections/course/course.section";
 import { observer } from "mobx-react-lite";
+import { DiveinSection } from "./sections/divein.section";
 
 export const MainPage = observer(() => {
   const [vm] = useState(() => new MainPageViewModel());
@@ -14,6 +15,7 @@ export const MainPage = observer(() => {
       <AssistantSection vm={vm} />
       <OnBoardingSection vm={vm} />
       <CourseSection vm={vm} />
+      <DiveinSection vm={vm} />
       <EventsSection vm={vm} />
     </div>
   );
