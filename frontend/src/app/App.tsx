@@ -32,7 +32,7 @@ const App = observer(() => {
 
   return (
     // check for grid template areas before change!
-    <div className={`${cl.layout} text-text-primary`}>
+    <div className={`${cl.layout} text-text-primary sm:bg-bg-desktop h-fit`}>
       <SkipToContent />
       {!RoutesWithoutNav.includes(location.pathname) && (
         <>
@@ -40,7 +40,7 @@ const App = observer(() => {
           <DesktopHeading />
         </>
       )}
-      <main id="content" tabIndex={-1} className={"[grid-area:main] h-max-content"}>
+      <main id="content" tabIndex={-1} className={"[grid-area:main] mb-4"}>
         <SwitchTransition>
           <CSSTransition key={location.pathname} classNames="fade" timeout={150} unmountOnExit>
             <Routes location={location}>

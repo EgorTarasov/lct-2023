@@ -20,9 +20,12 @@ export const DesktopHeading = () => {
   return (
     <>
       {/* measurer */}
-      <div className="hidden sm:flex [grid-area:desktop] w-[300px]" aria-hidden="true" />
-      <aside className="hidden sm:flex fixed left-0 bottom-0 top-0 w-[300px] flex-col px-4 py-8">
-        <Logo width={160} />
+      <div
+        className="hidden sm:flex [grid-area:desktop] w-[180px] desktop:w-[300px] bg-white"
+        aria-hidden="true"
+      />
+      <aside className="hidden sm:flex fixed left-0 bottom-0 top-0 w-[180px] desktop:w-[300px] flex-col px-2 desktop:px-4 py-8">
+        <Logo className="w-3/4 max-w-[150px]" />
         <nav>
           <ul className="flex flex-col gap-1 mt-10">
             {routes

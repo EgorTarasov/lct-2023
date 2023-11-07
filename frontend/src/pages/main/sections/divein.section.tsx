@@ -17,7 +17,7 @@ export const DiveinSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
   if (!vm.tasks) return null;
 
   return (
-    <section className="flex flex-col w-full">
+    <section className="flex flex-col">
       <div className="flex flex-col">
         <div className="flex justify-between items-center mx-4 mt-6">
           <h2 className="font-medium text-xl">Погружение</h2>

@@ -10,6 +10,9 @@ export default {
       colors: {
         primary: "rgba(var(--color-primary), <alpha-value>)",
         onPrimary: "rgba(var(--color-onPrimary), <alpha-value>)",
+        bg: {
+          desktop: "#EDEDED"
+        },
         error: "#F20000",
         nav: {
           background: "#FFFFFF",
