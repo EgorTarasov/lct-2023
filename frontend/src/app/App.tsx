@@ -40,7 +40,7 @@ const App = observer(() => {
           <DesktopHeading />
         </>
       )}
-      <main id="content" tabIndex={-1} className={"[grid-area:main] mb-4"}>
+      <main id="content" tabIndex={-1} className={"[grid-area:main] mb-4 w-full"}>
         <SwitchTransition>
           <CSSTransition key={location.pathname} classNames="fade" timeout={150} unmountOnExit>
             <Routes location={location}>

@@ -12,7 +12,7 @@ export const EventsSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
 
   return (
     <section className="flex flex-col w-full">
-      <div className="flex justify-between items-center mx-4 mt-6">
+      <div className="flex justify-between items-center mx-4">
         <h2 className="font-medium text-xl">Мероприятия</h2>
         <Link
           to="/events"
