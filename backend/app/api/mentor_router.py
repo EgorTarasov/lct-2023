@@ -15,7 +15,7 @@ from app.controllers.mentor_controller import MentorController
 from app.auth.dependency import get_current_user
 
 
-router = APIRouter(tags=["mentor", "mentee"])
+router = APIRouter(tags=["mentor"])
 
 
 @router.get("/mentee", response_model=list[UserDto])

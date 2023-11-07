@@ -10,6 +10,7 @@ from .mentee import mentor_mentee
 
 if tp.TYPE_CHECKING:
     from .interest import SqlInterest
+    from .event import SqlEvent
 
 
 class UserCreate(BaseModel):
@@ -50,8 +51,14 @@ class SqlUser(Base):
     email: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
     gender: Mapped[str] = mapped_column(Text, nullable=True)
     password: Mapped[str] = mapped_column(Text, nullable=False)
-    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"), nullable=False)
-    position_id: Mapped[int] = mapped_column(ForeignKey("positions.id"), nullable=True)
+    role_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("roles.id", ondelete="NO ACTION"),
+        nullable=False,
+    )
+    position_id: Mapped[int] = mapped_column(
+        ForeignKey("positions.id", ondelete=None), nullable=True, default=None,
+    )
 
     user_role = relationship("SqlRole")
     position = relationship("SqlPosition", back_populates="users")
