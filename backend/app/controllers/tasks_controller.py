@@ -18,6 +18,6 @@ class TaskController:
         mentor_tasks = await crud.task.get_tasks_for_mentor(self.db, mentor_id)
         return [TaskDto.model_validate(obj) for obj in mentor_tasks]
 
-    async def create_task(self, payload: TaskCreate, mentor_id: int) -> TaskDto | None:
+    async def create_task(self, payload: TaskCreate, mentor_id: int) -> TaskDto:
         new_task = await crud.task.create_task(self.db, payload, mentor_id)
         return TaskDto.model_validate(new_task)
