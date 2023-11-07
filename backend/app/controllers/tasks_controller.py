@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from app import crud
 from app.auth.jwt import UserTokenData
-from app.models.tasks import TaskDto, TaskCreate
+from app.models.task import TaskDto, TaskCreate
 from app.models.user import UserDto
 
 

@@ -27,7 +27,7 @@ async def register_new_user(
     """
     CSV файл с кодировкой UTF-8, в котором существует колонки - Почта и ФИО
     Пример файла:\n
-    Почта,ФИО,ФИО Руководителя,Профессия
+    Почта,ФИО,ФИО Руководителя, Профессия
     """
     print(file.content_type)
     controller = AdminController(db)

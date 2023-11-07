@@ -10,20 +10,18 @@ from sqlalchemy.orm import Session
 from app.controllers.tasks_controller import TaskController
 from app.core.sql import Sql
 from app.auth.jwt import UserTokenData
-from app.models.tasks import TaskDto, TaskCreate
-from app.models.user import UserDto
-from app.controllers.mentor_controller import MentorController
+from app.models.task import TaskDto, TaskCreate
 from app.auth.dependency import get_current_user
 
 router = APIRouter(prefix="/task", tags=["task"])
 
 
-@router.get("/for-mentee", response_model=list[TaskDto])
-async def get_my_tasks(
+@router.get("/my", response_model=list[TaskDto])
+async def get_user_tasks(
         user: UserTokenData = Depends(get_current_user),
         db: Session = Depends(Sql.get_session),
 ) -> list[TaskDto]:
-    """Получение списка задач для подопечного"""
+    """Список всех задач для пользователя"""
     try:
         return await TaskController(db).get_tasks(user.user_id)
     except Exception as e:

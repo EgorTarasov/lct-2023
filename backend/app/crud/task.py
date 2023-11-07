@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.models.tasks import TaskCreate, SqlTask, TaskDto
+from app.models.task import TaskCreate, SqlTask, TaskDto
 
 
 async def create_task(db: Session, payload: TaskCreate, mentor_id) -> SqlTask:
