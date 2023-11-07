@@ -34,6 +34,10 @@ class SkillController:
 
         return QuestionDto.model_validate(db_question)
 
+    async def get_questions(self, skill_id: int) -> list[QuestionDto]:
+        db_questions = await crud.question.get_all(self.db, skill_id)
+        return [QuestionDto.model_validate(obj) for obj in db_questions]
+
     async def submit_answer(self, payload: QuestionSubmissionCreate) -> bool:
         """
         Проверяет ответ пользователя и сохраняет его в бд
