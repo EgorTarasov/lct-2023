@@ -31,6 +31,7 @@ const App = observer(() => {
     return <div className={"w-full h-full flex items-center justify-center"}>⏳Загрузка...</div>;
 
   return (
+    // check for grid template areas before change!
     <div className={`${cl.layout} text-text-primary`}>
       <SkipToContent />
       {!RoutesWithoutNav.includes(location.pathname) && (
@@ -41,7 +42,7 @@ const App = observer(() => {
       )}
       <main id="content" tabIndex={-1} className={"[grid-area:main] h-max-content"}>
         <SwitchTransition>
-          <CSSTransition key={location.key} classNames="fade" timeout={150} unmountOnExit>
+          <CSSTransition key={location.pathname} classNames="fade" timeout={150} unmountOnExit>
             <Routes location={location}>
               {MappedRoutes}
               <Route path="*" element={<Navigate to="/" />} />
