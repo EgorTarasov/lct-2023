@@ -14,9 +14,7 @@ export const AssistantSection: FCVM<MainPageViewModel> = ({ vm }) => {
   const [inputValue, setInputValue] = useState("");
 
   return (
-    <section
-      className="flex flex-col px-4 py-3 bg-primary gap-4 mb-3"
-      aria-label="Цифровой наставник">
+    <section className="flex flex-col px-4 py-3 bg-primary gap-4" aria-label="Цифровой наставник">
       <label htmlFor={assistantId} className="text-2xl font-bold text-white">
         Цифровой наставник
       </label>
