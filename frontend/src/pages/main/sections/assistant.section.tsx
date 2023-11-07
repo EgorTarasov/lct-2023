@@ -20,7 +20,7 @@ export const AssistantSection: FCVM<MainPageViewModel> = ({ vm }) => {
   return (
     <div className="flex bg-primary sm:rounded-2xl sm:mt-10">
       <section
-        className="px-4 sm:pl-8 py-3 sm:py-6 flex flex-1 flex-col gap-4"
+        className="px-4 py-3 flex flex-1 flex-col gap-4 sm:px-6 sm:py-6"
         aria-label="Цифровой наставник">
         <label
           htmlFor={assistantId}
@@ -59,8 +59,8 @@ export const AssistantSection: FCVM<MainPageViewModel> = ({ vm }) => {
           ))}
         </ul>
       </section>
-      <div className="w-full max-w-[40%] relative hidden desktop:flex">
-        <span className="text-center mr-2 px-4 py-3 rounded-2xl text-onPrimary rounded-br-none bg-white/20 w-fit h-fit z-10 mt-3">
+      <div className="w-full max-w-[34%] relative hidden desktop:flex desktop:rounded-2xl">
+        <span className="text-center leading-tight absolute px-4 py-3 rounded-2xl text-onPrimary rounded-br-none hidden etalon:block bg-white/20 z-10 top-2.5 -left-5">
           Отвечу на любой вопрос
           <br /> о новой работе!
         </span>
