@@ -6,7 +6,7 @@ from app.auth import oauth2_scheme
 
 from app.models.user import UserLogin, UserCreate
 from app.models.token import Token
-from app.controllers.auth_controller import AuthController
+from app.controllers.user_controller import UserController
 from app.core.sql import Sql
 
 
@@ -19,7 +19,7 @@ async def login(
     db: Session = Depends(Sql.get_session),
 ):
     try:
-        token = await AuthController(db).authenticate_user(
+        token = await UserController(db).authenticate_user(
             UserLogin(email=form_data.username, password=form_data.password)
         )
         return token
@@ -35,7 +35,7 @@ async def register(
     db: Session = Depends(Sql.get_session),
 ):
 
-    user = await AuthController(db).create_user(user_data)
+    user = await UserController(db).create_user(user_data)
     if not user:
         raise HTTPException(status_code=400, detail="User already exists")
     return user
