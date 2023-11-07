@@ -8,6 +8,7 @@ interface exampleStyleConfig {
     fontName: string;
     link: string;
   };
+  color: string;
   companyName: string;
   logoUrl: string;
 }
@@ -18,6 +19,7 @@ const exampleStyleConfig: exampleStyleConfig = {
     fontName: "SF Pro Display",
     link: "https://fonts.cdnfonts.com/css/sf-pro-display"
   },
+  color: "44 85 222",
   companyName: "PROSCOM",
   logoUrl: logo
 };
@@ -34,17 +36,15 @@ export class ThemeServiceViewModel {
   }
 
   private _init() {
-    console.log("init");
     setTimeout(() => {
-      console.log("set timeout");
       this.themeConfig = exampleStyleConfig;
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.href = exampleStyleConfig.font.link;
       document.head.appendChild(link);
       document.body.style.fontFamily = `${exampleStyleConfig.font.fontName}, Arial, sans-serif`;
+      document.body.style;
       this.isLoaded = true;
-      console.log("this.isLoaded", this.isLoaded);
     }, LOADING_TIME);
   }
 }

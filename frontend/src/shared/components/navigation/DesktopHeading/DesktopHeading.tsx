@@ -1,18 +1,40 @@
-import { Link } from "react-router-dom";
+import { Logo } from "@/ui";
+import { Link, NavLink } from "react-router-dom";
+import { twMerge } from "tailwind-merge";
+import { RouteType, routes } from "../../../../app/routes";
+
+const NavItem = ({ item }: { item: RouteType }) => (
+  <NavLink
+    to={item.path}
+    className={({ isActive }) =>
+      twMerge(
+        "px-4 py-3 w-full hover:text-text-primary hover:bg-text-primary/5 rounded-xl text-text-primary/60",
+        isActive && "!text-primary"
+      )
+    }>
+    {item.title}
+  </NavLink>
+);
 
 export const DesktopHeading = () => {
   return (
     <>
       {/* measurer */}
-      <div className="hidden sm:flex [grid-area:desktop] w-[340px]" aria-hidden="true" />
-      <header className="hidden sm:flex fixed left-0 bottom-0 top-0 w-[340px]">
+      <div className="hidden sm:flex [grid-area:desktop] w-[300px]" aria-hidden="true" />
+      <aside className="hidden sm:flex fixed left-0 bottom-0 top-0 w-[300px] flex-col px-4 py-8">
+        <Logo width={160} />
         <nav>
-          <ul>
-            <Link to="/main">Main</Link>
+          <ul className="flex flex-col gap-1 mt-10">
+            {routes
+              .filter((route) => route.showInNav)
+              .map((item, i) => (
+                <li key={i} className="flex w-full">
+                  <NavItem item={item} />
+                </li>
+              ))}
           </ul>
         </nav>
-        Heading
-      </header>
+      </aside>
     </>
   );
 };
