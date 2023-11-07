@@ -4,7 +4,7 @@ from app.models.user import *
 from app.models.mentee import mentor_mentee
 
 
-async def create_user(db: Session, payload: UserCreate) -> SqlUser:
+def create_user(db: Session, payload: UserCreate) -> SqlUser:
     """Создание пользователя"""
     db_user = SqlUser(**payload.model_dump())
 
@@ -23,7 +23,22 @@ async def get_user_by_id(db: Session, user_id: int) -> SqlUser:
         raise Exception("User not found")
 
 
-async def get_user_by_email(db: Session, email: str) -> SqlUser:
+def get_user_by_fio(db: Session, fio: str) -> SqlUser:
+    last_name, first_name, middle_name = fio.split()
+
+    # Выполните запрос
+    result = (
+        db.query(SqlUser)
+        .filter_by(first_name=first_name, last_name=last_name, middle_name=middle_name)
+        .first()
+    )
+    if result:
+        return result
+    else:
+        raise Exception("User not found")
+
+
+def get_user_by_email(db: Session, email: str) -> SqlUser:
     """Получение пользователя по email"""
     user = db.query(SqlUser).where(SqlUser.email == email).one_or_none()
     if user:

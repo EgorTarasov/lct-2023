@@ -33,7 +33,7 @@ class SqlCourse(Base):
     name: Mapped[str] = mapped_column(Text)
     duration: Mapped[int] = mapped_column(Integer)  # продолжительность в стори поинтах
 
-    skills: Mapped[list["SqlSkill"]] = relationship(SqlSkill, back_populates="course")
+    skills: Mapped[list["SqlSkill"]] = relationship("SqlSkill", back_populates="course")
     positions: Mapped[list["SqlPosition"]] = relationship(
         "SqlPosition", secondary="position_course"
     )

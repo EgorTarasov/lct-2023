@@ -17,15 +17,14 @@ class UserController:
         self.db = db
 
     async def create_user(self, payload: UserCreate) -> UserDto | None:
-
         payload.password = PasswordManager.hash_password(payload.password)
         try:
-            return UserDto.model_validate(await crud.user.create_user(self.db, payload))
+            return UserDto.model_validate(crud.user.create_user(self.db, payload))
         except Exception as e:
             raise e
 
     async def authenticate_user(self, payload: UserLogin) -> Token:
-        user = await crud.user.get_user_by_email(self.db, payload.email)
+        user = crud.user.get_user_by_email(self.db, payload.email)
         if not user:
             raise Exception("User not found")
         if not PasswordManager.verify_password(payload.password, user.password):
