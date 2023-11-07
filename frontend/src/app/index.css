@@ -15,8 +15,8 @@ main:focus {
 }
 
 body {
-    --color-primary: #2C55DE;
-    --color-onPrimary: #fff;
+    --color-primary: 44, 85, 222;
+    --color-onPrimary: 255, 255, 255;
 }
 
 :is(a, button, textarea, summary) {
