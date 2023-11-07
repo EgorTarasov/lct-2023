@@ -22,7 +22,7 @@ export const CourseCard = ({ item, wide }: { item: CourseDto.Item; wide?: boolea
       <Link
         to={`/education/${item.id}`}
         className={twMerge(
-          "flex p-5 gap-3 rounded-2xl border border-text-primary/20 transition-shadow shadow-none hover:shadow-sm",
+          "flex p-5 gap-3 rounded-2xl border border-text-primary/20 transition-shadow shadow-none hover:shadow-sm bg-white",
           item.isCompleted && "opacity-60"
         )}>
         <Icon className="text-primary" />
