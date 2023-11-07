@@ -1,5 +1,5 @@
 import { EventDto } from "api/models/event.model";
-import { FC, HTMLProps, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { getEventMap } from "@/constants/event.map";
 import { Button } from "@/ui";
 import ClockIcon from "@/assets/clock.svg";
@@ -7,7 +7,7 @@ import CalendarIcon from "@/assets/calendar.svg";
 import LightningIcon from "@/assets/lightning.svg";
 import MarkerIcon from "@/assets/marker.svg";
 import { twMerge } from "tailwind-merge";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { convertDate, convertMinutes } from "@/utils/dateConverters";
 import { IconText } from "@/ui/IconText";
 
@@ -34,7 +34,7 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) =
   return (
     <li
       className={twMerge(
-        "flex-col w-52 rounded-2xl border border-text-primary/20 relative hover:shadow-sm",
+        "flex-col bg-white w-52 rounded-2xl border border-text-primary/20 relative hover:shadow-sm transition-shadow",
         wide ? "w-full" : "w-52"
       )}>
       <Icon className="text-primary rounded-2xl" />

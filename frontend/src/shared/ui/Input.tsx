@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 // import ClearSvg from "@/assets/clear.svg"; WTF IS TRIGGERING TS ERROR
-import React, { useEffect } from "react";
+import React from "react";
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   appearance?: "primary";
@@ -27,7 +27,7 @@ export const Input: React.FC<InputProps> = ({
   label,
   ...rest
 }) => (
-  <div className={twMerge("w-full flex flex-col", className)}>
+  <div className={twMerge("w-full flex flex-col max-w-[600px]", className)}>
     {label && (
       <label
         className={twMerge("text-primary/60 mb-2", (error || errorText) && "text-error")}
