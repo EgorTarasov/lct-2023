@@ -11,6 +11,20 @@ from app.models.event import EventDto, EventCreate
 router = APIRouter(prefix="/event", tags=["event"])
 
 
+@router.get("/my", response_model=list[EventDto])
+async def get_user_events(
+        db: Session = Depends(Sql.get_session),
+        user: UserTokenData = Depends(get_current_user)
+):
+    """Список всех мероприятий для пользователя с полем, записан ли он на события или нет"""
+    try:
+        return await EventController(db).get_events(user.user_id)
+    except Exception as e:
+        # TODO: error messages
+        logging.error(e)
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 @router.get("/", response_model=list[EventDto])
 async def get_events(
         db: Session = Depends(Sql.get_session),
@@ -19,20 +33,6 @@ async def get_events(
     """Список всех мероприятий"""
     try:
         return await EventController(db).get_events()
-    except Exception as e:
-        # TODO: error messages
-        logging.error(e)
-        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-@router.get("/for-user", response_model=list[EventDto])
-async def get_events_for_user(
-        db: Session = Depends(Sql.get_session),
-        user: UserTokenData = Depends(get_current_user)
-):
-    """Список всех мероприятий для пользователя с полем, записан ли он на события или нет"""
-    try:
-        return await EventController(db).get_events(user.user_id)
     except Exception as e:
         # TODO: error messages
         logging.error(e)

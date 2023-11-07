@@ -3,7 +3,6 @@ post создать skill
 
 """
 
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.auth.dependency import get_current_user
@@ -12,16 +11,16 @@ from app.auth.jwt import UserTokenData
 from app.controllers.course_controller import CourseController
 from app.core.sql import Sql
 from app.models.course import CourseDto, CourseCreate
-
+from app.models.user import SqlUser
 
 router = APIRouter(prefix="/course", tags=["course"])
 
 
 @router.post("/")
 async def create_course(
-    payload: CourseCreate,
-    user: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        payload: CourseCreate,
+        user: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ) -> CourseDto:
     # FIXME: ограничить права доступа для пользователей, которым не назначен курс
     if user.role_id == 1:
@@ -32,11 +31,24 @@ async def create_course(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Такой курс уже существует")
 
 
+@router.get("/my", response_model=list[CourseDto])
+async def get_user_courses(
+        user: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
+) -> list[CourseDto]:
+    """Список всех мероприятий для пользователя"""
+    try:
+        user_db = db.query(SqlUser).where(SqlUser.id == user.user_id).first()
+        return await CourseController(db).get_courses_by_position(user_db.position_id)
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 @router.get("/{course_id}")
 async def get_course(
-    course_id: int,
-    _: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        course_id: int,
+        _: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ) -> CourseDto:
     try:
         return await CourseController(db).get_course(course_id)
@@ -46,9 +58,9 @@ async def get_course(
 
 @router.get("/for-position/{position_id}", response_model=list[CourseDto])
 async def get_courses_by_position(
-    position_id: int,
-    _: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        position_id: int,
+        _: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ) -> list[CourseDto]:
     try:
         return await CourseController(db).get_courses_by_position(position_id)
