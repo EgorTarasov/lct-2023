@@ -13,11 +13,11 @@ export const MainPage = observer(() => {
   const [vm] = useState(() => new MainPageViewModel());
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 sm:px-4 mx-auto max-w-screen-desktop">
       <AssistantSection vm={vm} />
       <div className="flex flex-col gap-4 w-full mx-auto max-w-screen-desktop">
         <div
-          className="grid sm:mx-4 gap-4"
+          className="grid gap-4"
           style={{
             gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))"
           }}>
@@ -28,10 +28,10 @@ export const MainPage = observer(() => {
             <CourseSection vm={vm} />
           </div>
         </div>
-        <div className={`sm:w-auto sm:mx-4 ${card}`}>
+        <div className={card}>
           <DiveinSection vm={vm} />
         </div>
-        <div className={`sm:w-auto sm:mx-4 ${card}`}>
+        <div className={card}>
           <EventsSection vm={vm} />
         </div>
       </div>

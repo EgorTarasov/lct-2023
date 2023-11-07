@@ -69,7 +69,7 @@ export const routes: RouteType[] = [
     title: "Задания"
   },
   {
-    path: "/staff",
+    path: "/contacts",
     component: () => (
       <PrivateRoute>
         <StaffPage />
@@ -126,12 +126,6 @@ export const routes: RouteType[] = [
     ),
     title: "Магазин",
     showInNav: false
-  },
-  {
-    path: "/contacts",
-    component: () => <MainPage />,
-    title: "Контакты",
-    showInNav: true
   },
   {
     path: "/login",

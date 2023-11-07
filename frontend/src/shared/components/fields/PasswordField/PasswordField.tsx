@@ -10,7 +10,7 @@ export const PasswordField: FC<PasswordField> = ({ ...rest }) => {
   return (
     <Input
       onIconClick={() => setShowPassword((v) => !v)}
-      icon={
+      rightIcon={
         showPassword ? (
           <EyeClosedIcon
             role={"button"}

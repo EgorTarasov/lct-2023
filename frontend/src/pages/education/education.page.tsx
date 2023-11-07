@@ -20,7 +20,7 @@ export const EducationPage = () => {
       <Input
         id={"search"}
         placeholder={"Поиск"}
-        icon={<SearchIcon />}
+        rightIcon={<SearchIcon />}
         className=""
         value={search}
         onChange={setSearch}

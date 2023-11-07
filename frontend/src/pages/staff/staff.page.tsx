@@ -11,7 +11,7 @@ export const StaffPage = () => {
       <Input
         id={"search"}
         placeholder={"Поиск"}
-        icon={<SearchIcon />}
+        rightIcon={<SearchIcon />}
         className="px-4"
         value={search}
         onChange={setSearch}

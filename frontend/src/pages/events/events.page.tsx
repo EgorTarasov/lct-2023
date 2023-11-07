@@ -29,7 +29,7 @@ export const EventsPage = () => {
       <Input
         id={"search"}
         placeholder={"Поиск"}
-        icon={<SearchIcon />}
+        rightIcon={<SearchIcon />}
         className=""
         value={search}
         onChange={setSearch}
