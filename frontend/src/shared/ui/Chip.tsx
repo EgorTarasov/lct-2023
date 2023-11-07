@@ -16,7 +16,7 @@ export const Chip: React.FC<IChip> = ({ title, onClick, className, isActive, ico
       aria-pressed={isActive}
       className={twMerge(
         "flex items-center gap-2 px-3 py-1 rounded-lg transition-colors border border-primary",
-        isActive ? "bg-primary text-white" : "bg-primary/50 text-primary",
+        isActive ? "bg-primary text-white" : "bg-primary/5 text-primary",
         className
       )}>
       {icon}
