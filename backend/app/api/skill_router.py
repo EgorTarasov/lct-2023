@@ -24,7 +24,6 @@ async def create_skill(
     _: UserTokenData = Depends(get_current_user),
     db: Session = Depends(Sql.get_session),
 ) -> SkillDto:
-
     try:
         return await SkillController(db).create_skill(payload)
     except:
@@ -52,14 +51,25 @@ async def create_question(
     _: UserTokenData = Depends(get_current_user),
     db: Session = Depends(Sql.get_session),
 ) -> QuestionDto:
-
     try:
         return await SkillController(db).create_question(payload)
     except:
         raise Exception("Question already exists")
 
 
-@question_router.get("/{question_id}")
+@question_router.get("/{skill_id}")
+async def get_questions(
+    skill_id: int,
+    _: UserTokenData = Depends(get_current_user),
+    db: Session = Depends(Sql.get_session),
+) -> list[QuestionDto]:
+    try:
+        return await SkillController(db).get_questions(skill_id)
+    except:
+        raise Exception("Question not found")
+
+
+@question_router.get("/byid/{question_id}")
 async def get_question(
     question_id: int,
     _: UserTokenData = Depends(get_current_user),
