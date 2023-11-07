@@ -26,8 +26,8 @@ export const HorizontalCarousel: FC<HorizontalCarouselProps> = ({
       keyboard
       mousewheel
       modules={[Mousewheel, Keyboard, A11y, Navigation]}
-      onSlideChange={() => console.log("slide change")}
-      onSwiper={(swiper) => console.log(swiper)}
+      // onSlideChange={() => console.log("slide change")}
+      // onSwiper={(swiper) => console.log(swiper)}
       {...rest}>
       {children.map((element, i) => (
         <SwiperSlide key={i}>{element}</SwiperSlide>
