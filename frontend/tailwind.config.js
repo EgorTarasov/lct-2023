@@ -4,7 +4,8 @@ export default {
   theme: {
     screens: {
       sm: "640px",
-      desktop: "1024px"
+      desktop: "1024px",
+      etalon: "1420px"
     },
     extend: {
       colors: {
