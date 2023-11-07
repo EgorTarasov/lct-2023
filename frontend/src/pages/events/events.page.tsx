@@ -25,7 +25,7 @@ export const EventsPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 px-4 py-6">
+    <div className="flex flex-col gap-4 px-4 mx-auto max-w-screen-desktop fade-enter-done mt-6 sm:mt-10">
       <Input
         id={"search"}
         placeholder={"Поиск"}
@@ -61,7 +61,11 @@ export const EventsPage = () => {
           isActive={filters.includes(Filter.Creativity)}
         />
       </div>
-      <ul className="flex flex-col justify-between items-center gap-4">
+      <ul
+        className="grid gap-4"
+        style={{
+          gridTemplateColumns: "repeat(auto-fit, minmax(256px, 1fr))"
+        }}>
         {MockEvents.map((v, i) => (
           <EventCard item={v} onRegisterClick={() => console.log(v.id)} key={v.id} wide />
         ))}
