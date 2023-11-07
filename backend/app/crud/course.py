@@ -1,6 +1,7 @@
+from typing import Type
 from sqlalchemy.orm import Session
 
-from ..models.course import SqlCourse, CourseCreate, CourseDto
+from ..models.course import SqlCourse, CourseCreate
 from ..models.position import SqlPosition
 
 
@@ -13,14 +14,14 @@ async def create(db: Session, payload: CourseCreate) -> SqlCourse:
     return db_course
 
 
-async def get(db: Session, course_id: int) -> SqlCourse:
+async def get(db: Session, course_id: int) -> Type[SqlCourse]:
     db_course = db.query(SqlCourse).filter(SqlCourse.id == course_id).first()
     if not db_course:
         raise Exception("Course not found")
     return db_course
 
 
-async def get_all(db: Session) -> list[SqlCourse]:
+async def get_all(db: Session) -> list[Type[SqlCourse]]:
     db_courses = db.query(SqlCourse).all()
     return db_courses
 
