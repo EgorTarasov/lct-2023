@@ -8,6 +8,7 @@ import ChevronIcon from "@/assets/chevron2.svg";
 import CloseIcon from "@/assets/clear.svg";
 import { ThemeService } from "@/stores/theme.service.ts";
 import { routes } from "../../../../app/routes";
+import { Logo } from "@/ui";
 
 export const MobileNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,7 +20,7 @@ export const MobileNav = () => {
   };
 
   return (
-    <nav className="[grid-area:mobile] sticky sm:hidden top-0 z-10 w-full bg-nav-background flex justify-between items-center px-3 py-2 shadow">
+    <nav className="[grid-area:header] sticky sm:hidden top-0 z-10 w-full bg-nav-background flex justify-between items-center px-3 py-2 shadow">
       <div className="flex items-center gap-2">
         <button
           id="nav-button"
@@ -52,7 +53,7 @@ export const MobileNav = () => {
           <Dialog.Title>Навигационное меню</Dialog.Title>
           <div id="mobile-menu" className="appear fixed inset-0 z-40 bg-nav-background">
             <div className="flex justify-between px-3 py-2 items-center">
-              <div className="flex items-center">
+              <div className="flex items-center gap-3">
                 <button onClick={toggleMenu} className="p-1">
                   <span className="sr-only">Закрыть меню</span>
                   <CloseIcon
@@ -61,7 +62,7 @@ export const MobileNav = () => {
                     className="w-10 h-10 text-text-primary"
                   />
                 </button>
-                <img src={ThemeService.themeConfig?.logoUrl} alt="Логотип" className="h-8" />
+                <Logo width={128} />
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2" aria-label={"Ваша активность: 100%"}>
