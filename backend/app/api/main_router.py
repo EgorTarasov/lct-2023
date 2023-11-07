@@ -11,7 +11,7 @@ from app.api import (
     admin_router,
     course_router,
     skill_router,
-    position_router
+    position_router, file_router
 )
 
 
@@ -27,3 +27,4 @@ router.include_router(event_router.router)
 router.include_router(course_router.router)
 router.include_router(skill_router.router)
 router.include_router(position_router.router)
+router.include_router(file_router.router)

@@ -1,7 +1,7 @@
 import typing as tp
 from pydantic import BaseModel, ConfigDict, Field
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, Text, ForeignKey
 
 from .base import Base
@@ -24,18 +24,6 @@ class PositionDto(PositionBase):
     id: int = Field(...)
 
 
-class SqlPosition(Base):
-    __tablename__ = "positions"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(Text, nullable=False)
-
-    users: Mapped["SqlUser"] = mapped_column("SqlUser", back_populates="position")
-    courses: Mapped["SqlCourse"] = mapped_column(
-        "SqlCourse", secondary="position_course"
-    )
-
-
 class PositionCourse(Base):
     __tablename__ = "position_course"
 
@@ -50,6 +38,17 @@ class PositionCourse(Base):
         primary_key=True,
     )
 
+
+class SqlPosition(Base):
+    __tablename__ = "positions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(Text, nullable=False)
+
+    users: Mapped["SqlUser"] = relationship("SqlUser", back_populates="position")
+    courses: Mapped["SqlCourse"] = relationship(
+        "SqlCourse", secondary="position_course"
+    )
 
 # interest_user = sqlalchemy.Table(
 #     "interest_user",
