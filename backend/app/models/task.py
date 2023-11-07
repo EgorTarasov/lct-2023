@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, Text, JSON, DateTime, Enum, ForeignKey
+from sqlalchemy import Integer, Text, JSON, DateTime, Enum, ForeignKey, Boolean
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 import datetime as dt
 from pydantic import BaseModel, Field, ConfigDict
@@ -45,6 +45,7 @@ class TaskDto(BaseModel):
     points: int = Field(...)
     place: str = Field(...)
     links: list[str] = Field(...)
+    is_finished: bool = Field(...)
     created_at: dt.datetime = Field(...)
 
 
@@ -60,6 +61,7 @@ class SqlTask(Base):
     points: Mapped[int] = mapped_column(Integer)
     place: Mapped[str] = mapped_column(Text)
     links: Mapped[list[str]] = mapped_column(JSON)
+    is_finished: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[dt.datetime] = mapped_column(DateTime, default=dt.datetime.utcnow)
 
     mentee_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
