@@ -9,7 +9,7 @@ const NavItem = ({ item }: { item: RouteType }) => (
     className={({ isActive }) =>
       twMerge(
         "px-4 py-3 w-full hover:text-text-primary hover:bg-text-primary/5 rounded-xl text-text-primary/60",
-        isActive && "!text-primary"
+        isActive && "!text-primary bg-primary/10"
       )
     }>
     {item.title}

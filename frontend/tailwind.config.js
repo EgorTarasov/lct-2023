@@ -8,8 +8,8 @@ export default {
     },
     extend: {
       colors: {
-        primary: "var(--color-primary)",
-        onPrimary: "var(--color-onPrimary)",
+        primary: "rgba(var(--color-primary), <alpha-value>)",
+        onPrimary: "rgba(var(--color-onPrimary), <alpha-value>)",
         error: "#F20000",
         nav: {
           background: "#FFFFFF",
