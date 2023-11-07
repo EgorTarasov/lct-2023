@@ -18,12 +18,12 @@ from app.auth.dependency import get_current_user
 router = APIRouter(prefix="/task", tags=["task"])
 
 
-@router.get("/for-mentee", response_model=list[TaskDto])
-async def get_my_tasks(
+@router.get("/my", response_model=list[TaskDto])
+async def get_user_tasks(
         user: UserTokenData = Depends(get_current_user),
         db: Session = Depends(Sql.get_session),
 ) -> list[TaskDto]:
-    """Получение списка задач для подопечного"""
+    """Список всех задач пользователя"""
     try:
         return await TaskController(db).get_tasks(user.user_id)
     except Exception as e:
