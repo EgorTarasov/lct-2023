@@ -36,7 +36,7 @@ async def get_user_courses(
         user: UserTokenData = Depends(get_current_user),
         db: Session = Depends(Sql.get_session),
 ) -> list[CourseDto]:
-    """Список всех мероприятий для пользователя"""
+    """Список всех курсов для пользователя (пока нет поля, выполнен курс или нет)"""
     try:
         user_db = db.query(SqlUser).where(SqlUser.id == user.user_id).first()
         return await CourseController(db).get_courses_by_position(user_db.position_id)
