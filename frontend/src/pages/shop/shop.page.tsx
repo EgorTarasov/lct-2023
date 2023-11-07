@@ -17,7 +17,7 @@ export const ShopPage = () => {
       <Input
         id={"search"}
         placeholder={"Поиск"}
-        icon={<SearchIcon />}
+        rightIcon={<SearchIcon />}
         className=""
         value={search}
         onChange={setSearch}

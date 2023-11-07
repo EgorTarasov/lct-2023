@@ -22,7 +22,7 @@ body {
 :is(a, button, textarea, summary) {
     --outline-size: max(2px, 0.08em);
     --outline-style: solid;
-    --outline-color: var(--color-primary);
+    --outline-color: rgb(var(--color-primary));
 }
 
 :is(a, button, textarea, summary):focus-visible {
