@@ -25,7 +25,7 @@ export const IconText = ({
       width={16}
       height={16}
     />
-    <span className="ml-1 text-sm leading-none mt-[0.5px]" aria-hidden="true">
+    <span className="ml-1 text-sm leading-none mt-[1px]" aria-hidden="true">
       {text}
     </span>
   </li>

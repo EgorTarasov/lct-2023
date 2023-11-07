@@ -18,7 +18,7 @@ export const CourseSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
   return (
     <section className="flex flex-col w-full">
       <div className="flex flex-col">
-        <div className="flex justify-between items-center mx-4 mt-6">
+        <div className="flex justify-between items-center mx-4">
           <h2 className="font-medium text-xl">Обучение</h2>
           <div className="flex gap-2">
             <IconButton id={leftControlId} icon={() => <ChevronIcon className="rotate-180" />} />
