@@ -28,13 +28,3 @@ async def login(
         raise HTTPException(status_code=400, detail="Incorrect email or password")
 
 
-@router.post("/register")
-async def register(
-    user_data: UserCreate,
-    db: Session = Depends(Sql.get_session),
-):
-
-    user = await UserController(db).create_user(user_data)
-    if not user:
-        raise HTTPException(status_code=400, detail="User already exists")
-    return user
