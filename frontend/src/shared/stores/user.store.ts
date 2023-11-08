@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 
 class UserStoreViewModel {
   public points = 100;
+
   constructor() {
     makeAutoObservable(this);
   }
