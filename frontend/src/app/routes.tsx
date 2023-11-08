@@ -1,4 +1,4 @@
-import { ComponentType, ReactElement } from "react";
+import { ComponentType } from "react";
 import { Login, MainPage, ResetPassword } from "../pages";
 import { ProfilePage } from "../pages/profile/profile.page.tsx";
 import { EventsPage } from "../pages/events/events.page.tsx";
@@ -7,6 +7,12 @@ import { TasksPage } from "../pages/tasks/tasks.page.tsx";
 import { ShopPage } from "../pages/shop/shop.page.tsx";
 import { StaffPage } from "../pages/staff/staff.page.tsx";
 import { PrivateRoute } from "@/hoc/PrivateRoute.tsx";
+import { EmployeesPage } from "../pages/admin/employees/employees.page.tsx";
+import { AdminOnboardingPage } from "../pages/admin/onboarding/adminOnboarding.page.tsx";
+import { BrandingPage } from "../pages/admin/branding/branding.page.tsx";
+import { AdminEducationPage } from "../pages/admin/education/admin-education.page.tsx";
+import { AdminEventsPage } from "../pages/admin/events/adminEvents.page.tsx";
+import { AnalyticsPage } from "../pages/admin/analytics/analytics.page.tsx";
 
 export interface RouteType {
   path: string;
@@ -17,7 +23,6 @@ export interface RouteType {
 
 export const RoutesWithoutNav = ["/login", "/reset-password"];
 
-// This looks bad we're sorry
 export const routes: RouteType[] = [
   {
     path: "/",
@@ -136,5 +141,62 @@ export const routes: RouteType[] = [
     path: "/reset-password",
     component: () => <ResetPassword />,
     title: "Восстановление пароля"
+  }
+];
+
+export const adminRoutes = [
+  {
+    path: "/admin/employees",
+    component: () => (
+      <PrivateRoute>
+        <EmployeesPage />
+      </PrivateRoute>
+    ),
+    title: "Сотрудники"
+  },
+  {
+    path: "/admin/onboarding",
+    component: () => (
+      <PrivateRoute>
+        <AdminOnboardingPage />
+      </PrivateRoute>
+    ),
+    title: "Материалы онбординга"
+  },
+  {
+    path: "/admin/branding",
+    component: () => (
+      <PrivateRoute>
+        <BrandingPage />
+      </PrivateRoute>
+    ),
+    title: "Данные о брендинге"
+  },
+  {
+    path: "/admin/education",
+    component: () => (
+      <PrivateRoute>
+        <AdminEducationPage />
+      </PrivateRoute>
+    ),
+    title: "Образовательные материалы"
+  },
+  {
+    path: "/admin/events",
+    component: () => (
+      <PrivateRoute>
+        <AdminEventsPage />
+      </PrivateRoute>
+    ),
+    title: "Мероприятия"
+  },
+  {
+    path: "/admin/analytics",
+    component: () => (
+      <PrivateRoute>
+        <AnalyticsPage />
+      </PrivateRoute>
+    ),
+    title: "Аналитика"
   }
 ];
