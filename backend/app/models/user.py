@@ -19,6 +19,7 @@ class UserCreate(BaseModel):
     middle_name: str = Field(None, min_length=2, max_length=50)
     email: EmailStr = Field(..., min_length=5, max_length=50)
     number: str = Field(...)
+    adaptation_target: str = Field(...)
     starts_work_at: datetime.date = Field(...)
     position_id: int = Field(..., ge=1)
     role_id: int = Field(default=1, ge=1)
@@ -45,6 +46,7 @@ class SqlUser(Base):
     gender: Mapped[str] = mapped_column(Text, nullable=True)
     password: Mapped[str] = mapped_column(Text, nullable=False)
     number: Mapped[str] = mapped_column(Text, nullable=False)
+    adaptation_target: Mapped[str] = mapped_column(Text, nullable=False)
     starts_work_at: Mapped[datetime.date] = mapped_column(Date, nullable=False)
     role_id: Mapped[int] = mapped_column(
         Integer,
