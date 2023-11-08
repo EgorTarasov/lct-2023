@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.models.event import SqlEvent, EventCreate, SqlEnrollment
+from app.models.event import SqlEvent, EventCreate, SqlEnrollment, SqlEventType
 from app.models.user import SqlUser
 
 
@@ -19,7 +19,7 @@ async def get_events(db: Session) -> list[SqlEvent]:
     events = db.query(SqlEvent).order_by(SqlEvent.starts_at.desc()).all()
     return events
 
-#
+
 async def get_events_for_user(db: Session, user_id: int) -> list[int]:
     """Получение всех мероприятий для пользователя"""
     # events = db.query(SqlEvent).join(SqlEnrollment, SqlEvent.id == SqlEnrollment.id).all()
@@ -41,3 +41,30 @@ async def enroll_on_event(db: Session, event_id: int, user_id: int) -> SqlEnroll
     db.commit()
     db.refresh(db_enrollment)
     return db_enrollment
+
+
+async def get_available_event_types(db: Session) -> list[str]:
+    """Получение всех типов мероприятий"""
+    event_types = db.query(SqlEventType, SqlEventType.name).all()
+    return [event_type.name for event_type in event_types]
+
+
+async def delete_event(db: Session, event_id: int) -> bool:
+    """Получение всех мероприятий"""
+    deleted_rows = db.query(SqlEvent).where(SqlEvent.id == event_id).delete()
+    if deleted_rows == 0:
+        raise Exception("Такого типа не существует")
+    db.commit()
+    return True
+
+
+async def change_event(db: Session, event_id: int, payload: EventCreate) -> SqlEvent:
+    """Получение всех мероприятий"""
+    db_event = db.query(SqlEvent).where(SqlEvent.id == event_id).one_or_none()
+    if not db_event:
+        raise Exception("Такого мероприятия не существует")
+    for key, value in payload.model_dump().items():
+        setattr(db_event, key, value) if value else None
+    db.commit()
+    db.refresh(db_event)
+    return db_event

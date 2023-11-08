@@ -7,15 +7,14 @@ from app.models.base import Base
 
 
 class EventCreate(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
     title: str
-    description: str
     place: str
     type_id: int
     starts_at: dt.datetime
 
 
 class EventDto(EventCreate):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     is_enrolled: bool = False
 
@@ -25,7 +24,6 @@ class SqlEvent(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column(Text)
-    description: Mapped[str] = mapped_column(Text)
     place: Mapped[str] = mapped_column(Text)
     starts_at: Mapped[dt.datetime] = mapped_column(DateTime)
     type_id: Mapped[int] = mapped_column(ForeignKey("event_type.id"), nullable=False)
