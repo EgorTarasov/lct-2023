@@ -1,7 +1,7 @@
-from turtle import pos
+import datetime
 import typing as tp
 
-from sqlalchemy import ForeignKey, Integer, Text
+from sqlalchemy import ForeignKey, Integer, Text, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from .base import Base
@@ -18,27 +18,20 @@ class UserCreate(BaseModel):
     last_name: str = Field(..., min_length=2, max_length=50)
     middle_name: str = Field(None, min_length=2, max_length=50)
     email: EmailStr = Field(..., min_length=5, max_length=50)
-    password: str = Field(..., min_length=8, max_length=100)
-    gender: str = Field(None, min_length=1, max_length=10)
-    role_id: int = Field(..., ge=1)
+    number: str = Field(...)
+    starts_work_at: datetime.date = Field(...)
+    position_id: int = Field(..., ge=1)
+    role_id: int = Field(default=1, ge=1)
 
 
 class UserLogin(BaseModel):
     email: EmailStr = Field(..., min_length=5, max_length=50)
-    password: str = Field(..., min_length=8, max_length=50)
+    password: str = Field(..., min_length=6, max_length=50)
 
 
-class UserDto(BaseModel):
+class UserDto(UserCreate):
     model_config = ConfigDict(from_attributes=True)
-
     id: int = Field(..., alias="id")
-    first_name: str = Field(..., min_length=2, max_length=50)
-    last_name: str = Field(..., min_length=2, max_length=50)
-    middle_name: str = Field(None, min_length=2, max_length=50)
-    email: EmailStr = Field(..., min_length=5, max_length=50)
-    gender: str = Field(None, min_length=1, max_length=10)
-    password: str = Field(..., min_length=8)
-    role_id: int = Field(..., ge=1)
 
 
 class SqlUser(Base):
@@ -51,6 +44,8 @@ class SqlUser(Base):
     email: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
     gender: Mapped[str] = mapped_column(Text, nullable=True)
     password: Mapped[str] = mapped_column(Text, nullable=False)
+    number: Mapped[str] = mapped_column(Text, nullable=False)
+    starts_work_at: Mapped[datetime.date] = mapped_column(Date, nullable=False)
     role_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("roles.id", ondelete="NO ACTION"),

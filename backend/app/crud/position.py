@@ -10,6 +10,14 @@ async def create(db: Session, position: PositionCreate) -> SqlPosition:
     return db_position
 
 
+async def get_position_by_name(db: Session, name: str) -> SqlPosition:
+    # TODO pagination
+    position = db.query(SqlPosition).filter(SqlPosition.name == name).one_or_none()
+    if not position:
+        raise Exception("Должности не существует")
+    return position
+
+
 async def get_all(db: Session) -> list[SqlPosition]:
     # TODO pagination
     return db.query(SqlPosition).all()
