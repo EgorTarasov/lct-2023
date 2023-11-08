@@ -1,7 +1,7 @@
 import { Logo } from "@/ui";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
-import { RouteType, routes } from "../../../../app/routes";
+import { adminRoutes, RouteType } from "../../../../app/routes";
 import LightningIcon from "@/assets/lightning.svg";
 import { observer } from "mobx-react-lite";
 import { UserStore } from "@/stores/user.store";
@@ -47,13 +47,11 @@ export const DesktopHeading = observer(() => {
                 </div>
               )}
             </NavLink>
-            {routes
-              .filter((route) => route.showInNav)
-              .map((item, i) => (
-                <li key={i} className="flex w-full">
-                  <NavItem item={item} />
-                </li>
-              ))}
+            {adminRoutes.map((item, i) => (
+              <li key={i} className="flex w-full">
+                <NavItem item={item} />
+              </li>
+            ))}
           </ul>
         </nav>
       </aside>

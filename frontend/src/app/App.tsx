@@ -1,11 +1,11 @@
 import "./index.css";
-import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { ThemeService } from "@/stores/theme.service.ts";
 import { observer } from "mobx-react-lite";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import "./transitions.scss";
-import { RoutesWithoutNav, routes } from "./routes";
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { adminRoutes, RoutesWithoutNav } from "./routes";
+import { useLayoutEffect, useState } from "react";
 import { SkipToContent } from "@/components/SkipToContent";
 import { DesktopHeading, MobileNav } from "@/components/navigation";
 import { Footer } from "@/components/footer";
@@ -22,7 +22,7 @@ const App = observer(() => {
   }, [location.pathname]);
 
   const [MappedRoutes] = useState(() =>
-    routes.map((route, index) => (
+    adminRoutes.map((route, index) => (
       <Route key={index} path={route.path} element={<route.component />} />
     ))
   );
