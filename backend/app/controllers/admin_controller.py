@@ -58,7 +58,8 @@ class AdminController:
                         middle_name=middle_name,
                         first_name=first_name,
                         starts_work_at=starts_work_at,
-                        number=user["Номер телефона"]
+                        number=user["Номер телефона"],
+                        adaptation_target=user["Цель адаптации"]
                     ),
                     password
                 )
