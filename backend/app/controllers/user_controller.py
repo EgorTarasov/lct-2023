@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+import logging
 
 from app.auth.jwt import UserTokenData
 from app.models.interest import InterestDto, InterestUpdate
@@ -6,10 +7,9 @@ from app.models.token import Token
 from app.models.user import UserCreate, UserDto, UserLogin
 from app.models.position import PositionCreate, PositionDto
 from app.models.role import RoleCreate, RoleDto
-
-
 from app.auth import PasswordManager, JWTEncoder
 from app import crud
+from app.worker import user_create_notification
 
 
 class UserController:
@@ -17,11 +17,18 @@ class UserController:
         self.db = db
 
     async def create_user(self, payload: UserCreate) -> UserDto | None:
-        payload.password = PasswordManager.hash_password(payload.password)
+        password = PasswordManager.generate_password()
         try:
-            return UserDto.model_validate(crud.user.create_user(self.db, payload))
+            user = crud.user.create_user(self.db, payload, password=password)
+            logging.info(f"User {user.email} created with password {password}")
+            user_create_notification(
+                fio=f"{user.last_name} {user.first_name} {user.middle_name}",
+                email=user.email, password=password
+            )
+            return UserDto.model_validate(user)
         except Exception as e:
             raise e
+
 
     async def authenticate_user(self, payload: UserLogin) -> Token:
         user = crud.user.get_user_by_email(self.db, payload.email)
