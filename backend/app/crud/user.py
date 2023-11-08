@@ -1,12 +1,14 @@
 from sqlalchemy.orm import Session
 
+from app.auth import PasswordManager
 from app.models.user import *
 from app.models.mentee import mentor_mentee
 
 
-def create_user(db: Session, payload: UserCreate) -> SqlUser:
+def create_user(db: Session, payload: UserCreate, password: str) -> SqlUser:
     """Создание пользователя"""
-    db_user = SqlUser(**payload.model_dump())
+    hashed_password = PasswordManager.hash_password(password)
+    db_user = SqlUser(**payload.model_dump(), password=hashed_password)
 
     db.add(db_user)
     db.commit()
