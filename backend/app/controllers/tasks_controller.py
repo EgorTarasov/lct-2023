@@ -1,8 +1,10 @@
+from datetime import timezone, timedelta, datetime
+
 from sqlalchemy.orm import Session
 
 from app import crud
 from app.models.task import TaskDto, TaskCreate, TaskStatus
-from app.worker import notify_user_about_new_task, notify_admin_about_task_done
+from app.worker import notify_user_about_new_task, notify_admin_about_task_done, check_for_deadline
 
 
 class TaskController:
@@ -23,8 +25,11 @@ class TaskController:
 
     async def create_task(self, payload: TaskCreate, mentor_id: int) -> TaskDto:
         task = await crud.task.create_task(self.db, payload, mentor_id)
+        print(task.mentee_id, task.id)
         fullname = f"{task.mentee.last_name} {task.mentee.first_name} {task.mentee.middle_name}"
         notify_user_about_new_task.delay(fullname, task.mentee.email, task.name)
+        print(datetime.utcnow() + timedelta(seconds=5))
+        check_for_deadline.apply_async((task.id, ), eta=datetime.utcnow() + timedelta(seconds=5))
         return TaskDto.model_validate(task)
 
     async def change_task(self, task_id: int, payload: TaskCreate) -> TaskDto:
