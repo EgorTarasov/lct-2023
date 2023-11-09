@@ -14,7 +14,6 @@ export type Auth =
     }
   | {
       state: "authorized";
-      auth: AuthDto.Item;
       user: UserDto.Item;
     };
 
@@ -23,6 +22,19 @@ class AuthServiceViewModel {
 
   constructor() {
     makeAutoObservable(this);
+    void this.init();
+  }
+
+  private async init() {
+    try {
+      const user = await UserEndpoint.current();
+      this.auth = {
+        state: "authorized",
+        user
+      };
+    } catch {
+      this.auth = { state: "anonymous" };
+    }
   }
 
   public async login(username: string, password: string): Promise<boolean> {
@@ -33,7 +45,6 @@ class AuthServiceViewModel {
         const user = await UserEndpoint.current();
         this.auth = {
           state: "authorized",
-          auth,
           user
         };
         return true;

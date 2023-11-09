@@ -11,10 +11,20 @@ import { DesktopHeading, MobileNav } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import cl from "./layout.module.scss";
 import { AuthService } from "@/stores/auth.service";
+import { toJS } from "mobx";
 
 const App = observer(() => {
   const location = useLocation();
   const navigate = useNavigate();
+  const routeFallback = useMemo(() => {
+    if (AuthService.auth.state === "anonymous" || AuthService.auth.state === "loading") {
+      return "/login";
+    }
+    if (AuthService.auth.user.user_role.name === "hr") {
+      return "/admin/employees";
+    }
+    return "/";
+  }, [AuthService.auth.state]);
 
   useLayoutEffect(() => {
     window.scrollTo({
@@ -22,12 +32,6 @@ const App = observer(() => {
       behavior: "smooth"
     });
   }, [location.pathname]);
-
-  useEffect(() => {
-    if (AuthService.auth.state === "loading") {
-      navigate("/login");
-    }
-  }, [AuthService.auth]);
 
   if (!ThemeService.isLoaded)
     return <div className={"w-full h-full flex items-center justify-center"}>⏳Загрузка...</div>;
@@ -49,7 +53,7 @@ const App = observer(() => {
               {RoutesStore.routes.map((route, index) => (
                 <Route key={index} path={route.path} element={<route.component />} />
               ))}
-              <Route path="*" element={<Navigate to="/" />} />
+              <Route path="*" element={<Navigate to={routeFallback} />} />
             </Routes>
           </CSSTransition>
         </SwitchTransition>
