@@ -102,12 +102,12 @@ async def get_positions(
 
 @role_router.post("/", response_model=RoleDto, status_code=status.HTTP_201_CREATED)
 async def create_role(
-    role_data: RoleCreate,
+    payload: RoleCreate,
     user_data: UserTokenData = Depends(get_current_user),
     db: Session = Depends(Sql.get_session),
 ):
     logging.info(user_data)
-    role = await UserController(db).create_role(role_data)
+    role = await UserController(db).create_role(payload)
     if not role:
         raise HTTPException(status_code=400, detail="Role already exists")
     return role

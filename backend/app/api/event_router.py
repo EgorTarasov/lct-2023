@@ -90,17 +90,17 @@ async def change_event(
         raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@router.delete("/{event_id}", response_model=bool)
+@router.delete("/{event_id}")
 async def delete_event(
         event_id: int,
         user: UserTokenData = Depends(get_current_user),
         db: Session = Depends(Sql.get_session)
-) -> bool:
+):
     """Удаление мероприятия"""
     if user.role_id == 1:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Доступ запрещён")
     try:
-        return await EventController(db).delete_event(event_id)
+        await EventController(db).delete_event(event_id)
     except Exception as e:
         # TODO: error messages
         logging.error(e)
