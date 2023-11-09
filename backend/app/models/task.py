@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, Text, JSON, DateTime, Enum, ForeignKey, Boolean
+from sqlalchemy import Integer, Text, JSON, DateTime, Enum, ForeignKey, Boolean, Date
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 import datetime as dt
 from pydantic import BaseModel, Field, ConfigDict
@@ -23,7 +23,7 @@ class TaskType(str, Enum):
 class TaskCreate(BaseModel):
     name: str = Field(...)
     mentee_id: int = Field(...)
-    deadline: dt.datetime = Field(...)
+    deadline: dt.date = Field(...)
     status: TaskStatus = Field(...)
     type: TaskType = Field(...)
     difficulty: int = Field(...)
@@ -47,7 +47,7 @@ class SqlTask(Base):
 
     id: Mapped[int] = mapped_column(Integer, autoincrement=True, primary_key=True)
     name: Mapped[str] = mapped_column(Text, nullable=False)
-    deadline: Mapped[dt.datetime] = mapped_column(DateTime)
+    deadline: Mapped[dt.date] = mapped_column(Date)
     status: Mapped[TaskStatus] = mapped_column(Text)
     type: Mapped[TaskType] = mapped_column(Text)
     difficulty: Mapped[int] = mapped_column(Integer)
