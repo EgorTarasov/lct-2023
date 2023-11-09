@@ -1,4 +1,4 @@
-import DragDropFile from "@/components/gragAndDrop/index.tsc.tsx";
+import DragDropFile from "@/components/dragAndDrop/index.tsc";
 import { Input } from "@/ui";
 import { Popover } from "@headlessui/react";
 import { BlockPicker } from "react-color";
