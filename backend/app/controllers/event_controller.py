@@ -28,3 +28,10 @@ class EventController:
     async def enroll_on_event(self, event_id: int, user_id: int) -> bool:
         db_event = await crud.event.enroll_on_event(self.db, event_id, user_id)
         return True
+
+    async def delete_event(self, event_id: int) -> bool:
+        return await crud.event.delete_event(self.db, event_id)
+
+    async def change_event(self, event_id: int, payload: EventCreate) -> EventDto:
+        db_event = await crud.event.change_event(self.db, event_id, payload)
+        return EventDto.model_validate(db_event)
