@@ -111,22 +111,6 @@ async def delete_task(
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@router.delete("/{task_id}")
-async def delete_task(
-        task_id: int,
-        user: UserTokenData = Depends(get_current_user),
-        db: Session = Depends(Sql.get_session)
-):
-    """Удаление задач ментором"""
-    if user.role_id == 1:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
-    try:
-        await TaskController(db).delete_task(task_id)
-    except Exception as e:
-        logging.error(e)
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
 @router.put("/update_status/{task_id}", response_model=TaskDto)
 async def change_task(
         task_id: int,
