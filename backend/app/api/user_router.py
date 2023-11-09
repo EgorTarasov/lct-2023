@@ -6,6 +6,8 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+
+from app import crud
 from app.auth.dependency import get_current_user
 
 from app.auth.jwt import UserTokenData
@@ -14,20 +16,35 @@ from app.models.position import PositionCreate, PositionDto
 from app.models.role import RoleCreate, RoleDto
 from app.controllers.user_controller import UserController
 
-
 from app.core.sql import Sql
+from app.models.user import UserDto, SqlUser
 
 router = APIRouter(prefix="/user", tags=["user"])
-
 
 interest_router = APIRouter(prefix="/interest")
 position_router = APIRouter(prefix="/position")
 role_router = APIRouter(prefix="/role")
 
 
+@router.get("/me", response_model=UserDto)
+async def get_me(
+        db: Session = Depends(Sql.get_session),
+        user: UserTokenData = Depends(get_current_user)):
+    user = await crud.user.get_user_by_id(db, user.user_id)
+    return user
+
+
+@router.get("/role", response_model=RoleDto)
+async def get_my_role(
+        db: Session = Depends(Sql.get_session),
+        user: UserTokenData = Depends(get_current_user)):
+    user = await crud.user.get_user_by_id(db, user.user_id)
+    return user.user_role
+
+
 @interest_router.get("/", response_model=list[InterestDto])
 async def get_available_interests(
-    db: Session = Depends(Sql.get_session),
+        db: Session = Depends(Sql.get_session),
 ):
     """Интересы / хобби доступные для выбора
 
@@ -45,9 +62,9 @@ async def get_available_interests(
 
 @interest_router.post("/", response_model=list[InterestDto])
 async def update_interests(
-    payload: InterestUpdate,
-    db: Session = Depends(Sql.get_session),
-    user: UserTokenData = Depends(get_current_user),
+        payload: InterestUpdate,
+        db: Session = Depends(Sql.get_session),
+        user: UserTokenData = Depends(get_current_user),
 ) -> list[InterestDto]:
     try:
         return await UserController(db).update_interest(user, payload)
@@ -59,8 +76,8 @@ async def update_interests(
 
 @interest_router.get("/my", response_model=list[InterestDto])
 async def get_users_interests(
-    db: Session = Depends(Sql.get_session),
-    user: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
+        user: UserTokenData = Depends(get_current_user),
 ) -> list[InterestDto]:
     try:
         return await UserController(db).get_users_interests(user)
@@ -74,9 +91,9 @@ async def get_users_interests(
     "/", response_model=PositionDto, status_code=status.HTTP_201_CREATED
 )
 async def create_position(
-    payload: PositionCreate,
-    user: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        payload: PositionCreate,
+        user: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ) -> PositionDto:
     if user.role_id == 1:
         raise HTTPException(
@@ -94,7 +111,7 @@ async def create_position(
     "/", response_model=list[PositionDto], status_code=status.HTTP_200_OK
 )
 async def get_positions(
-    db: Session = Depends(Sql.get_session),
+        db: Session = Depends(Sql.get_session),
 ) -> list[PositionDto]:
     positions = await UserController(db).get_positions()
     return positions
@@ -102,9 +119,9 @@ async def get_positions(
 
 @role_router.post("/", response_model=RoleDto, status_code=status.HTTP_201_CREATED)
 async def create_role(
-    payload: RoleCreate,
-    user_data: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        payload: RoleCreate,
+        user_data: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ):
     logging.info(user_data)
     role = await UserController(db).create_role(payload)
@@ -115,10 +132,10 @@ async def create_role(
 
 @role_router.get("/", response_model=list[RoleDto], status_code=status.HTTP_200_OK)
 async def get_roles(
-    db: Session = Depends(Sql.get_session),
+        db: Session = Depends(Sql.get_session),
 ):
     try:
-        roles = await UserController(db).get_avaliable_roles()
+        roles = await UserController(db).get_available_roles()
         return roles
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

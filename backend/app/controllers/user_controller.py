@@ -16,6 +16,7 @@ class UserController:
     def __init__(self, db: Session) -> None:
         self.db = db
 
+
     async def create_user(self, payload: UserCreate) -> UserDto | None:
         password = PasswordManager.generate_password()
         try:
@@ -75,7 +76,7 @@ class UserController:
         except Exception as e:
             raise e
 
-    async def get_avaliable_roles(self) -> list[RoleDto]:
+    async def get_available_roles(self) -> list[RoleDto]:
         try:
             return [
                 RoleDto.model_validate(obj)
