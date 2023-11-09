@@ -13,6 +13,9 @@ import { BrandingPage } from "../pages/admin/branding/branding.page.tsx";
 import { AdminEducationPage } from "../pages/admin/education/admin-education.page.tsx";
 import { AdminEventsPage } from "../pages/admin/events/adminEvents.page.tsx";
 import { AnalyticsPage } from "../pages/admin/analytics/analytics.page.tsx";
+import { observer } from "mobx-react-lite";
+import { AuthService } from "@/stores/auth.service.ts";
+import { autorun, makeAutoObservable } from "mobx";
 
 export interface RouteType {
   path: string;
@@ -23,7 +26,7 @@ export interface RouteType {
 
 export const RoutesWithoutNav = ["/login", "/reset-password"];
 
-export const routes: RouteType[] = [
+const userRoutes: RouteType[] = [
   {
     path: "/",
     component: () => (
@@ -132,7 +135,73 @@ export const routes: RouteType[] = [
     ),
     title: "Магазин",
     showInNav: false
+  }
+];
+
+const adminRoutes: RouteType[] = [
+  {
+    path: "/admin/employees",
+    component: () => (
+      <PrivateRoute>
+        <EmployeesPage />
+      </PrivateRoute>
+    ),
+    showInNav: true,
+    title: "Сотрудники"
   },
+  {
+    path: "/admin/onboarding",
+    component: () => (
+      <PrivateRoute>
+        <AdminOnboardingPage />
+      </PrivateRoute>
+    ),
+    showInNav: true,
+    title: "Материалы онбординга"
+  },
+  {
+    path: "/admin/branding",
+    component: () => (
+      <PrivateRoute>
+        <BrandingPage />
+      </PrivateRoute>
+    ),
+    showInNav: true,
+    title: "Данные о брендинге"
+  },
+  {
+    path: "/admin/education",
+    component: () => (
+      <PrivateRoute>
+        <AdminEducationPage />
+      </PrivateRoute>
+    ),
+    showInNav: true,
+    title: "Образовательные материалы"
+  },
+  {
+    path: "/admin/events",
+    component: () => (
+      <PrivateRoute>
+        <AdminEventsPage />
+      </PrivateRoute>
+    ),
+    showInNav: true,
+    title: "Мероприятия"
+  },
+  {
+    path: "/admin/analytics",
+    component: () => (
+      <PrivateRoute>
+        <AnalyticsPage />
+      </PrivateRoute>
+    ),
+    showInNav: true,
+    title: "Аналитика"
+  }
+];
+
+export const globalRoutes: RouteType[] = [
   {
     path: "/login",
     component: () => <Login />,
@@ -142,67 +211,29 @@ export const routes: RouteType[] = [
     path: "/reset-password",
     component: () => <ResetPassword />,
     title: "Восстановление пароля"
-  },
-  {
-    path: "/admin/employees",
-    component: () => (
-      <PrivateRoute>
-        <EmployeesPage />
-      </PrivateRoute>
-    ),
-    title: "Admin Сотрудники",
-    showInNav: true
-  },
-  {
-    path: "/admin/onboarding",
-    component: () => (
-      <PrivateRoute>
-        <AdminOnboardingPage />
-      </PrivateRoute>
-    ),
-    title: "Admin Материалы онбординга",
-    showInNav: true
-  },
-  {
-    path: "/admin/branding",
-    component: () => (
-      <PrivateRoute>
-        <BrandingPage />
-      </PrivateRoute>
-    ),
-    title: "Admin Данные о брендинге",
-    showInNav: true
-  },
-  {
-    path: "/admin/education",
-    component: () => (
-      <PrivateRoute>
-        <AdminEducationPage />
-      </PrivateRoute>
-    ),
-    title: "Admin Образовательные материалы",
-    showInNav: true
-  },
-  {
-    path: "/admin/events",
-    component: () => (
-      <PrivateRoute>
-        <AdminEventsPage />
-      </PrivateRoute>
-    ),
-    title: "Admin Мероприятия",
-    showInNav: true
-  },
-  {
-    path: "/admin/analytics",
-    component: () => (
-      <PrivateRoute>
-        <AnalyticsPage />
-      </PrivateRoute>
-    ),
-    title: "Admin Аналитика",
-    showInNav: true
   }
 ];
 
-export const adminRoutes = [];
+class routesStore {
+  constructor() {
+    makeAutoObservable(this);
+    autorun(() => {
+      if (AuthService.auth.state === "loading" || AuthService.auth.state === "anonymous") {
+        this._routes = globalRoutes;
+        return;
+      }
+      if (AuthService.auth.user.user_role.name === "hr") {
+        this._routes = adminRoutes;
+        return;
+      }
+      this._routes = userRoutes;
+    });
+  }
+
+  private _routes: RouteType[] = [];
+  get routes() {
+    return this._routes;
+  }
+}
+
+export const RoutesStore = new routesStore();
