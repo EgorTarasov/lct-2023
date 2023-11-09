@@ -110,7 +110,8 @@ export const routes: RouteType[] = [
         <ProfilePage />
       </PrivateRoute>
     ),
-    title: "Профиль"
+    title: "Профиль",
+    showInNav: true
   },
   {
     path: "/shop",
@@ -141,10 +142,7 @@ export const routes: RouteType[] = [
     path: "/reset-password",
     component: () => <ResetPassword />,
     title: "Восстановление пароля"
-  }
-];
-
-export const adminRoutes = [
+  },
   {
     path: "/admin/employees",
     component: () => (
@@ -152,7 +150,8 @@ export const adminRoutes = [
         <EmployeesPage />
       </PrivateRoute>
     ),
-    title: "Сотрудники"
+    title: "Admin Сотрудники",
+    showInNav: true
   },
   {
     path: "/admin/onboarding",
@@ -161,7 +160,8 @@ export const adminRoutes = [
         <AdminOnboardingPage />
       </PrivateRoute>
     ),
-    title: "Материалы онбординга"
+    title: "Admin Материалы онбординга",
+    showInNav: true
   },
   {
     path: "/admin/branding",
@@ -170,7 +170,8 @@ export const adminRoutes = [
         <BrandingPage />
       </PrivateRoute>
     ),
-    title: "Данные о брендинге"
+    title: "Admin Данные о брендинге",
+    showInNav: true
   },
   {
     path: "/admin/education",
@@ -179,7 +180,8 @@ export const adminRoutes = [
         <AdminEducationPage />
       </PrivateRoute>
     ),
-    title: "Образовательные материалы"
+    title: "Admin Образовательные материалы",
+    showInNav: true
   },
   {
     path: "/admin/events",
@@ -188,7 +190,8 @@ export const adminRoutes = [
         <AdminEventsPage />
       </PrivateRoute>
     ),
-    title: "Мероприятия"
+    title: "Admin Мероприятия",
+    showInNav: true
   },
   {
     path: "/admin/analytics",
@@ -197,6 +200,9 @@ export const adminRoutes = [
         <AnalyticsPage />
       </PrivateRoute>
     ),
-    title: "Аналитика"
+    title: "Admin Аналитика",
+    showInNav: true
   }
 ];
+
+export const adminRoutes = [];
