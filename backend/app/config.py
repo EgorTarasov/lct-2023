@@ -40,6 +40,9 @@ class Config(BaseSettings):
     s3_minio_access_key: str = ""
     s3_minio_secret_key: str = ""
 
+    admin_email: str = "misis.larek.deda@mail.ru"
+    admin_password: str = "Test123456"
+
     @property
     def rabbitmq_url(self) -> str:
         return f"amqp://{config.rabbitmq_default_user}:{config.rabbitmq_default_pass}@{config.rabbitmq_host}:{config.rabbitmq_port}"
