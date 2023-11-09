@@ -5,17 +5,23 @@ import { Separator } from ".";
 
 const Collapsible = ({
   title,
-  children
+  children,
+  withoutPadding
 }: {
   title: string;
   children: JSX.Element[] | JSX.Element;
+  withoutPadding?: boolean;
 }) => {
   return (
     <Disclosure defaultOpen>
       {({ open }) => (
         <>
           <Disclosure.Button className={"w-full flex flex-col items-center justify-between"}>
-            <div className="flex gap-3 items-center justify-between w-full h-8 px-4">
+            <div
+              className={twMerge(
+                "flex gap-3 items-center justify-between w-full h-8 ",
+                !withoutPadding && "px-4"
+              )}>
               <h2 className="font-medium text-xl">{title}</h2>
               <ChevronSvg
                 className={twMerge(
