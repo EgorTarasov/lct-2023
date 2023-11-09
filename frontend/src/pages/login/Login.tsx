@@ -48,9 +48,7 @@ export const Login = observer(() => {
         <div className={"mb-5 w-full flex items-center justify-center"}>
           <Logo />
         </div>
-        <div className={"h-5 flex"}>
-          {showError && <span className={"text-error text-sm"}>Неверный логин или пароль</span>}
-        </div>
+
         <form
           onSubmit={handleFormSubmit}
           aria-label="Два поля: почта и пароль, либо вход через Telegram"
@@ -91,6 +89,9 @@ export const Login = observer(() => {
               </Link>
             </div>
           </div>
+          {showError && (
+            <span className={"text-center text-error text-sm"}>Неверный логин или пароль</span>
+          )}
           <Button disabled={isLoading} type="submit">
             Войти
           </Button>

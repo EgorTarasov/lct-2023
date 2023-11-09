@@ -6,14 +6,14 @@ import LightningIcon from "@/assets/lightning.svg";
 import UserIcon from "@/assets/user.svg";
 import ChevronIcon from "@/assets/chevron2.svg";
 import CloseIcon from "@/assets/clear.svg";
-import { ThemeService } from "@/stores/theme.service.ts";
-import { routes } from "../../../../app/routes";
+import { RoutesStore } from "../../../../app/routes";
 import { Logo } from "@/ui";
+import { observer } from "mobx-react-lite";
 
-export const MobileNav = () => {
+export const MobileNav = observer(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const currentRoute = routes.find((route) => route.path === location.pathname);
+  const currentRoute = RoutesStore.routes.find((route) => route.path === location.pathname);
 
   const toggleMenu = () => {
     setIsMenuOpen((v) => !v);
@@ -75,7 +75,7 @@ export const MobileNav = () => {
               </div>
             </div>
             <ul className="px-4 gap-1 flex flex-col">
-              {routes
+              {RoutesStore.routes
                 .filter((route) => route.showInNav)
                 .map((item) => (
                   <li
@@ -98,4 +98,4 @@ export const MobileNav = () => {
       </Dialog>
     </nav>
   );
-};
+});
