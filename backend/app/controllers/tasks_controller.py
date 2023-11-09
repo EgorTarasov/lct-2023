@@ -21,3 +21,11 @@ class TaskController:
     async def create_task(self, payload: TaskCreate, mentor_id: int) -> TaskDto:
         new_task = await crud.task.create_task(self.db, payload, mentor_id)
         return TaskDto.model_validate(new_task)
+
+    async def change_task(self, task_id: int, payload: TaskCreate) -> TaskDto:
+        db_event = await crud.task.change_task(self.db, task_id, payload)
+        return TaskDto.model_validate(db_event)
+
+    async def delete_task(self, task_id: int):
+        await crud.task.delete_task(self.db, task_id)
+

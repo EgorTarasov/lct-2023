@@ -39,7 +39,7 @@ async def get_skills_for_course(
 ) -> list[SkillDto]:
     try:
         return await SkillController(db).get_skills(course_id)
-    except:
+    except Exception as e:
         raise Exception("Course not found")
 
 
