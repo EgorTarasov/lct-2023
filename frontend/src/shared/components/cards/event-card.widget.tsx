@@ -34,11 +34,11 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) =
   return (
     <li
       className={twMerge(
-        "flex-col bg-white w-52 rounded-2xl border border-text-primary/20 relative hover:shadow-sm transition-shadow",
+        "flex flex-col bg-white w-52 rounded-2xl border border-text-primary/20 relative hover:shadow-sm transition-shadow",
         wide ? "w-full" : "w-52"
       )}>
       <Icon className="text-primary rounded-2xl" />
-      <div className="flex flex-col m-4 mt-3">
+      <div className="flex flex-col m-4 mt-3 flex-1">
         <span className={`text-sm ${textColor}`}>{locale}</span>
         <Link
           to={`/events/${item.id}`}
@@ -59,7 +59,7 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) =
           )}
         </ul>
         <Button
-          className="relative z-10"
+          className="relative z-10 mt-auto"
           appearance="secondary"
           onClick={(e) => {
             e.stopPropagation();

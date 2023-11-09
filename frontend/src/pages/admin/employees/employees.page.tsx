@@ -1,4 +1,4 @@
-import DragDropFile from "@/components/gragAndDrop/index.tsc.tsx";
+import DragDropFile from "@/components/dragAndDrop/index.tsc";
 import { Button, IconText } from "@/ui";
 import UserIcon from "@/assets/user.svg";
 import PhoneIcon from "@/assets/phone.svg";

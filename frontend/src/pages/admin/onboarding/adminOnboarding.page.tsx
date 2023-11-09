@@ -1,5 +1,5 @@
 import { Input } from "@/ui";
-import DragDropFile from "@/components/gragAndDrop/index.tsc.tsx";
+import DragDropFile from "@/components/dragAndDrop/index.tsc";
 import Collapsible from "@/ui/Collapsible.tsx";
 import { UploadedFile } from "@/components/uploadedFile/uploadedFile.tsx";
 

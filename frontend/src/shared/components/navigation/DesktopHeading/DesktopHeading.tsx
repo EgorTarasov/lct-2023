@@ -1,10 +1,12 @@
-import { Logo } from "@/ui";
+import { Button, Logo, Separator } from "@/ui";
 import { NavLink } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { RouteType, RoutesStore } from "../../../../app/routes";
 import LightningIcon from "@/assets/lightning.svg";
 import { observer } from "mobx-react-lite";
 import { UserStore } from "@/stores/user.store";
+import LogoutIcon from "../assets/logout.svg";
+import { AuthService } from "@/stores/auth.service";
 
 const NavItem = ({ item }: { item: RouteType }) => (
   <NavLink
@@ -50,6 +52,13 @@ export const DesktopHeading = observer(() => {
                   <NavItem item={item} />
                 </li>
               ))}
+            <Separator className="my-3" />
+            <button
+              className="px-4 py-3 flex items-center gap-3 hover:text-text-primary hover:bg-text-primary/5 rounded-xl text-text-primary/60"
+              onClick={() => AuthService.logout()}>
+              <LogoutIcon aria-hidden="true" width={24} />
+              <span className="mb-px">Выход</span>
+            </button>
           </ul>
         </nav>
       </aside>
