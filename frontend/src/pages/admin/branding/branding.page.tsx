@@ -9,7 +9,7 @@ export const BrandingPage = () => {
       <h1 className={"text-2xl font-medium sm:text-2xl"}>Данные о брендинге</h1>
       <section className="flex flex-col gap-4 mt-4">
         <h2 className={"text-2xl font-medium sm:text-2xl"}>Основное</h2>
-        <div className="flex gap-4">
+        <div className="flex-col gap-4 sm:flex sm:flex-row">
           <div className={"flex flex-col w-max align-start"}>
             <label htmlFor={"color-picker"} className={"text-text-primary/50 w-max"}>
               Корпоративный цвет
