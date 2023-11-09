@@ -49,13 +49,12 @@ async def get_available_event_types(db: Session) -> list[str]:
     return [event_type.name for event_type in event_types]
 
 
-async def delete_event(db: Session, event_id: int) -> bool:
+async def delete_event(db: Session, event_id: int):
     """Получение всех мероприятий"""
     deleted_rows = db.query(SqlEvent).where(SqlEvent.id == event_id).delete()
     if deleted_rows == 0:
         raise Exception("Такого типа не существует")
     db.commit()
-    return True
 
 
 async def change_event(db: Session, event_id: int, payload: EventCreate) -> SqlEvent:

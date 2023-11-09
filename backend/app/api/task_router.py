@@ -7,11 +7,13 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.controllers.admin_controller import AdminController
 from app.controllers.tasks_controller import TaskController
 from app.core.sql import Sql
 from app.auth.jwt import UserTokenData
-from app.models.task import TaskDto, TaskCreate
+from app.models.task import TaskDto, TaskCreate, TaskStatus
 from app.auth.dependency import get_current_user
+from app.worker import notify_admin_about_task_done
 
 router = APIRouter(prefix="/task", tags=["task"])
 
@@ -62,7 +64,7 @@ async def get_tasks_for_mentor_one(
 
 @router.post("/", response_model=TaskDto)
 async def create_task(
-        task_data: TaskCreate,
+        payload: TaskCreate,
         user: UserTokenData = Depends(get_current_user),
         db: Session = Depends(Sql.get_session)
 ) -> TaskDto:
@@ -70,7 +72,60 @@ async def create_task(
     if user.role_id == 1:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
     try:
-        return await TaskController(db).create_task(task_data, user.user_id)
+        return await TaskController(db).create_task(payload, user.user_id)
+    except Exception as e:
+        logging.error(e)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@router.put("/{task_id}", response_model=TaskDto)
+async def change_task(
+        task_id: int,
+        payload: TaskCreate,
+        user: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session)
+) -> TaskDto:
+    """Изменение задач ментором"""
+    if user.role_id == 1:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+    try:
+        return await TaskController(db).change_task(task_id, payload)
+    except Exception as e:
+        logging.error(e)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@router.delete("/{task_id}")
+async def delete_task(
+        task_id: int,
+        user: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session)
+):
+    """Удаление задач ментором"""
+    if user.role_id == 1:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+    try:
+        await TaskController(db).delete_task(task_id)
+    except Exception as e:
+        logging.error(e)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@router.put("/update_status/{task_id}", response_model=TaskDto)
+async def change_task(
+        task_id: int,
+        task_status: TaskStatus,
+        user: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session)
+) -> TaskDto:
+    """Выполнение задачи пользователем или отмена выполнения"""
+    try:
+        task = await TaskController(db).get_task_by_id(task_id)
+        task.status = task_status
+        task = await TaskController(db).change_task(task_id, task)
+        if task_status == TaskStatus.finished:
+            await AdminController(db).notify_about_task_done(task)
+        return task
     except Exception as e:
         logging.error(e)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

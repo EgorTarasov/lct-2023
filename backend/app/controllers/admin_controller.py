@@ -1,23 +1,26 @@
 import datetime
-
 import typing as tp
-import logging
-
 from sqlalchemy.orm import Session
+import pandas as pd
 
 from app.auth import PasswordManager
-
+from app.models.task import TaskDto
 from app.models.user import UserCreate
 from app.models.position import PositionCreate
-import pandas as pd
-from app.worker import user_create_notification
-
 from app import crud
+from app.worker import notify_admin_about_task_done
 
 
 class AdminController:
     def __init__(self, db: Session):
         self.db = db
+
+    async def notify_about_task_done(self, payload: TaskDto):
+        mentor = await crud.user.get_user_by_id(self.db, payload.mentor_id)
+        mentor_fullname = f"{mentor.last_name} {mentor.first_name} {mentor.middle_name}"
+        mentee = await crud.user.get_user_by_id(self.db, payload.mentee_id)
+        mentee_fullname = f"{mentee.last_name} {mentee.first_name} {mentee.middle_name}"
+        notify_admin_about_task_done.delay(mentor.email, mentor_fullname, mentee_fullname, payload.name)
 
     async def load_user_data(self, payload: tp.BinaryIO):
         """

@@ -4,7 +4,7 @@ import datetime as dt
 from pydantic import BaseModel, Field, ConfigDict
 from enum import Enum
 from .base import Base
-from .user import SqlUser
+from .user import SqlUser, UserDto
 
 
 class TaskStatus(str, Enum):
@@ -32,21 +32,14 @@ class TaskCreate(BaseModel):
     links: list[str] = Field(...)
 
 
-class TaskDto(BaseModel):
+class TaskDto(TaskCreate):
     model_config = ConfigDict(from_attributes=True)
 
     id: int = Field(...)
-    name: str = Field(...)
-    mentee_id: int = Field(...)
-    deadline: dt.datetime = Field(...)
-    status: TaskStatus = Field(...)
-    type: TaskType = Field(...)
-    difficulty: int = Field(...)
-    points: int = Field(...)
-    place: str = Field(...)
-    links: list[str] = Field(...)
-    is_finished: bool = Field(...)
+    mentor_id: int = Field(...)
     created_at: dt.datetime = Field(...)
+    mentor: UserDto
+    mentee: UserDto
 
 
 class SqlTask(Base):
@@ -61,7 +54,6 @@ class SqlTask(Base):
     points: Mapped[int] = mapped_column(Integer)
     place: Mapped[str] = mapped_column(Text)
     links: Mapped[list[str]] = mapped_column(JSON)
-    is_finished: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[dt.datetime] = mapped_column(DateTime, default=dt.datetime.utcnow)
 
     mentee_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
