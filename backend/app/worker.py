@@ -22,6 +22,16 @@ def notify_user_about_registration(fullname: str, email: str, password: str):
 
 
 @celery.task
+def notify_user_about_new_task(fullname: str, email: str, task_name: str):
+    logging.debug("sending email about new task")
+    subject = "Назначена новая задача"
+    template = "new_task.jinja"
+
+    data = {"fullname": fullname, "task_name": task_name}
+    email_client.send_mailing(email, subject, template, data)
+
+
+@celery.task
 def notify_admin_about_task_done(email: str, mentor_fullname: str, mentee_fullname: str, task_name: str):
     logging.debug("sending email about task_done")
     subject = "Подопечный выполнил задачу!"

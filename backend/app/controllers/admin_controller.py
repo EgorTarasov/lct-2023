@@ -15,13 +15,6 @@ class AdminController:
     def __init__(self, db: Session):
         self.db = db
 
-    async def notify_about_task_done(self, payload: TaskDto):
-        mentor = await crud.user.get_user_by_id(self.db, payload.mentor_id)
-        mentor_fullname = f"{mentor.last_name} {mentor.first_name} {mentor.middle_name}"
-        mentee = await crud.user.get_user_by_id(self.db, payload.mentee_id)
-        mentee_fullname = f"{mentee.last_name} {mentee.first_name} {mentee.middle_name}"
-        notify_admin_about_task_done.delay(mentor.email, mentor_fullname, mentee_fullname, payload.name)
-
     async def load_user_data(self, payload: tp.BinaryIO):
         """
         Загрузка данных из сторонней системы
