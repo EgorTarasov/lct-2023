@@ -25,11 +25,10 @@ class TaskController:
 
     async def create_task(self, payload: TaskCreate, mentor_id: int) -> TaskDto:
         task = await crud.task.create_task(self.db, payload, mentor_id)
-        print(task.mentee_id, task.id)
+
         fullname = f"{task.mentee.last_name} {task.mentee.first_name} {task.mentee.middle_name}"
         notify_user_about_new_task.delay(fullname, task.mentee.email, task.name)
-        print(datetime.utcnow() + timedelta(seconds=5))
-        check_for_deadline.apply_async((task.id, ), eta=datetime.utcnow() + timedelta(seconds=5))
+        check_for_deadline.apply_async((task.id, ), eta=task.deadline - timedelta(days=1))
         return TaskDto.model_validate(task)
 
     async def change_task(self, task_id: int, payload: TaskCreate) -> TaskDto:
