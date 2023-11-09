@@ -1,5 +1,7 @@
 import DragDropFile from "@/components/gragAndDrop/index.tsc.tsx";
 import { Input } from "@/ui";
+import { Popover } from "@headlessui/react";
+import { BlockPicker } from "react-color";
 
 export const BrandingPage = () => {
   return (
@@ -12,8 +14,25 @@ export const BrandingPage = () => {
             <label htmlFor={"color-picker"} className={"text-text-primary/50 w-max"}>
               Корпоративный цвет
             </label>
-            <input type={"color"} id={"color-picker"} />
-            {/*TODO: СДЕЛАТЬ НОРМАЛЬНЫЙ ИНПУТ ЦВЕТОВ*/}
+            <Popover className="relative">
+              <Popover.Button>
+                <div
+                  className={
+                    "w-full flex items-center gap-4 p-3 rounded-lg h-11 bg-white outline-none transition-colors border border-text-primary/20 group-hover:border-text-primary/60 focus:!border-primary"
+                  }>
+                  <div className={"w-6 h-6 rounded-lg bg-primary"} />
+                  <input
+                    className={"outline-0"}
+                    type="text"
+                    id="color-value"
+                    placeholder={"#000000"}
+                  />
+                </div>
+              </Popover.Button>
+              <Popover.Panel className="absolute z-10 w-full max-w-sm px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0">
+                <BlockPicker />
+              </Popover.Panel>
+            </Popover>
           </div>
           <div className={"flex flex-col w-full"}>
             <label htmlFor={"company-name"} className={"text-text-primary/50"}>
