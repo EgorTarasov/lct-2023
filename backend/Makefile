@@ -1,4 +1,4 @@
-0install:
+install:
 	pip3 install -r backend/requirements/local.txt
 
 run:

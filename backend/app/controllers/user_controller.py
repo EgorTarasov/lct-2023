@@ -9,19 +9,20 @@ from app.models.position import PositionCreate, PositionDto
 from app.models.role import RoleCreate, RoleDto
 from app.auth import PasswordManager, JWTEncoder
 from app import crud
-from app.worker import user_create_notification
+from app.worker import notify_user_about_registration
 
 
 class UserController:
     def __init__(self, db: Session) -> None:
         self.db = db
 
+
     async def create_user(self, payload: UserCreate) -> UserDto | None:
         password = PasswordManager.generate_password()
         try:
             user = crud.user.create_user(self.db, payload, password=password)
             logging.info(f"User {user.email} created with password {password}")
-            user_create_notification(
+            notify_user_about_registration.delay(
                 fio=f"{user.last_name} {user.first_name} {user.middle_name}",
                 email=user.email, password=password
             )
@@ -75,7 +76,7 @@ class UserController:
         except Exception as e:
             raise e
 
-    async def get_avaliable_roles(self) -> list[RoleDto]:
+    async def get_available_roles(self) -> list[RoleDto]:
         try:
             return [
                 RoleDto.model_validate(obj)

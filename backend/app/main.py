@@ -12,11 +12,13 @@ from app import crud
 from app.models.position import PositionCreate
 from app.models.role import RoleCreate
 from app.models.user import UserCreate
+from app.worker import celery
+
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global scheduler
+    global celery
     # startup
     sql = Sql(
         pg_user=config.postgres_user,
@@ -25,7 +27,9 @@ async def lifespan(app: FastAPI):
         pg_db=config.postgres_db,
         pg_port=config.postgres_port,
     )
-
+    # from datetime import datetime, timedelta
+    # tomorrow = datetime.utcnow() + timedelta(seconds=15)
+    # hello.apply_async(eta=tomorrow)
     Base.metadata.create_all(bind=sql.get_engine())
 
     # checks if users not exists load admin data from .env and create user
