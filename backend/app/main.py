@@ -7,11 +7,12 @@ from app.api import main_router
 from app.config import config
 from app.core.sql import Sql
 from app.models.base import Base
+from app.worker import celery
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global scheduler
+    global celery
     # startup
     sql = Sql(
         pg_user=config.postgres_user,
@@ -20,7 +21,9 @@ async def lifespan(app: FastAPI):
         pg_db=config.postgres_db,
         pg_port=config.postgres_port,
     )
-
+    # from datetime import datetime, timedelta
+    # tomorrow = datetime.utcnow() + timedelta(seconds=15)
+    # hello.apply_async(eta=tomorrow)
     Base.metadata.create_all(bind=sql.get_engine())
 
     yield

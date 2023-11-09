@@ -9,7 +9,7 @@ from app.models.position import PositionCreate, PositionDto
 from app.models.role import RoleCreate, RoleDto
 from app.auth import PasswordManager, JWTEncoder
 from app import crud
-from app.worker import user_create_notification
+from app.worker import notify_user_about_registration
 
 
 class UserController:
@@ -21,7 +21,7 @@ class UserController:
         try:
             user = crud.user.create_user(self.db, payload, password=password)
             logging.info(f"User {user.email} created with password {password}")
-            user_create_notification(
+            notify_user_about_registration(
                 fio=f"{user.last_name} {user.first_name} {user.middle_name}",
                 email=user.email, password=password
             )
