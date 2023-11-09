@@ -12,10 +12,23 @@ email_client = EmailClient(
 
 
 @celery.task
-def user_create_notification(fio: str, email: str, password: str):
-    logging.debug("sending email")
+def notify_user_about_registration(fullname: str, email: str, password: str):
+    logging.debug("sending email about registration")
     subject = "Регистрация на сервисе для адаптации"
-    template = "test.jinja"
+    template = "registration.jinja"
 
-    data = {"user_name": fio, "new_password": password}
+    data = {"fullname": fullname, "password": password}
     email_client.send_mailing(email, subject, template, data)
+
+
+@celery.task
+def notify_admin_about_task_done(email: str, mentor_fullname: str, mentee_fullname: str, task_name: str):
+    logging.debug("sending email about task_done")
+    subject = "Подопечный выполнил задачу!"
+    template = "task_done.jinja"
+
+    data = {"mentor_fullname": mentor_fullname, "mentee_fullname": mentee_fullname,
+            "task_name": task_name}
+    email_client.send_mailing(email, subject, template, data)
+
+

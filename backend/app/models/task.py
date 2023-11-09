@@ -4,7 +4,7 @@ import datetime as dt
 from pydantic import BaseModel, Field, ConfigDict
 from enum import Enum
 from .base import Base
-from .user import SqlUser
+from .user import SqlUser, UserDto
 
 
 class TaskStatus(str, Enum):
@@ -38,6 +38,8 @@ class TaskDto(TaskCreate):
     id: int = Field(...)
     mentor_id: int = Field(...)
     created_at: dt.datetime = Field(...)
+    mentor: UserDto
+    mentee: UserDto
 
 
 class SqlTask(Base):
