@@ -8,8 +8,6 @@ from .base import Base
 if tp.TYPE_CHECKING:
     from .position import SqlPosition
 
-from .skill import SqlSkill, SkillDto
-
 
 class BaseCourse(BaseModel):
     name: str = Field(...)
@@ -23,7 +21,6 @@ class CourseCreate(BaseCourse):
 class CourseDto(BaseCourse):
     model_config = ConfigDict(from_attributes=True)
     id: int = Field(...)
-    skills: list[SkillDto] = Field(...)
 
 
 class SqlCourse(Base):
@@ -33,7 +30,6 @@ class SqlCourse(Base):
     name: Mapped[str] = mapped_column(Text)
     duration: Mapped[int] = mapped_column(Integer)  # продолжительность в стори поинтах
 
-    skills: Mapped[list["SqlSkill"]] = relationship("SqlSkill", back_populates="course")
     positions: Mapped[list["SqlPosition"]] = relationship(
         "SqlPosition", secondary="position_course"
     )
