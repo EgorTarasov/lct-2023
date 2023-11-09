@@ -5,5 +5,4 @@ from . import task
 from . import event
 from . import course
 from . import quiz
-from . import question
 from . import position
