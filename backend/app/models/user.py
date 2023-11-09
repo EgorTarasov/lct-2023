@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from .base import Base
 from .interest import interest_user
 from .mentee import mentor_mentee
+from .role import RoleDto
 
 if tp.TYPE_CHECKING:
     from .interest import SqlInterest
@@ -33,6 +34,7 @@ class UserLogin(BaseModel):
 class UserDto(UserCreate):
     model_config = ConfigDict(from_attributes=True)
     id: int = Field(..., alias="id")
+    user_role: RoleDto
 
 
 class SqlUser(Base):
