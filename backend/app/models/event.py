@@ -13,10 +13,17 @@ class EventCreate(BaseModel):
     starts_at: dt.datetime
 
 
+class EventTypeDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    name: str
+
+
 class EventDto(EventCreate):
     model_config = ConfigDict(from_attributes=True)
     id: int
     is_enrolled: bool = False
+    event_type: EventTypeDto
 
 
 class SqlEvent(Base):
