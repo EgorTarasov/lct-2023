@@ -8,7 +8,9 @@ from .base import Base
 from .interest import interest_user
 from .mentee import mentor_mentee
 
+
 if tp.TYPE_CHECKING:
+    from .quiz import SqlUserQuiz
     from .interest import SqlInterest
     from .event import SqlEvent
 
@@ -57,7 +59,9 @@ class SqlUser(Base):
         nullable=False,
     )
     position_id: Mapped[int] = mapped_column(
-        ForeignKey("positions.id", ondelete=None), nullable=True, default=None,
+        ForeignKey("positions.id", ondelete=None),
+        nullable=True,
+        default=None,
     )
 
     user_role = relationship("SqlRole")
@@ -79,3 +83,7 @@ class SqlUser(Base):
         foreign_keys=[mentor_mentee.c.mentee_id],
         back_populates="mentors",
     )
+
+    # quiz_results: Mapped[list["SqlUserQuiz"]] = relationship(
+    #     "SqlUserQuiz", back_populates="user"
+    # )
