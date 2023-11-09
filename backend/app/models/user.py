@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from .base import Base
 from .interest import interest_user
 from .mentee import mentor_mentee
+from .role import SqlRole
 
 if tp.TYPE_CHECKING:
     from .interest import SqlInterest
