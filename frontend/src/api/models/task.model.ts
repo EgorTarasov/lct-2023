@@ -59,6 +59,7 @@ export namespace TaskDto {
     location: string;
     imgSrc: string | null;
   }
+
   // "name": "string",
   // "mentee_id": 0,
   // "deadline": "2023-11-10T20:08:34.106Z",
@@ -101,4 +102,16 @@ export namespace TaskDto {
       imgSrc: null
     };
   };
+
+  export interface Create {
+    name: string;
+    mentee_id: number;
+    deadline: Date;
+    status: string;
+    type: string;
+    difficulty: number;
+    points: number;
+    place: string;
+    links: string[];
+  }
 }
