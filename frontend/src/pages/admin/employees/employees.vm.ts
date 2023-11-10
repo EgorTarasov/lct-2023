@@ -15,7 +15,7 @@ export class EmployeesPageViewModel {
   public mentees: UserDto.Item[] = [];
   public positions: CommonDto.Named<number>[] = [];
   public selectedPosition: CommonDto.Named<number> | null = null;
-  public tasks: { userId: number; tasks: TaskDto.Result[] }[] = [];
+  public tasks: { userId: number; tasks: TaskDto.Item[] }[] = [];
   isLoading = true;
 
   constructor() {
@@ -29,7 +29,7 @@ export class EmployeesPageViewModel {
     await runInAction(async () => {
       for (const mentee of this.mentees) {
         const res = await TasksEndpoint.getMenteeTasks(mentee.id);
-        this.tasks.push({ userId: mentee.id, tasks: res });
+        this.tasks.push({ userId: mentee.id, tasks: res.map(TaskDto.convertDtoToItem) });
       }
     });
     this.isLoading = false;
