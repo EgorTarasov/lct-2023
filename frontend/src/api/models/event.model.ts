@@ -44,4 +44,37 @@ export namespace EventDto {
     location?: string;
     imgSrc: string | null;
   }
+
+  export interface Result {
+    title: string;
+    place: string;
+    type_id: number;
+    starts_at: string;
+    id: number;
+    is_enrolled: boolean;
+    event_type: {
+      id: number;
+      name: string;
+    };
+  }
+
+  export const convertDtoToItem = (dto: Result): Item => {
+    return {
+      id: dto.id,
+      category: (
+        {
+          1: "sport",
+          2: "education",
+          3: "charity",
+          4: "art"
+        } as Record<number, EventType>
+      )[dto.type_id],
+      title: dto.title,
+      deadline: new Date(dto.starts_at),
+      durationMin: 0,
+      points: 0,
+      location: dto.place,
+      imgSrc: null
+    };
+  };
 }

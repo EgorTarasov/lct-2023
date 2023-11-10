@@ -28,32 +28,38 @@ export const CourseSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
         <Separator className="my-3" />
       </div>
       <ul className="grid">
-        <HorizontalCarousel
-          a11y={{
-            prevSlideMessage: "Предыдущие задачи",
-            nextSlideMessage: "Следующие задачи",
-            containerMessage: "Список задач, 3 на страницу",
-            firstSlideMessage: "Первая страница",
-            lastSlideMessage: "Последняя страница"
-          }}
-          mousewheel={{
-            forceToAxis: true
-          }}
-          keyboard={false}
-          slidesPerView={1}
-          navigation={{
-            prevEl: `#${CSS.escape(leftControlId)}`,
-            nextEl: `#${CSS.escape(rightControlId)}`,
-            enabled: true
-          }}>
-          {arrayChunk(vm.courses, 3).map((v, i) => (
-            <div className="flex flex-col gap-3 my-1" key={i}>
-              {v.map((course, j) => (
-                <CourseCard key={j} item={course} />
-              ))}
-            </div>
-          ))}
-        </HorizontalCarousel>
+        {vm.courses.length === 0 ? (
+          <div className="flex justify-center items-center w-full h-48">
+            <p className="text-gray-500">Нет незаконченных курсов 💨</p>
+          </div>
+        ) : (
+          <HorizontalCarousel
+            a11y={{
+              prevSlideMessage: "Предыдущие задачи",
+              nextSlideMessage: "Следующие задачи",
+              containerMessage: "Список задач, 3 на страницу",
+              firstSlideMessage: "Первая страница",
+              lastSlideMessage: "Последняя страница"
+            }}
+            mousewheel={{
+              forceToAxis: true
+            }}
+            keyboard={false}
+            slidesPerView={1}
+            navigation={{
+              prevEl: `#${CSS.escape(leftControlId)}`,
+              nextEl: `#${CSS.escape(rightControlId)}`,
+              enabled: true
+            }}>
+            {arrayChunk(vm.courses, 3).map((v, i) => (
+              <div className="flex flex-col gap-3 my-1" key={i}>
+                {v.map((course, j) => (
+                  <CourseCard key={j} item={course} />
+                ))}
+              </div>
+            ))}
+          </HorizontalCarousel>
+        )}
       </ul>
     </section>
   );
