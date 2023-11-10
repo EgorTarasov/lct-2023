@@ -1,12 +1,15 @@
 from typing import Type
 from sqlalchemy.orm import Session
 
-from ..models.course import SqlCourse, CourseCreate
+from ..models.file import SqlFile
+from ..models.quiz import SqlQuiz
+from ..models.course import SqlCourse, CourseCreate, QuizCourse
 from ..models.position import SqlPosition
 
 
 async def create(db: Session, payload: CourseCreate) -> SqlCourse:
     db_course = SqlCourse(name=payload.name, duration=payload.duration)
+
     db.add(db_course)
     db.commit()
     db.refresh(db_course)
@@ -33,6 +36,17 @@ async def get_for_position(db: Session, position_id: int) -> list[SqlCourse]:
     return db_position.courses
 
 
-# async def get_for_user(db: Session, position_id: int) -> SqlCourse:
-#     db_courses = db.query(SqlCourse).filter(SqlCourse.id == position_id).all()
-#     return db_courses
+async def assign_quizes(db: Session, course: SqlCourse, quizes: list[SqlQuiz]):
+    course.quizes = quizes
+    db.add(course)
+    db.commit()
+    db.refresh(course)
+    return course
+
+
+async def assign_files(db: Session, course: SqlCourse, files: list[SqlFile]):
+    course.files = files
+    db.add(course)
+    db.commit()
+    db.refresh(course)
+    return course

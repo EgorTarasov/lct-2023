@@ -4,7 +4,8 @@ post создать skill
 """
 
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from app.auth.dependency import get_current_user
 
@@ -17,6 +18,38 @@ from app.models.course import CourseDto, CourseCreate
 router = APIRouter(prefix="/course", tags=["course"])
 
 
+@router.post("/")
+async def create_course(
+    payload: CourseCreate = Depends(),
+    user: UserTokenData = Depends(get_current_user),
+    data: UploadFile = File(None),
+    db: Session = Depends(Sql.get_session),
+):
+    if user.role_id == 1:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Доступ запрещён"
+        )
+
+    if data and data.content_type not in [
+        "application/zip",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ]:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Поддерживаемые форматы '.zip' '.docx'",
+        )
+    return await CourseController(db).create_course(
+        payload, data.file.read(), data.filename, data.content_type
+    )
+    # try:
+
+    # except Exception as e:
+    #     print(e)
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND, detail="Такой курс уже существует"
+    #     )
+
+
 @router.get("/my")
 async def get_my_courses(
     user: UserTokenData = Depends(get_current_user),
@@ -24,25 +57,6 @@ async def get_my_courses(
 ) -> list[CourseDto]:
     try:
         return await CourseController(db).get_courses(user.user_id)
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Такой курс уже существует"
-        )
-
-
-@router.post("/")
-async def create_course(
-    payload: CourseCreate,
-    user: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
-) -> CourseDto:
-    # FIXME: ограничить права доступа для пользователей, которым не назначен курс
-    if user.role_id == 1:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail="Доступ запрещён"
-        )
-    try:
-        return await CourseController(db).create_course(payload)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Такой курс уже существует"
