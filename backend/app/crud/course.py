@@ -17,7 +17,7 @@ async def update(db: Session, payload: CourseCreate, course_id: int) -> SqlCours
     else:
         db_course.name = "Общий инбординг"
         db_course.duration = 0
-        db_course.quizes = 
+        db_course.quizes = []
     db.add(db_course)
 
 
