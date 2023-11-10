@@ -232,9 +232,9 @@ export const EmployeesPage = observer(() => {
       <DialogBase
         isOpen={showNewTaskDialog}
         width={555}
-        title="Новый сотрудник"
+        title="Новое задание"
         onCancel={() => setShowNewUserDialog(false)}
-        confirmText="Добавить сотрудника">
+        confirmText="Добавить задание">
         <form className="flex flex-col gap-5" onSubmit={handleCreateTask}>
           <Input id="title" label="Название" placeholder="Новое задание" required />
           <Input
