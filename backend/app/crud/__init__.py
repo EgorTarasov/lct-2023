@@ -7,3 +7,4 @@ from . import course
 from . import quiz
 from . import position
 from . import file
+from . import action

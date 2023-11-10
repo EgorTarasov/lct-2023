@@ -7,7 +7,6 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.controllers.admin_controller import AdminController
 from app.controllers.tasks_controller import TaskController
 from app.core.sql import Sql
 from app.auth.jwt import UserTokenData
@@ -112,7 +111,7 @@ async def delete_task(
 
 
 @router.put("/update_status/{task_id}", response_model=TaskDto)
-async def change_task(
+async def update_task_status(
         task_id: int,
         task_status: TaskStatus,
         user: UserTokenData = Depends(get_current_user),
@@ -121,7 +120,7 @@ async def change_task(
     """Выполнение задачи пользователем или отмена выполнения"""
     try:
 
-        return await TaskController(db).change_task_status(task_id, task_status)
+        return await TaskController(db).update_task_status(task_id, task_status)
     except Exception as e:
         logging.error(e)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
