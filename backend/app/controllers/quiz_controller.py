@@ -9,6 +9,7 @@ from app.models.quiz import (
     QuizDto,
     AnswerDto,
     QuizWithAnswersDto,
+    QuizDescription,
 )
 from app import crud
 from app.auth.jwt import UserTokenData
@@ -21,6 +22,11 @@ class QuizController:
     async def create_quiz(self, quiz: QuizCreate):
         db_quiz = await crud.quiz.create_quiz(self.db, quiz)
         return QuizDto.model_validate(db_quiz)
+
+    async def get_quizes(self) -> list[QuizDescription]:
+        db_quizes = await crud.quiz.get_all(self.db)
+        # как убрать поле с вопросами?)
+        return [QuizDescription.model_validate(quiz) for quiz in db_quizes]
 
     async def get_quiz(
         self, quiz_id: int, user: UserTokenData

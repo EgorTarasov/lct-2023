@@ -2,7 +2,7 @@ from fastapi import APIRouter, Body, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.core.sql import Sql
 
-from app.models.quiz import QuestionDto, QuizCreate, QuizDto, QuizWithAnswersDto
+from app.models.quiz import QuizDescription, QuizCreate, QuizDto, QuizWithAnswersDto
 from app.controllers.quiz_controller import QuizController
 from app.auth.dependency import get_current_user
 from app.auth.jwt import UserTokenData
@@ -22,7 +22,7 @@ async def create_quiz(
     return quiz
 
 
-@router.get("/{quiz_id}")
+@router.get("/quiz/{quiz_id}")
 async def get_quiz(
     quiz_id: int,
     user: UserTokenData = Depends(get_current_user),
@@ -36,6 +36,17 @@ async def get_quiz(
     quiz_controller = QuizController(db)
     quiz = await quiz_controller.get_quiz(quiz_id, user)
     return quiz
+
+
+@router.get("/all", tags=["course"])
+async def get_all_quizes(
+    user: UserTokenData = Depends(get_current_user),
+    db: Session = Depends(Sql.get_session),
+) -> list[QuizDescription]:
+    quiz_controller = QuizController(db)
+    quizes = await quiz_controller.get_quizes()
+
+    return quizes
 
 
 @router.get("/question/{question_id}")
