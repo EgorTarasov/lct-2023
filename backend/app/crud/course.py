@@ -7,6 +7,20 @@ from ..models.course import SqlCourse, CourseCreate, QuizCourse
 from ..models.position import SqlPosition
 
 
+async def update(db: Session, payload: CourseCreate, course_id: int) -> SqlCourse:
+    db_course = db.query(SqlCourse).filter(SqlCourse.id == 1).first()
+    if not db_course:
+        db_course = SqlCourse(
+            name="Общий инбординг",
+            duration=0,
+        )
+    else:
+        db_course.name = "Общий инбординг"
+        db_course.duration = 0
+        db_course.quizes = 
+    db.add(db_course)
+
+
 async def create(db: Session, payload: CourseCreate) -> SqlCourse:
     db_course = SqlCourse(name=payload.name, duration=payload.duration)
 
