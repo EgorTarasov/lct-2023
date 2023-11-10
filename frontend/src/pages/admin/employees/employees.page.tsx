@@ -112,14 +112,14 @@ export const EmployeesPage = observer(() => {
   const [vm] = useState(() => new EmployeesPageViewModel());
   const [showNewUserDialog, setShowNewUserDialog] = useState(false);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = newUserForm.current!.elements as unknown as Record<
       UserFormFields,
       HTMLInputElement
     >;
 
-    vm.addNewUser({
+    const result = await vm.registerUser({
       first_name: data.first_name.value,
       last_name: data.last_name.value,
       middle_name: data.middle_name.value,
@@ -127,6 +127,10 @@ export const EmployeesPage = observer(() => {
       email: data.email.value,
       goal: data.goal.value
     });
+
+    if (result) {
+      setShowNewUserDialog(false);
+    }
   };
 
   return (
@@ -159,12 +163,7 @@ export const EmployeesPage = observer(() => {
         title="Новый сотрудник"
         onCancel={() => setShowNewUserDialog(false)}
         confirmText="Добавить сотрудника">
-        <form
-          ref={newUserForm}
-          className="flex flex-col gap-5"
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}>
+        <form ref={newUserForm} className="flex flex-col gap-5" onSubmit={handleSubmit}>
           <div className="flex gap-5">
             <Input id="first_name" label="Имя" placeholder="Иван" required />
             <Input id="last_name" label="Фамилия" placeholder="Иванович" required />
@@ -182,7 +181,7 @@ export const EmployeesPage = observer(() => {
               className="flex-1"
               id="email"
               type="email"
-              placeholder="+79199999999"
+              placeholder="name@proscom.ru"
               label="Почта"
             />
           </div>
@@ -190,7 +189,7 @@ export const EmployeesPage = observer(() => {
             Цель адаптации
             <textarea
               id="goal"
-              className="px-3 py-2 h-20 text-text-primary border border-primary/20 rounded-lg w-full mt-3"
+              className="px-3 py-2 h-20 text-text-primary text-base border border-primary/20 rounded-lg w-full mt-3"
               placeholder="Актуализация/получение и закрепление навыков для выполнения должностных обязанностей."
             />
           </label>

@@ -12,8 +12,4 @@ export namespace UserEndpoint {
   export const getMentees = async () => {
     return await api.get<UserDto.Item[]>("/api/mentee");
   };
-
-  export const addNewUser = async (item: UserDto.Update) => {
-    return await api.post<string>("/api/admin/register");
-  };
 }
