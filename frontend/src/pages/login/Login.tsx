@@ -43,7 +43,7 @@ export const Login = observer(() => {
     setAuthData({ ...authData, username: value });
   };
   return (
-    <div className={"w-full h-full flex items-center justify-center"}>
+    <div className={"w-full h-full flex items-center justify-center bg-white"}>
       <div className={"w-[300px] p-5"}>
         <div className={"mb-5 w-full flex items-center justify-center"}>
           <Logo />
