@@ -1,8 +1,8 @@
 from typing import Type
 from sqlalchemy.orm import Session
 
+from ..models.file import SqlFile
 from ..models.quiz import SqlQuiz
-
 from ..models.course import SqlCourse, CourseCreate, QuizCourse
 from ..models.position import SqlPosition
 
@@ -38,6 +38,14 @@ async def get_for_position(db: Session, position_id: int) -> list[SqlCourse]:
 
 async def assign_quizes(db: Session, course: SqlCourse, quizes: list[SqlQuiz]):
     course.quizes = quizes
+    db.add(course)
+    db.commit()
+    db.refresh(course)
+    return course
+
+
+async def assign_files(db: Session, course: SqlCourse, files: list[SqlFile]):
+    course.files = files
     db.add(course)
     db.commit()
     db.refresh(course)

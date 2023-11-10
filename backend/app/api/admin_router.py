@@ -27,12 +27,14 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 @router.post("/register")
 async def register_user(
-        payload: UserCreate,
-        user: UserTokenData = Depends(get_current_user),
-        db: Session = Depends(Sql.get_session),
+    payload: UserCreate,
+    user: UserTokenData = Depends(get_current_user),
+    db: Session = Depends(Sql.get_session),
 ):
     if user.role_id == 1:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Доступ запрещён")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Доступ запрещён"
+        )
     mentee = await UserController(db).create_user(payload)
     await crud.user.assign_mentee(db, user.user_id, mentee.id)
     if not mentee:
@@ -42,9 +44,9 @@ async def register_user(
 
 @router.post("/register-new-users", response_model=bool)
 async def register_user_from_file(
-        file: UploadFile = File(...),
-        user: UserTokenData = Depends(get_current_user),
-        db: Session = Depends(Sql.get_session),
+    file: UploadFile = File(...),
+    user: UserTokenData = Depends(get_current_user),
+    db: Session = Depends(Sql.get_session),
 ):
     """
     CSV файл с кодировкой UTF-8
