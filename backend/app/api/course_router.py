@@ -17,19 +17,6 @@ from app.models.course import CourseDto, CourseCreate
 router = APIRouter(prefix="/course", tags=["course"])
 
 
-@router.get("/my")
-async def get_my_courses(
-    user: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
-) -> list[CourseDto]:
-    try:
-        return await CourseController(db).get_courses(user.user_id)
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Такой курс уже существует"
-        )
-
-
 @router.post("/")
 async def create_course(
     payload: CourseCreate,
@@ -43,6 +30,19 @@ async def create_course(
         )
     try:
         return await CourseController(db).create_course(payload)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Такой курс уже существует"
+        )
+
+
+@router.get("/my")
+async def get_my_courses(
+    user: UserTokenData = Depends(get_current_user),
+    db: Session = Depends(Sql.get_session),
+) -> list[CourseDto]:
+    try:
+        return await CourseController(db).get_courses(user.user_id)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Такой курс уже существует"

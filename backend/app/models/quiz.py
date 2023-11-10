@@ -13,6 +13,9 @@ from pydantic import BaseModel, ConfigDict, Field
 from .base import Base
 from .user import SqlUser
 
+if tp.TYPE_CHECKING:
+    from .course import SqlCourse
+
 
 class QuestionBase(BaseModel):
 
@@ -52,6 +55,9 @@ class QuizBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     title: str
     description_text: str
+
+class QuizDescription(QuizBase):
+    id: int
 
 
 class QuizDto(BaseModel):
@@ -143,6 +149,8 @@ class SqlQuiz(Base):
     # quiz_results: Mapped[list["SqlUserQuiz"]] = relationship(
     #     "SqlUserQuiz", backref="quiz"
     # )
+    
+    course: Mapped[list["SqlCourse"]] = relationship("SqlCourse", secondary="quiz_course")
 
 
 class SqlQuestion(Base):
