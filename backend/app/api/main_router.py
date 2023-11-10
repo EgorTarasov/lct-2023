@@ -10,6 +10,7 @@ from app.api import (
     course_router,
     quiz_router,
     file_router,
+    analytics_router
 )
 
 
@@ -23,3 +24,4 @@ router.include_router(task_router.router)
 router.include_router(event_router.router)
 router.include_router(course_router.router)
 router.include_router(file_router.router)
+router.include_router(analytics_router.router)

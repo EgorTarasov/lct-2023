@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app import crud
+from app.models.action import ActionCreate, ActionType
 from app.models.event import EventCreate, EventDto
 
 
@@ -27,6 +28,9 @@ class EventController:
 
     async def enroll_on_event(self, event_id: int, user_id: int) -> bool:
         db_event = await crud.event.enroll_on_event(self.db, event_id, user_id)
+        await crud.action.create(
+            self.db,
+            ActionCreate(action=ActionType.enroll_on_event, user_id=user_id))
         return True
 
     async def delete_event(self, event_id: int):

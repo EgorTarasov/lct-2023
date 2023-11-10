@@ -1,14 +1,11 @@
 import aiofiles
 import uuid
-import pathlib
 import os
 import shutil
-import typing as tp
 import zipfile
 
-from fastapi import File
 from sqlalchemy.orm import Session
-from app.models.file import FileBase, FileDto, SqlFile
+from app.models.file import SqlFile
 from app import crud
 
 

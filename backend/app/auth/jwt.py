@@ -6,7 +6,7 @@ from app.config import config
 
 
 class UserTokenData(NamedTuple):
-    """Данные которые храняться в jwt токене пользователя
+    """Данные которые хранятся в jwt токене пользователя
     user_id: int
     email: str
     role_id: int
@@ -47,13 +47,8 @@ class JWTEncoder:
                 minutes=config.access_token_expire_minutes
             ),
     ) -> str:
-        to_encode = {
-            "user_id": user_id,
-            "email": email,
-            "role_id": role_id,
-            "exp": dt.datetime.utcnow() + expires_delta,
-        }
-        to_encode["exp"] = dt.datetime.utcnow() + expires_delta
+        to_encode = {"user_id": user_id, "email": email, "role_id": role_id,
+                     "exp": dt.datetime.utcnow() + expires_delta}
         return jwt.encode(
             to_encode, config.jwt_secret_key, algorithm=config.hash_algorithm
         )

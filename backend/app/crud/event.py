@@ -20,6 +20,15 @@ async def get_events(db: Session) -> list[SqlEvent]:
     return events
 
 
+
+async def delete_event(db: Session, event_id: int):
+    """Получение всех мероприятий"""
+    deleted_rows = db.query(SqlEvent).where(SqlEvent.id == event_id).delete()
+    if deleted_rows == 0:
+        raise Exception("Такого типа не существует")
+    db.commit()
+
+
 async def get_events_for_user(db: Session, user_id: int) -> list[int]:
     """Получение всех мероприятий для пользователя"""
     # events = db.query(SqlEvent).join(SqlEnrollment, SqlEvent.id == SqlEnrollment.id).all()
@@ -49,14 +58,6 @@ async def get_available_event_types(db: Session) -> list[str]:
     return [event_type.name for event_type in event_types]
 
 
-async def delete_event(db: Session, event_id: int):
-    """Получение всех мероприятий"""
-    deleted_rows = db.query(SqlEvent).where(SqlEvent.id == event_id).delete()
-    if deleted_rows == 0:
-        raise Exception("Такого типа не существует")
-    db.commit()
-
-
 async def change_event(db: Session, event_id: int, payload: EventCreate) -> SqlEvent:
     """Получение всех мероприятий"""
     db_event = db.query(SqlEvent).where(SqlEvent.id == event_id).one_or_none()
@@ -67,3 +68,10 @@ async def change_event(db: Session, event_id: int, payload: EventCreate) -> SqlE
     db.commit()
     db.refresh(db_event)
     return db_event
+
+
+async def create_event_types(db: Session, event_types: list[str]):
+    """Создание типов мероприятий"""
+    db_event_types = [SqlEventType(name=event_type) for event_type in event_types]
+    db.bulk_save_objects(db_event_types)
+    db.commit()

@@ -5,10 +5,9 @@ post создать skill
 
 
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
-from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
-from app.auth.dependency import get_current_user
 
+from app.auth.dependency import get_current_user
 from app.auth.jwt import UserTokenData
 from app.controllers.course_controller import CourseController
 from app.core.sql import Sql
