@@ -29,7 +29,7 @@ async def lifespan(app: FastAPI):
     # checks if users not exists load admin data from .env and create user
     db = next(sql.get_session())
     try:
-        _ = await crud.user.get_user_by_email(db, config.admin_email)
+        _ = crud.user.get_user_by_email(db, config.admin_email)
     except Exception as e:
         role = await crud.role.create_role(
             db, RoleCreate(name="user", permissions={"editing": False})

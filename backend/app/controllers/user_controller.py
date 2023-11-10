@@ -142,7 +142,7 @@ class UserController:
                     password="UserExample"
                 )
             ]
-            crud.user.create_users(self.db, users, "stringst")
+            crud.user.create_users(self.db, users, config.admin_password)
         except Exception as e:
             raise e
 
