@@ -4,6 +4,5 @@ from . import interest
 from . import task
 from . import event
 from . import course
-from . import skill
-from . import question
+from . import quiz
 from . import position
