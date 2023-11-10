@@ -31,22 +31,23 @@ async def create_course(
         )
 
     if data and data.content_type not in [
-        # "application/zip",
+        "application/zip",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ]:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Поддерживаемые форматы '.zip' '.docx'",
         )
-    try:
-        return await CourseController(db).create_course(
-            payload, data.file.read(), data.filename
-        )
-    except Exception as e:
-        print(e)
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Такой курс уже существует"
-        )
+    return await CourseController(db).create_course(
+        payload, data.file.read(), data.filename, data.content_type
+    )
+    # try:
+
+    # except Exception as e:
+    #     print(e)
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND, detail="Такой курс уже существует"
+    #     )
 
 
 @router.get("/my")

@@ -1,3 +1,6 @@
+import os
+import zipfile
+import aiofiles
 import typing as tp
 from sqlalchemy.orm import Session
 
@@ -12,14 +15,27 @@ class CourseController:
         self.db = db
 
     async def create_course(
-        self, payload: CourseCreate, file: bytes, filename: str
+        self,
+        payload: CourseCreate,
+        file: bytes,
+        filename: str = "test.docx",
+        filetype: tp.Literal[
+            "application/zip",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ] = "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ) -> CourseDto:
         """
         Создать курс
         """
         # TODO: если zip, то распаковать и вернуть вместе с курсом
+        f_controller = FileController(self.db)
+        db_files = []
 
-        db_files = [await FileController(self.db).save_file(file, filename)]
+        if filetype == "application/zip":
+            db_files = await f_controller.save_files(file, filename)
+        else:
+            db_files = [await f_controller.save_file(file, filename)]
+
         db_course = await crud.course.create(self.db, payload)
         quizes = await crud.quiz.get_quizes(self.db, payload.quizes)
         db_course = await crud.course.assign_quizes(self.db, db_course, quizes)
