@@ -14,31 +14,32 @@ class CourseController:
     async def update_onboarding(
         self,
         payload: CourseCreate,
-        file: bytes,
+        file: bytes | None,
         filename: str = "test.docx",
         filetype: tp.Literal[
             "application/zip",
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         ] = "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ) -> CourseDto:
-        f_controller = FileController(self.db)
-        db_files = []
-
-        if filetype == "application/zip":
-            db_files = await f_controller.save_files(file, filename)
-        else:
-            db_files = [await f_controller.save_file(file, filename)]
 
         db_course = await crud.course.update(self.db, payload, course_id=1)
         quizes = await crud.quiz.get_quizes(self.db, payload.quizes)
         db_course = await crud.course.assign_quizes(self.db, db_course, quizes)
-        db_course = await crud.course.assign_files(self.db, db_course, db_files)
+        if file:
+            f_controller = FileController(self.db)
+            db_files = []
+            if filetype == "application/zip":
+                db_files = await f_controller.save_files(file, filename)
+            else:
+                db_files = [await f_controller.save_file(file, filename)]
+            db_course = await crud.course.assign_files(self.db, db_course, db_files)
+
         return CourseDto.model_validate(db_course)
 
     async def create_course(
         self,
         payload: CourseCreate,
-        file: bytes,
+        file: bytes | None,
         filename: str = "test.docx",
         filetype: tp.Literal[
             "application/zip",
@@ -49,18 +50,19 @@ class CourseController:
         Создать курс
         """
         # TODO: если zip, то распаковать и вернуть вместе с курсом
-        f_controller = FileController(self.db)
-        db_files = []
 
-        if filetype == "application/zip":
-            db_files = await f_controller.save_files(file, filename)
-        else:
-            db_files = [await f_controller.save_file(file, filename)]
-
-        db_course = await crud.course.create(self.db, payload)
+        db_course = await crud.course.update(self.db, payload, course_id=1)
         quizes = await crud.quiz.get_quizes(self.db, payload.quizes)
         db_course = await crud.course.assign_quizes(self.db, db_course, quizes)
-        db_course = await crud.course.assign_files(self.db, db_course, db_files)
+        if file:
+            f_controller = FileController(self.db)
+            db_files = []
+            if filetype == "application/zip":
+                db_files = await f_controller.save_files(file, filename)
+            else:
+                db_files = [await f_controller.save_file(file, filename)]
+            db_course = await crud.course.assign_files(self.db, db_course, db_files)
+
         return CourseDto.model_validate(db_course)
 
     async def get_course(self, course_id: int) -> CourseDto:

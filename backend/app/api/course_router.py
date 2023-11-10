@@ -37,8 +37,12 @@ async def create_course(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Поддерживаемые форматы '.zip' '.docx'",
         )
+
     return await CourseController(db).create_course(
-        payload, data.file.read(), data.filename, data.content_type
+        payload,
+        data.file.read() if data else None,
+        data.filename if data else None,
+        data.content_type if data else None,
     )
     # try:
 
@@ -83,7 +87,10 @@ async def create_onboarding(
             detail="Поддерживаемые форматы '.zip' '.docx'",
         )
     return await CourseController(db).update_onboarding(
-        payload, data.file.read(), data.filename, data.content_type
+        payload,
+        data.file.read() if data else None,
+        data.filename if data else None,
+        data.content_type if data else None,
     )
 
 
