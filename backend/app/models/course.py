@@ -18,7 +18,7 @@ class BaseCourse(BaseModel):
 
 
 class CourseCreate(BaseCourse):
-    quizes: list[int] = Field(..., default_factory=list)
+    quizes: list[int] = []
 
 
 class CourseDto(BaseCourse):

@@ -68,7 +68,6 @@ async def get_onboarding(
 
 @router.post("/onboarding")
 async def create_onboarding(
-    payload: CourseCreate = Depends(),
     user: UserTokenData = Depends(get_current_user),
     data: UploadFile = File(None),
     db: Session = Depends(Sql.get_session),
@@ -87,7 +86,7 @@ async def create_onboarding(
             detail="Поддерживаемые форматы '.zip' '.docx'",
         )
     return await CourseController(db).update_onboarding(
-        payload,
+        None,
         data.file.read() if data else None,
         data.filename if data else None,
         data.content_type if data else None,
