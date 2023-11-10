@@ -1,9 +1,10 @@
 import { CommonDto } from "@/utils/common-dto";
 import { AdminEndpoint } from "api/endpoints/admin.endpoint";
 import { PositionEndpoint } from "api/endpoints/position.endpoint";
-import { UserEndpoint } from "api/endpoints/user.endpoint";
 import { UserDto } from "api/models/user.model";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
+import { TaskDto } from "api/models/task.model.ts";
+import { TasksEndpoint } from "api/endpoints/tasks.endpoint.ts";
 
 type UserUpdate = Record<
   "first_name" | "last_name" | "middle_name" | "phone" | "email" | "goal",
@@ -14,6 +15,8 @@ export class EmployeesPageViewModel {
   public mentees: UserDto.Item[] = [];
   public positions: CommonDto.Named<number>[] = [];
   public selectedPosition: CommonDto.Named<number> | null = null;
+  public tasks: { userId: number; tasks: TaskDto.Result[] }[] = [];
+  isLoading = true;
 
   constructor() {
     makeAutoObservable(this);
@@ -23,6 +26,13 @@ export class EmployeesPageViewModel {
   async init() {
     this.mentees = await AdminEndpoint.getMentees();
     this.positions = await PositionEndpoint.getAll();
+    await runInAction(async () => {
+      for (const mentee of this.mentees) {
+        const res = await TasksEndpoint.getMenteeTasks(mentee.id);
+        this.tasks.push({ userId: mentee.id, tasks: res });
+      }
+    });
+    this.isLoading = false;
   }
 
   async registerUser(item: UserUpdate): Promise<boolean> {
@@ -42,15 +52,8 @@ export class EmployeesPageViewModel {
     return true;
   }
 
-  async createTask(item: {
-    title: string;
-    task_link: string;
-    deadline: Date;
-    time_estimate: string;
-    points: string;
-  }) {
-    console.log("create task", item);
-
+  createTask = async (item: TaskDto.Create) => {
+    await TasksEndpoint.create(item);
     return true;
-  }
+  };
 }

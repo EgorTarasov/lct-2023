@@ -4,38 +4,35 @@ import UserIcon from "@/assets/user.svg";
 import PhoneIcon from "@/assets/phone.svg";
 import EmailIcon from "@/assets/email.svg";
 import TelegramIcon from "@/assets/telegram-link.svg";
-import { CourseDto, MockCourses } from "api/models/course.model.ts";
 import CalendarIcon from "@/assets/calendar.svg";
 import { convertDate } from "@/utils/dateConverters.ts";
 import ClockIcon from "@/assets/clock.svg";
 import LightningIcon from "@/assets/lightning.svg";
-import { FormEvent, useMemo, useRef, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import CloseSvg from "@/assets/clear.svg";
 import EditSvg from "@/assets/edit.svg";
 import { EmployeesPageViewModel } from "./employees.vm";
 import DropdownMultiple from "@/ui/DropdownMultiple";
 import { CommonDto } from "@/utils/common-dto";
 import { observer } from "mobx-react-lite";
+import { UserDto } from "api/models/user.model.ts";
+import { TaskDto } from "api/models/task.model.ts";
 import DatePicker from "react-datepicker";
 
-interface IAdminCourseCardProps {
-  item: CourseDto.Item;
+interface IAdminCourseCard {
+  item: TaskDto.Result;
 }
 
-const AdminCourseCard = (x: IAdminCourseCardProps) => {
-  const isDeadlineExpired = useMemo(() => x.item.deadline < new Date(), [x.item]);
+const AdminCourseCard = (x: IAdminCourseCard) => {
+  const isDeadlineExpired = useMemo(() => x.item.deadline < new Date(), [x]);
 
   return (
     <ul className={"relative"}>
       <div className="flex flex-col gap-2 w-full border-t border-text-primary/20 py-3">
-        <h4 className="leading-5 text-lg max-w-[80%]">{x.item.title}</h4>
+        <h4 className="leading-5 text-lg max-w-[80%]">{x.item.name}</h4>
         <ul className="flex flex-wrap gap-2 items-center">
           <IconText icon={CalendarIcon} alt="Дедлайн" text={convertDate(x.item.deadline)} />
-          <IconText
-            icon={ClockIcon}
-            alt="Время выполнения"
-            text={`${x.item.timeEstimateMin} мин`}
-          />
+          <IconText icon={ClockIcon} alt="Время выполнения" text={`${x.item.difficulty} мин`} />
           <IconText icon={LightningIcon} alt="Баллы" text={x.item.points.toString()} iconPrimary />
         </ul>
       </div>
@@ -49,62 +46,140 @@ const AdminCourseCard = (x: IAdminCourseCardProps) => {
   );
 };
 
-const MyHomues = () => {
+const MyHomues = observer((x: UserDto.Item, vm: EmployeesPageViewModel) => {
+  const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
+  const [showNewTaskDialog, setShowNewTaskDialog] = useState(false);
+
+  const handleCreateTask = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = e.currentTarget.elements as unknown as Record<TaskFormFields, HTMLInputElement>;
+
+    const template: TaskDto.Create = {
+      name: data.title.value,
+      mentee_id: x.id,
+      deadline: deadlineDate ?? new Date(),
+      status: "В процессе",
+      type: "Адаптация",
+      difficulty: Number(data.time_estimate.value),
+      points: Number(data.points.value),
+      place: "",
+      links: [data.task_link.value]
+    };
+    const result = await vm.createTask(template);
+
+    if (result) {
+      setShowNewTaskDialog(false);
+    }
+  };
+
   return (
-    <article
-      className="flex flex-col gap-4 p-4 bg-white rounded-lg border border-text-primary/20"
-      aria-labelledby="Карточка сотрудника">
-      <div className="flex gap-2 items-start">
-        <UserIcon className="w-11 h-11 text-primary" aria-hidden="true" />
-        <div className="flex-col gap-1">
-          <div className="flex gap-2 items-center" aria-label="Роли сотрудника">
-            {/*{roles.map((role, index) => (*/}
-            {/*  <>*/}
-            {/*    {index !== 0 && <div className="w-1 h-1 bg-primary rounded-full not-sr-only" />}*/}
-            {/*    <span key={index} className="text-sm text-primary">*/}
-            {/*      {role}*/}
-            {/*    </span>*/}
-            {/*  </>*/}
-            {/*))}*/}
-            <span className="text-sm text-primary">Мафиозник</span>
+    <>
+      <article
+        className="flex flex-col gap-4 p-4 bg-white rounded-lg border border-text-primary/20"
+        aria-labelledby="Карточка сотрудника">
+        <div className="flex gap-2 items-start">
+          <UserIcon className="w-11 h-11 text-primary" aria-hidden="true" />
+          <div className="flex-col gap-1">
+            <div className="flex gap-2 items-center" aria-label="Роли сотрудника">
+              <span className="text-sm text-primary">{x.user_role.name}</span>
+            </div>
+            <p id="staffName" aria-label={"ФИО сотрудника"}>
+              {x.last_name} {x.first_name} {x.middle_name}
+            </p>
           </div>
-          <p id="staffName" aria-label={"ФИО сотрудника"}>
-            Зубенко Михаил Петрович
-          </p>
         </div>
-      </div>
-      <div className="flex flex-col gap-2 text-sm sm:flex-row sm:gap-4" aria-label={"Контакты "}>
-        <a
-          href={"tel:+79999999999"}
-          aria-label={"Телефон"}
-          className={"break-all underline text-primary"}>
-          <PhoneIcon className="w-4 h-4 inline-block mr-1" aria-hidden="true" />
-          {"+7(999)999-99-99"}
-        </a>
-        <a href={"mailto:"} aria-label={"Почта"} className="break-all underline text-primary">
-          <EmailIcon className="w-4 h-4 inline-block mr-1" aria-hidden="true" />
-          zi@be.nko
-        </a>
-        <a
-          href={"https://t.me/zubenko"}
-          aria-label={"Телеграм"}
-          className={"break-all underline text-primary"}>
-          <TelegramIcon className="w-4 h-4 inline-block mr-1" aria-hidden="true" />
-          @zubenko
-        </a>
-      </div>
-      <div className="flex-col">
-        {MockCourses.slice(0, 3).map((v, i) => (
-          <AdminCourseCard key={i} item={v} />
-        ))}
-      </div>
-      <div className={"flex flex-col gap-4 sm:flex-row"}>
-        <Button className={"max-w-[256px]"}>Добавить новое задание</Button>
-        <Button className={"max-w-[256px]"}>Посмотреть прогресс</Button>
-      </div>
-    </article>
+        <div className="flex flex-col gap-2 text-sm sm:flex-row sm:gap-4" aria-label={"Контакты "}>
+          <a
+            href={`"tel:${x.number}"`}
+            aria-label={"Телефон"}
+            className={"break-all underline text-primary"}>
+            <PhoneIcon className="w-4 h-4 inline-block mr-1" aria-hidden="true" />
+            {x.number}
+          </a>
+          <a
+            href={`mailto:${x.email}`}
+            aria-label={"Почта"}
+            className="break-all underline text-primary">
+            <EmailIcon className="w-4 h-4 inline-block mr-1" aria-hidden="true" />
+            {x.email}
+          </a>
+          <a
+            href={"https://t.me/zubenko"}
+            aria-label={"Телеграм"}
+            className={"break-all underline text-primary"}>
+            <TelegramIcon className="w-4 h-4 inline-block mr-1" aria-hidden="true" />@
+            {x.middle_name}
+          </a>
+        </div>
+        <div className="flex-col">
+          {vm.tasks &&
+            vm.tasks
+              .filter((v) => v.userId === x.id)
+              .map((v, i) => v.tasks.map((x) => <AdminCourseCard item={x} key={i} />))}
+        </div>
+        <div className={"flex flex-col gap-4 sm:flex-row"}>
+          <Button className={"max-w-[256px]"} onClick={() => setShowNewTaskDialog(true)}>
+            Добавить задание
+          </Button>
+          <Button className={"max-w-[256px]"}>Посмотреть прогресс</Button>
+        </div>
+      </article>
+      <DialogBase
+        isOpen={showNewTaskDialog}
+        width={555}
+        title="Новое задание"
+        onCancel={() => setShowNewTaskDialog(false)}
+        confirmText="Добавить задание">
+        <form className="flex flex-col gap-5" onSubmit={handleCreateTask}>
+          <Input id="title" label="Название" placeholder="Новое задание" required />
+          <Input
+            id="task_link"
+            label="Ссылка на описание"
+            placeholder="https://example.com"
+            required
+          />
+          <div className="flex gap-5 items-end">
+            <div className="flex flex-col">
+              <label htmlFor="deadline" className="text-text-primary/60">
+                Дедлайн
+              </label>
+              <DatePicker
+                id="deadline"
+                selected={deadlineDate}
+                onChange={(date) => setDeadlineDate(date)}
+                placeholderText="1 января"
+                className="rounded-lg px-3 py-2 mt-2 border broder-text-primary/20 w-28"
+              />
+            </div>
+            <Input
+              id="time_estimate"
+              label="Трудозатратность (мин)"
+              placeholder="60 мин"
+              className="flex-1"
+              required
+            />
+            <div className="flex flex-col flex-1 gap-2">
+              <label htmlFor="points" className="text-text-primary/60">
+                Баллы за выполнение
+              </label>
+              <div className="flex items-center gap-2">
+                <LightningIcon className="text-text-primary w-6 min-w-[24px]" />
+                <Input id="points" className="remove-arrow" type="number" required />
+              </div>
+            </div>
+          </div>
+          <button
+            className={
+              "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
+            }
+            disabled={!deadlineDate}>
+            Добавить задание
+          </button>
+        </form>
+      </DialogBase>
+    </>
   );
-};
+});
 
 type UserFormFields = "first_name" | "last_name" | "middle_name" | "phone" | "email" | "goal";
 type TaskFormFields = "title" | "task_link" | "time_estimate" | "points";
@@ -112,9 +187,7 @@ type TaskFormFields = "title" | "task_link" | "time_estimate" | "points";
 export const EmployeesPage = observer(() => {
   const [vm] = useState(() => new EmployeesPageViewModel());
   const [showNewUserDialog, setShowNewUserDialog] = useState(false);
-  const [showNewTaskDialog, setShowNewTaskDialog] = useState(false);
-  const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
-
+  if (vm.isLoading) return <div>Загрузка...</div>;
   const handleCreateUser = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = e.currentTarget.elements as unknown as Record<UserFormFields, HTMLInputElement>;
@@ -130,25 +203,6 @@ export const EmployeesPage = observer(() => {
 
     if (result) {
       setShowNewUserDialog(false);
-    }
-  };
-
-  const handleCreateTask = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!deadlineDate) return;
-
-    const data = e.currentTarget.elements as unknown as Record<TaskFormFields, HTMLInputElement>;
-
-    const result = await vm.createTask({
-      title: data.title.value,
-      task_link: data.task_link.value,
-      deadline: deadlineDate,
-      time_estimate: data.time_estimate.value,
-      points: data.points.value
-    });
-
-    if (result) {
-      setShowNewTaskDialog(false);
     }
   };
 
@@ -172,8 +226,9 @@ export const EmployeesPage = observer(() => {
         </section>
         <section className="flex flex-col gap-4 mt-4">
           <h2 className={"text-2xl font-medium sm:text-2xl"}>Мои сотрудники</h2>
-          <MyHomues />
-          <MyHomues />
+          {vm.mentees.map((x) => (
+            <MyHomues {...x} key={x.id} />
+          ))}
         </section>
       </div>
       <DialogBase
@@ -226,58 +281,6 @@ export const EmployeesPage = observer(() => {
               "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
             }>
             Добавить сотрудника
-          </button>
-        </form>
-      </DialogBase>
-      <DialogBase
-        isOpen={showNewTaskDialog}
-        width={555}
-        title="Новое задание"
-        onCancel={() => setShowNewUserDialog(false)}
-        confirmText="Добавить задание">
-        <form className="flex flex-col gap-5" onSubmit={handleCreateTask}>
-          <Input id="title" label="Название" placeholder="Новое задание" required />
-          <Input
-            id="task_link"
-            label="Ссылка на описание"
-            placeholder="https://example.com"
-            required
-          />
-          <div className="flex gap-5 items-end">
-            <div className="flex flex-col">
-              <label htmlFor="deadline" className="text-text-primary/60">
-                Дедлайн
-              </label>
-              <DatePicker
-                id="deadline"
-                selected={deadlineDate}
-                onChange={(date) => setDeadlineDate(date)}
-                placeholderText="1 января"
-                className="rounded-lg px-3 py-2 mt-2 border broder-text-primary/20 w-28"
-              />
-            </div>
-            <Input
-              id="time_estimate"
-              label="Трудозатратность (мин)"
-              placeholder="60 мин"
-              className="flex-1"
-              required
-            />
-            <div className="flex flex-col flex-1 gap-2">
-              <label htmlFor="points" className="text-text-primary/60">
-                Баллы за выполнение
-              </label>
-              <div className="flex items-center gap-2">
-                <LightningIcon className="text-text-primary w-6 min-w-[24px]" />
-                <Input id="points" className="remove-arrow" type="number" required />
-              </div>
-            </div>
-          </div>
-          <button
-            className={
-              "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
-            }>
-            Добавить задание
           </button>
         </form>
       </DialogBase>
