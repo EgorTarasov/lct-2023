@@ -55,4 +55,33 @@ export namespace CourseDto {
     title: string;
     isCompleted: boolean;
   }
+
+  export interface Result {
+    name: string;
+    duration: number;
+    id: number;
+    quizes: {
+      title: string;
+      description_text: string;
+      id: number;
+    }[];
+    files: {
+      name: string;
+      path: string;
+      id: number;
+    }[];
+  }
+
+  export const convertDtoToItem = (dto: Result): Item => {
+    return {
+      id: dto.id,
+      type: "course",
+      points: 12,
+      timeEstimateMin: 5,
+      progress: 70,
+      deadline: subDays(new Date(), 5),
+      title: dto.name,
+      isCompleted: false
+    };
+  };
 }
