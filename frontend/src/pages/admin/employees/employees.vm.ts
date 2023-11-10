@@ -1,4 +1,5 @@
 import { CommonDto } from "@/utils/common-dto";
+import { AdminEndpoint } from "api/endpoints/admin.endpoint";
 import { PositionEndpoint } from "api/endpoints/position.endpoint";
 import { UserEndpoint } from "api/endpoints/user.endpoint";
 import { UserDto } from "api/models/user.model";
@@ -24,10 +25,10 @@ export class EmployeesPageViewModel {
     this.positions = await PositionEndpoint.getAll();
   }
 
-  async addNewUser(item: UserUpdate) {
-    if (!this.selectedPosition) return;
+  async registerUser(item: UserUpdate): Promise<boolean> {
+    if (!this.selectedPosition) return false;
 
-    await UserEndpoint.addNewUser({
+    await AdminEndpoint.registerUser({
       first_name: item.first_name,
       last_name: item.last_name,
       middle_name: item.middle_name,
@@ -37,6 +38,7 @@ export class EmployeesPageViewModel {
       starts_work_at: "2023-12-12",
       position_id: this.selectedPosition.id
     });
-    await this.init();
+
+    return true;
   }
 }

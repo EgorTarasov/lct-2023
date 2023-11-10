@@ -8,7 +8,8 @@ const get = <T>(path: string, config?: AxiosRequestConfig<unknown>): Promise<T> 
     axios
       .get(path, {
         headers: {
-          Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined
+          Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined,
+          "Access-Control-Allow-Origin": "*"
         },
         ...config
       })
@@ -34,7 +35,8 @@ const post = <T>(
     axios
       .post(path, variables, {
         headers: {
-          Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined
+          Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined,
+          "Access-Control-Allow-Origin": "*"
         },
         ...config
       })
@@ -63,7 +65,8 @@ const put = <T>(
     axios
       .put(path, variables, {
         headers: {
-          Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined
+          Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined,
+          "Access-Control-Allow-Origin": "*"
         },
         ...config
       })
