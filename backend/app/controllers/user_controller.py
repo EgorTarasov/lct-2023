@@ -23,7 +23,7 @@ class UserController:
             user = crud.user.create_user(self.db, payload, password=password)
             logging.info(f"User {user.email} created with password {password}")
             notify_user_about_registration.delay(
-                fio=f"{user.last_name} {user.first_name} {user.middle_name}",
+                fullname=f"{user.last_name} {user.first_name} {user.middle_name}",
                 email=user.email, password=password
             )
             return UserDto.model_validate(user)

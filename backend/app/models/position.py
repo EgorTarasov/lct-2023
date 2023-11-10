@@ -31,7 +31,7 @@ class SqlPosition(Base):
     name: Mapped[str] = mapped_column(Text, nullable=False)
 
     users: Mapped["SqlUser"] = relationship("SqlUser", back_populates="position")
-    courses: Mapped["SqlCourse"] = relationship(
+    courses: Mapped[list["SqlCourse"]] = relationship(
         "SqlCourse", secondary="position_course"
     )
 

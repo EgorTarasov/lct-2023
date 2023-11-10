@@ -23,7 +23,7 @@ class SqlRole(Base):
     __tablename__ = "roles"
 
     id: Mapped[int] = mapped_column(Integer, autoincrement=True, primary_key=True)
-    name: Mapped[str] = mapped_column(Text, nullable=False)
+    name: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
     permissions: Mapped[dict] = mapped_column(JSON, nullable=False)
 
     # user = relationship("User", back_populates="user_role")
