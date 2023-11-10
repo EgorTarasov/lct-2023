@@ -10,6 +10,7 @@ from app.models.user import UserCreate
 from app.models.position import PositionCreate
 from app import crud
 from app.worker import notify_admin_about_task_done
+from app.controllers.file_controller import FileController
 
 
 class AdminController:
@@ -33,7 +34,9 @@ class AdminController:
             fio = user["ФИО"]
             supervisor_fio = user["ФИО Руководителя"]
             date_with_year = f'{user["День выхода"]}.{datetime.datetime.now().year}'
-            starts_work_at = datetime.datetime.strptime(date_with_year, "%d.%m.%Y").date()
+            starts_work_at = datetime.datetime.strptime(
+                date_with_year, "%d.%m.%Y"
+            ).date()
             password = PasswordManager.generate_password()
             last_name, middle_name, first_name = fio.split(" ")
             print(last_name, middle_name, first_name, supervisor_fio)
@@ -44,7 +47,9 @@ class AdminController:
             except Exception as e:
                 print(e)
                 mentor = crud.user.get_user_by_fio(self.db, supervisor_fio)
-                position = await crud.position.get_position_by_name(self.db, user["Должность"])
+                position = await crud.position.get_position_by_name(
+                    self.db, user["Должность"]
+                )
                 mentee = crud.user.create_user(
                     self.db,
                     UserCreate(
@@ -56,11 +61,12 @@ class AdminController:
                         first_name=first_name,
                         starts_work_at=starts_work_at,
                         number=user["Номер телефона"],
-                        adaptation_target=user["Цель адаптации"]
+                        adaptation_target=user["Цель адаптации"],
                     ),
-                    password
+                    password,
                 )
                 await crud.user.assign_mentee(self.db, mentor.id, mentee.id)
                 await crud.action.create(
                     self.db,
-                    ActionCreate(action=ActionType.registration, user_id=mentee.id))
+                    ActionCreate(action=ActionType.registration, user_id=mentee.id),
+                )
