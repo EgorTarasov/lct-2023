@@ -1,6 +1,7 @@
 from fastapi.background import P
 from sqlalchemy.orm import Session
 
+from app.models.action import ActionCreate, ActionType
 from app.models.quiz import (
     QuestionDto,
     QuestionWithAnswerDto,
@@ -84,4 +85,7 @@ class QuizController:
         db_answer = await crud.quiz.create_answer(
             self.db, question_id, user.user_id, answer, db_question.answer == answer
         )
+        await crud.action.create(
+            self.db,
+            ActionCreate(action=ActionType.enroll_on_event, user_id=user.user_id))
         return AnswerDto.model_validate(db_answer)

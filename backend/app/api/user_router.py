@@ -17,7 +17,7 @@ from app.models.role import RoleCreate, RoleDto
 from app.controllers.user_controller import UserController
 
 from app.core.sql import Sql
-from app.models.user import UserDto, SqlUser
+from app.models.user import UserDto
 
 router = APIRouter(prefix="/user", tags=["user"])
 
