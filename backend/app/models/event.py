@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict
-from sqlalchemy import Text, Integer, ForeignKey, DateTime, Text
+from sqlalchemy import Integer, ForeignKey, DateTime, Text
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 import datetime as dt
 

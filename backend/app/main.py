@@ -27,9 +27,6 @@ async def lifespan(app: FastAPI):
         pg_db=config.postgres_db,
         pg_port=config.postgres_port,
     )
-    # from datetime import datetime, timedelta
-    # tomorrow = datetime.utcnow() + timedelta(seconds=15)
-    # hello.apply_async(eta=tomorrow)
     Base.metadata.create_all(bind=sql.get_engine())
 
     # checks if users not exists load admin data from .env and create user
@@ -60,6 +57,9 @@ async def lifespan(app: FastAPI):
             ),
             config.admin_password,
         )
+        await crud.event.create_event_types(
+            db,
+            ["Спорт", "Образование", "Волонтёрство", "Творчество"])
     yield
 
     # shutdown

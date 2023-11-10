@@ -3,6 +3,7 @@ from datetime import timezone, timedelta, datetime
 from sqlalchemy.orm import Session
 
 from app import crud
+from app.models.action import ActionCreate, ActionType
 from app.models.task import TaskDto, TaskCreate, TaskStatus
 from app.worker import notify_user_about_new_task, notify_admin_about_task_done, check_for_deadline
 
@@ -38,13 +39,16 @@ class TaskController:
     async def delete_task(self, task_id: int):
         await crud.task.delete_task(self.db, task_id)
 
-    async def change_task_status(self, task_id: int, status: str) -> TaskDto:
-        task = await crud.task.get_task_by_id(self.db, task_id)
+    async def update_task_status(self, task_id: int, status: str) -> TaskDto:
+        task = crud.task.get_task_by_id(self.db, task_id)
         task.status = status
         if status == TaskStatus.finished:
             mentor_fullname = f"{task.mentor.last_name} {task.mentor.first_name} {task.mentor.middle_name}"
             mentee_fullname = f"{task.mentee.last_name} {task.mentee.first_name} {task.mentee.middle_name}"
             notify_admin_about_task_done.delay(task.mentor.email, mentor_fullname, mentee_fullname, task.name)
+        await crud.action.create(
+            self.db,
+            ActionCreate(action=ActionType.update_task_status, user_id=task.mentee.id))
         return TaskDto.model_validate(task)
 
 

@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 import pandas as pd
 
 from app.auth import PasswordManager
+from app.models.action import ActionCreate, ActionType
 from app.models.task import TaskDto
 from app.models.user import UserCreate
 from app.models.position import PositionCreate
@@ -60,4 +61,6 @@ class AdminController:
                     password
                 )
                 await crud.user.assign_mentee(self.db, mentor.id, mentee.id)
-
+                await crud.action.create(
+                    self.db,
+                    ActionCreate(action=ActionType.registration, user_id=mentee.id))

@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 import logging
 
 from app.auth.jwt import UserTokenData
+from app.models.action import ActionCreate, ActionType
 from app.models.interest import InterestDto, InterestUpdate
 from app.models.token import Token
 from app.models.user import UserCreate, UserDto, UserLogin
@@ -36,6 +37,9 @@ class UserController:
             raise Exception("User not found")
         if not PasswordManager.verify_password(payload.password, user.password):
             raise Exception("Incorrect password")
+        await crud.action.create(
+            self.db,
+            ActionCreate(action=ActionType.login, user_id=user.id))
         return Token(
             access_token=JWTEncoder.create_access_token(
                 user.id, user.email, user.role_id
@@ -46,6 +50,9 @@ class UserController:
     async def update_interest(
         self, user: UserTokenData, payload: InterestUpdate
     ) -> list[InterestDto]:
+        await crud.action.create(
+            self.db,
+            ActionCreate(action=ActionType.update_interests, user_id=user.user_id))
         return [
             InterestDto.model_validate(obj)
             for obj in await crud.interest.update_user_interests(
@@ -58,7 +65,7 @@ class UserController:
         return [InterestDto.model_validate(obj) for obj in user_interests]
 
     async def get_avaliable_interest(self) -> list[InterestDto]:
-        avaliable_interests = await crud.interest.get_avaliable_interests(self.db)
+        avaliable_interests = await crud.interest.get_available_interests(self.db)
         return [InterestDto.model_validate(obj) for obj in avaliable_interests]
 
     async def create_position(self, position: PositionCreate) -> PositionDto:
