@@ -67,6 +67,19 @@ async def get_quiz(db: Session, quiz_id: int) -> SqlQuiz:
     return db_quiz
 
 
+async def get_quizes(db: Session, quizes: list[int]) -> list[SqlQuiz]:
+    db_quizes = db.query(SqlQuiz).filter(SqlQuiz.id.in_(quizes)).all()
+    return db_quizes
+
+
+async def get_all(db: Session, offcet: int = 0, limit: int = 50) -> list[SqlQuiz]:
+    """
+    Получение всех тестов
+    """
+    db_quizes = db.query(SqlQuiz).offset(offcet).limit(limit).all()
+    return db_quizes
+
+
 async def get_question(db: Session, question_id: int) -> SqlQuestion:
     db_question = db.query(SqlQuestion).filter(SqlQuestion.id == question_id).first()
     if not db_question:
