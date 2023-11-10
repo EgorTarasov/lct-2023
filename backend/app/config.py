@@ -5,6 +5,7 @@ from pydantic import AnyUrl, EmailStr, Field
 class Config(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
+    domain: str = "larek.itatmisis.ru"
     server_host: str = "0.0.0.0"
     server_port: int = 8000
 
@@ -42,6 +43,9 @@ class Config(BaseSettings):
 
     admin_email: str = "misis.larek.deda@mail.ru"
     admin_password: str = "Test123456"
+
+    # TELEGRAM_BOT_TOKEN = "6593582253:AAHXwtqVM4tI44NzOaq6k2T3dIJB4RzJZs4"
+    # TELEGRAM_BOT_NAME: str = "discrete_third_bot"
 
     @property
     def rabbitmq_url(self) -> str:
