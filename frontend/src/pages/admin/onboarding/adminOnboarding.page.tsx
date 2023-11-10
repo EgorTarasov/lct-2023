@@ -2,38 +2,30 @@ import { Input } from "@/ui";
 import DragDropFile from "@/components/dragAndDrop/index.tsc";
 import Collapsible from "@/ui/Collapsible.tsx";
 import { UploadedFile } from "@/components/uploadedFile/uploadedFile.tsx";
+import { observer } from "mobx-react-lite";
+import { useState } from "react";
+import { AdminOnboardingPageViewModel } from "./adminOnboarding.vm";
 
-const MocFiles = [
-  {
-    title: "test",
-    url: "test"
-  },
-  {
-    title: "test 2",
-    url: "test"
-  },
-  {
-    title: "test 3",
-    url: "test"
-  },
-  {
-    title: "test 4",
-    url: "test"
-  }
-];
-export const AdminOnboardingPage = () => {
+export const AdminOnboardingPage = observer(() => {
+  const [vm] = useState(() => new AdminOnboardingPageViewModel());
+
   return (
     <div className="flex flex-col px-4 mx-auto mt-6 max-w-screen-desktop fade-enter-done sm:mt-10">
-      <h1 className={"text-2xl font-medium sm:text-2xl"}>Материалы онбординга</h1>
+      <h1 className={"text-2xl font-medium sm:text-2xl"}>Общий онбординг</h1>
       <Collapsible title={"Файлы общего онбординга"} withoutPadding>
         <div className="flex flex-col">
-          {MocFiles.map((file, index) => (
-            <UploadedFile title={file.title} url={file.url} key={index} onRemove={() => {}} />
+          {vm.uploadedFiles.map((file, index) => (
+            <UploadedFile
+              key={index}
+              title={file.name}
+              onRemove={() => vm.removeFile(file)}
+              fileSize={file.size}
+            />
           ))}
         </div>
         <div className="mt-6">
           <DragDropFile
-            onUpload={(data) => console.log(data)}
+            onUpload={(files) => vm.addFiles(files)}
             acceptableFormats={[".zip"]}
             dropZone={
               <div>
@@ -49,4 +41,4 @@ export const AdminOnboardingPage = () => {
       </section>
     </div>
   );
-};
+});
