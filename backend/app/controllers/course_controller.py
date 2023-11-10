@@ -14,7 +14,9 @@ class CourseController:
         Создать курс
         """
         db_course = await crud.course.create(self.db, payload)
-
+        quizes = await crud.quiz.get_quizes(self.db, payload.quizes)
+        db_course = await crud.course.assign_quizes(self.db, db_course, quizes)
+        print(db_course.quizes)
         return CourseDto.model_validate(db_course)
 
     async def get_course(self, course_id: int) -> CourseDto:
