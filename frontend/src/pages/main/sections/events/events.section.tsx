@@ -22,14 +22,20 @@ export const EventsSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
       </div>
       <Separator className="my-3" />
       <ul className="grid">
-        <HorizontalCarousel
-          mousewheel={{
-            forceToAxis: true
-          }}>
-          {vm.events.map((v, i) => (
-            <EventCard key={i} item={v} onRegisterClick={() => console.log(v.id)} />
-          ))}
-        </HorizontalCarousel>
+        {vm.events.length === 0 ? (
+          <div className="flex justify-center items-center w-full h-48">
+            <p className="text-gray-500">Нет новых мероприятий 😭</p>
+          </div>
+        ) : (
+          <HorizontalCarousel
+            mousewheel={{
+              forceToAxis: true
+            }}>
+            {vm.events.map((v, i) => (
+              <EventCard key={i} item={v} onRegisterClick={() => console.log(v.id)} />
+            ))}
+          </HorizontalCarousel>
+        )}
       </ul>
     </section>
   );
