@@ -1,19 +1,16 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
-import datetime
 
 from app.api import main_router
 from app.config import config
+from app.controllers.user_controller import UserController
 from app.core.sql import Sql
 from app.models.base import Base
 from app import crud
 from app.models.position import PositionCreate
 from app.models.role import RoleCreate
-from app.models.user import UserCreate
-from app.worker import celery
-
 
 
 @asynccontextmanager
@@ -32,7 +29,7 @@ async def lifespan(app: FastAPI):
     # checks if users not exists load admin data from .env and create user
     db = next(sql.get_session())
     try:
-        _ = await crud.user.get_user_by_id(db, 1)
+        _ = await crud.user.get_user_by_email(db, config.admin_email)
     except Exception as e:
         role = await crud.role.create_role(
             db, RoleCreate(name="user", permissions={"editing": False})
@@ -42,24 +39,10 @@ async def lifespan(app: FastAPI):
             db, RoleCreate(name="hr", permissions={"editing": True})
         )
         position = await crud.position.create(db, PositionCreate(name="hr"))
-        user = crud.user.create_user(
-            db,
-            UserCreate(
-                first_name="Иван",
-                last_name="Иванов",
-                middle_name="Иванович",
-                email=config.admin_email,
-                adaptation_target="",
-                starts_work_at=datetime.date.today(),
-                role_id=role.id,
-                position_id=position.id,
-                number="88005553535",
-            ),
-            config.admin_password,
-        )
         await crud.event.create_event_types(
             db,
             ["Спорт", "Образование", "Волонтёрство", "Творчество"])
+        await UserController(db).prepare_test_users()
     yield
 
     # shutdown

@@ -1,11 +1,14 @@
+import datetime
+
 from sqlalchemy.orm import Session
 import logging
 
 from app.auth.jwt import UserTokenData
+from app.config import config
 from app.models.action import ActionCreate, ActionType
 from app.models.interest import InterestDto, InterestUpdate
 from app.models.token import Token
-from app.models.user import UserCreate, UserDto, UserLogin
+from app.models.user import UserCreate, UserDto, UserLogin, UserTeam
 from app.models.position import PositionCreate, PositionDto
 from app.models.role import RoleCreate, RoleDto
 from app.auth import PasswordManager, JWTEncoder
@@ -30,7 +33,6 @@ class UserController:
         except Exception as e:
             raise e
 
-
     async def authenticate_user(self, payload: UserLogin) -> Token:
         user = crud.user.get_user_by_email(self.db, payload.email)
         if not user:
@@ -48,7 +50,7 @@ class UserController:
         )
 
     async def update_interest(
-        self, user: UserTokenData, payload: InterestUpdate
+            self, user: UserTokenData, payload: InterestUpdate
     ) -> list[InterestDto]:
         await crud.action.create(
             self.db,
@@ -75,6 +77,88 @@ class UserController:
     async def get_positions(self) -> list[PositionDto]:
         db_positions = await crud.position.get_all(self.db)
         return [PositionDto.model_validate(db_position) for db_position in db_positions]
+
+    async def prepare_test_users(self):
+        try:
+            users = [
+                UserCreate(
+                    first_name="Иван",
+                    last_name="Иванов",
+                    middle_name="Иванович",
+                    email=config.admin_email,
+                    adaptation_target=
+                    "Актуализация/получение и закрепление навыков для выполнения должностных обязанностей.",
+                    starts_work_at=datetime.date.today(),
+                    role_id=1,
+                    position_id=1,
+                    number="88005553535",
+                ),
+                UserCreate(
+                    first_name="Анастасия",
+                    last_name="Белова",
+                    middle_name="Сергеевна",
+                    email=config.test_users["lead"],
+                    adaptation_target="",
+                    starts_work_at=datetime.date.today(),
+                    role_id=2,
+                    position_id=1,
+                    number="+7 (999) 123-45-67",
+                    password="UserExample"
+                ),
+                UserCreate(
+                    first_name="Егор",
+                    last_name="Муравьев",
+                    middle_name="Павлович",
+                    email=config.test_users["director"],
+                    adaptation_target="",
+                    starts_work_at=datetime.date.today(),
+                    role_id=2,
+                    position_id=1,
+                    number="+7 (999) 765-43-21",
+                    password="UserExample"
+                ),
+                UserCreate(
+                    first_name="Максим",
+                    last_name="Ледаков",
+                    middle_name="Павлович",
+                    email=config.test_users["team_1"],
+                    adaptation_target="",
+                    starts_work_at=datetime.date.today(),
+                    role_id=2,
+                    position_id=1,
+                    number="+7 (999) 765-43-22",
+                    password="UserExample"
+                ),
+                UserCreate(
+                    first_name="Кузнецова",
+                    last_name="Екатерина",
+                    middle_name="Александровна",
+                    email=config.test_users["team_2"],
+                    adaptation_target="",
+                    starts_work_at=datetime.date.today(),
+                    role_id=2,
+                    position_id=1,
+                    number="+7 (999) 765-43-23",
+                    password="UserExample"
+                )
+            ]
+            crud.user.create_users(self.db, users, "stringst")
+        except Exception as e:
+            raise e
+
+    async def get_my_team(self, user_id: int) -> UserTeam:
+        try:
+            user = await crud.user.get_user_by_id(self.db, user_id)
+            team = UserTeam(
+                lead=UserDto.model_validate(user.mentees[0] if user.mentees else
+                                            crud.user.get_user_by_email(self.db, config.test_users["lead"])),
+                director=UserDto.model_validate(crud.user.get_user_by_email(self.db, config.test_users["director"])),
+                team=[UserDto.model_validate(crud.user.get_user_by_email(self.db, config.test_users["team_1"])),
+                      UserDto.model_validate(crud.user.get_user_by_email(self.db, config.test_users["team_2"]))]
+            )
+            return team
+        except Exception as e:
+            raise e
 
     async def create_role(self, payload: RoleCreate) -> RoleDto | None:
         try:
