@@ -3,6 +3,8 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Integer, Text, ForeignKey
 
+from app.models.file import FileDto, SqlFile
+
 from .base import Base
 from .quiz import SqlQuiz, QuizDescription
 
@@ -23,6 +25,7 @@ class CourseDto(BaseCourse):
     model_config = ConfigDict(from_attributes=True)
     id: int = Field(...)
     quizes: list[QuizDescription] = Field(...)
+    files: list[FileDto] = Field(...)
 
 
 class SqlCourse(Base):
@@ -38,6 +41,8 @@ class SqlCourse(Base):
 
     quizes: Mapped[list[SqlQuiz]] = relationship(SqlQuiz, secondary="quiz_course")
 
+    files: Mapped[list[SqlFile]] = relationship(SqlFile, secondary="file_course")
+
 
 class QuizCourse(Base):
     __tablename__ = "quiz_course"
@@ -47,4 +52,15 @@ class QuizCourse(Base):
     )
     quiz_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("quiz.id"), primary_key=True
+    )
+
+
+class FileCourse(Base):
+    __tablename__ = "file_course"
+
+    course_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("courses.id"), primary_key=True
+    )
+    file_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("file.id"), primary_key=True
     )

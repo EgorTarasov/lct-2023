@@ -6,3 +6,4 @@ from . import event
 from . import course
 from . import quiz
 from . import position
+from . import file
