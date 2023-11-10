@@ -89,7 +89,7 @@ class UserController:
                     adaptation_target=
                     "Актуализация/получение и закрепление навыков для выполнения должностных обязанностей.",
                     starts_work_at=datetime.date.today(),
-                    role_id=1,
+                    role_id=2,
                     position_id=1,
                     number="88005553535",
                 ),
