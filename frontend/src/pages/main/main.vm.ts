@@ -3,7 +3,7 @@ import { EventsEndpoint } from "api/endpoints/events.endpoint";
 import { TasksEndpoint } from "api/endpoints/tasks.endpoint";
 import { CourseDto, MockCourses } from "api/models/course.model";
 import { EventDto, MockEvents } from "api/models/event.model";
-import { MockTasks, TaskDto } from "api/models/task.model";
+import { TaskDto } from "api/models/task.model";
 import { makeAutoObservable } from "mobx";
 
 export class MainPageViewModel {

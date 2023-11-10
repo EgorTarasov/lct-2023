@@ -84,4 +84,20 @@ export namespace CourseDto {
       isCompleted: false
     };
   };
+
+  export interface AdminResult {
+    name: string;
+    duration: number;
+    id: number;
+    quizes: {
+      title: string;
+      description_text: string;
+      id: number;
+    }[];
+    files: {
+      name: string;
+      path: string;
+      id: number;
+    }[];
+  }
 }

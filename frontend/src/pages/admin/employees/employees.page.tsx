@@ -18,9 +18,10 @@ import { observer } from "mobx-react-lite";
 import { UserDto } from "api/models/user.model.ts";
 import { TaskDto } from "api/models/task.model.ts";
 import DatePicker from "react-datepicker";
+import { toJS } from "mobx";
 
 interface IAdminCourseCard {
-  item: TaskDto.Result;
+  item: TaskDto.Item;
   vm: EmployeesPageViewModel;
 }
 
@@ -41,7 +42,7 @@ const AdminCourseCard = (x: IAdminCourseCard) => {
 
     const template: TaskDto.Create = {
       name: data.title.value,
-      mentee_id: x.item.mentee_id,
+      mentee_id: x.item.menteeId,
       deadline: deadlineDate?.toISOString().split("T")[0] ?? "",
       status: x.item.status,
       type: x.item.type,
@@ -56,7 +57,7 @@ const AdminCourseCard = (x: IAdminCourseCard) => {
       setEditMode(false);
       x.vm.tasks = x.vm.tasks.map((v) => ({
         userId: v.userId,
-        tasks: v.tasks.map((x) => (x.id === result.id ? result : x))
+        tasks: v.tasks.map((x) => (x.id === result.id ? TaskDto.convertDtoToItem(result) : x))
       }));
     }
   };
@@ -64,7 +65,7 @@ const AdminCourseCard = (x: IAdminCourseCard) => {
     <>
       <ul className={"relative"}>
         <div className="flex flex-col gap-2 w-full border-t border-text-primary/20 py-3">
-          <h4 className="leading-5 text-lg max-w-[80%]">{x.item.name}</h4>
+          <h4 className="leading-5 text-lg max-w-[80%]">{x.item.title}</h4>
           <ul className="flex flex-wrap gap-2 items-center">
             <IconText icon={CalendarIcon} alt="Дедлайн" text={convertDate(x.item.deadline)} />
             <IconText icon={ClockIcon} alt="Время выполнения" text={`${x.item.difficulty} мин`} />
@@ -98,7 +99,7 @@ const AdminCourseCard = (x: IAdminCourseCard) => {
             label="Название"
             placeholder="Новое задание"
             required
-            defaultValue={x.item.name}
+            defaultValue={x.item.title}
           />
           <Input
             id="task_link"
@@ -182,7 +183,7 @@ const MyHomues = observer(({ x, vm }: { x: UserDto.Item; vm: EmployeesPageViewMo
       setShowNewTaskDialog(false);
       vm.tasks.push({
         userId: x.id,
-        tasks: [result]
+        tasks: [TaskDto.convertDtoToItem(result)]
       });
     }
   };

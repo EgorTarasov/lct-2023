@@ -1,50 +1,3 @@
-export const MockTasks: TaskDto.Item[] = [
-  {
-    id: 0,
-    type: "Мероприятие",
-    title: "Дизайн-митап",
-    isCompleted: false,
-    deadline: new Date(),
-    durationMin: 120,
-    points: 12,
-    location: "Синий зал главного корпуса",
-    imgSrc: null
-  },
-  {
-    id: 0,
-    type: "Адаптация",
-    title: "Караоке",
-    isCompleted: false,
-    deadline: new Date(),
-    durationMin: 125,
-    points: 20,
-    location: "Синий зал главного корпуса",
-    imgSrc: null
-  },
-  {
-    id: 0,
-    type: "Работа",
-    title: "Донат на твич",
-    isCompleted: true,
-    deadline: new Date(),
-    durationMin: 75,
-    points: 20,
-    location: "Синий зал главного корпуса",
-    imgSrc: null
-  },
-  {
-    id: 0,
-    type: "Обучение",
-    title: "Как проектировать интерфейсы",
-    isCompleted: false,
-    deadline: new Date(),
-    durationMin: 40,
-    points: 20,
-    location: "Синий зал главного корпуса",
-    imgSrc: null
-  }
-];
-
 export namespace TaskDto {
   export type TaskType = "Адаптация" | "Работа" | "Собрание" | "Мероприятие" | "Обучение";
   export type TaskStatus = "В процессе" | "Завершена";
@@ -59,12 +12,16 @@ export namespace TaskDto {
     points: number;
     location: string;
     imgSrc: string | null;
+    menteeId: number;
+    difficulty: number;
+    status: TaskStatus;
+    links: string[];
   }
 
   export interface Result {
     name: string;
     mentee_id: number;
-    deadline: Date;
+    deadline: string;
     status: TaskStatus;
     type: TaskType;
     difficulty: number;
@@ -80,13 +37,17 @@ export namespace TaskDto {
     return {
       id: dto.id,
       title: dto.name,
-      deadline: dto.deadline,
+      deadline: new Date(dto.deadline),
       type: dto.type as TaskType,
       isCompleted: dto.status === "Завершена",
       durationMin: dto.difficulty,
       points: dto.points,
       location: dto.place,
-      imgSrc: null
+      imgSrc: null,
+      menteeId: dto.mentee_id,
+      difficulty: dto.difficulty,
+      status: dto.status,
+      links: dto.links
     };
   };
 
