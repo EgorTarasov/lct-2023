@@ -20,7 +20,7 @@ export const DiveinSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
     <section className="flex flex-col">
       <div className="flex flex-col">
         <div className="flex justify-between items-center mx-4">
-          <h2 className="font-medium text-xl">Погружение</h2>
+          <h2 className="font-medium text-xl">Мои задачи</h2>
           <div className="flex gap-2">
             <IconButton id={leftControlId} icon={() => <ChevronIcon className="rotate-180" />} />
             <IconButton id={rightControlId} icon={ChevronIcon} />
@@ -29,6 +29,9 @@ export const DiveinSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
         <Separator className="my-3" />
       </div>
       <ul className="grid">
+        <div className="flex justify-center items-center w-full h-48">
+          <p className="text-gray-500">Нет незаконченных задач 🤯</p>
+        </div>
         <HorizontalCarousel
           spaceBetween={16}
           a11y={{

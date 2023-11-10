@@ -16,17 +16,8 @@ export const MainPage = observer(() => {
     <div className="flex flex-col gap-4 sm:px-4 mx-auto max-w-screen-desktop">
       <AssistantSection vm={vm} />
       <div className="flex flex-col gap-4 w-full mx-auto max-w-screen-desktop">
-        <div
-          className="grid gap-4"
-          style={{
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))"
-          }}>
-          <div className={card}>
-            <OnBoardingSection vm={vm} />
-          </div>
-          <div className={card}>
-            <CourseSection vm={vm} />
-          </div>
+        <div className={card}>
+          <CourseSection vm={vm} />
         </div>
         <div className={card}>
           <DiveinSection vm={vm} />
