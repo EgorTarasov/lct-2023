@@ -22,4 +22,16 @@ export namespace UserDto {
       id: number;
     };
   }
+
+  export interface Update {
+    first_name: string;
+    last_name: string;
+    middle_name?: string;
+    email: string;
+    number: string;
+    adaptation_target: string;
+    starts_work_at: string;
+    position_id: number;
+    role_id?: number;
+  }
 }

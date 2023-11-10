@@ -30,7 +30,7 @@ export const Input: React.FC<InputProps> = ({
   <div className={twMerge("w-full flex flex-col max-w-[600px]", className)}>
     {label && (
       <label
-        className={twMerge("text-primary/60 mb-2", (error || errorText) && "text-error")}
+        className={twMerge("text-text-primary/60 mb-2", (error || errorText) && "text-error")}
         htmlFor={rest.id ?? rest.name}>
         {label}
       </label>

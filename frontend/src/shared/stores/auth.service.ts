@@ -1,7 +1,7 @@
 import { AuthEndpoint } from "api/endpoints/auth.endpoint";
 import { UserEndpoint } from "api/endpoints/user.endpoint";
 import { AuthDto } from "api/models/auth.model";
-import { UserDto } from "api/models/role.model";
+import { UserDto } from "api/models/user.model";
 import { removeStoredAuthToken } from "api/utils/authToken";
 import { makeAutoObservable } from "mobx";
 

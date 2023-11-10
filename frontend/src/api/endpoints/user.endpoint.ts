@@ -1,5 +1,5 @@
 import { AuthDto } from "api/models/auth.model";
-import { UserDto } from "api/models/role.model";
+import { UserDto } from "api/models/user.model";
 import api from "api/utils/api";
 import { setStoredAuthToken } from "api/utils/authToken";
 import { parseJwt } from "api/utils/parseJwt";
@@ -7,5 +7,13 @@ import { parseJwt } from "api/utils/parseJwt";
 export namespace UserEndpoint {
   export const current = async () => {
     return await api.get<UserDto.Item>("/api/user/me");
+  };
+
+  export const getMentees = async () => {
+    return await api.get<UserDto.Item[]>("/api/mentee");
+  };
+
+  export const addNewUser = async (item: UserDto.Update) => {
+    return await api.post<string>("/api/admin/register");
   };
 }
