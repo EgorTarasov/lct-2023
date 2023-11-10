@@ -46,7 +46,7 @@ const AdminCourseCard = (x: IAdminCourseCard) => {
   );
 };
 
-const MyHomues = observer((x: UserDto.Item, vm: EmployeesPageViewModel) => {
+const MyHomues = observer(({ x, vm }: { x: UserDto.Item; vm: EmployeesPageViewModel }) => {
   const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
   const [showNewTaskDialog, setShowNewTaskDialog] = useState(false);
 
@@ -227,7 +227,7 @@ export const EmployeesPage = observer(() => {
         <section className="flex flex-col gap-4 mt-4">
           <h2 className={"text-2xl font-medium sm:text-2xl"}>Мои сотрудники</h2>
           {vm.mentees.map((x) => (
-            <MyHomues {...x} key={x.id} />
+            <MyHomues x={x} vm={vm} key={x.id} />
           ))}
         </section>
       </div>
