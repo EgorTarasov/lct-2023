@@ -41,4 +41,16 @@ export class EmployeesPageViewModel {
 
     return true;
   }
+
+  async createTask(item: {
+    title: string;
+    task_link: string;
+    deadline: Date;
+    time_estimate: string;
+    points: string;
+  }) {
+    console.log("create task", item);
+
+    return true;
+  }
 }
