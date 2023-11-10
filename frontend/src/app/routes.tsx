@@ -107,16 +107,6 @@ const userRoutes: RouteType[] = [
     showInNav: false
   },
   {
-    path: "/me",
-    component: () => (
-      <PrivateRoute>
-        <ProfilePage />
-      </PrivateRoute>
-    ),
-    title: "Профиль",
-    showInNav: true
-  },
-  {
     path: "/shop",
     component: () => (
       <PrivateRoute>
