@@ -1,17 +1,18 @@
-import "./index.css";
+import "./index.scss";
+import "./transitions.scss";
+import cl from "./layout.module.scss";
 import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { ThemeService } from "@/stores/theme.service.ts";
 import { observer } from "mobx-react-lite";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import "./transitions.scss";
 import { RoutesStore, RoutesWithoutNav } from "./routes";
 import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { SkipToContent } from "@/components/SkipToContent";
 import { DesktopHeading, MobileNav } from "@/components/navigation";
 import { Footer } from "@/components/footer";
-import cl from "./layout.module.scss";
 import { AuthService } from "@/stores/auth.service";
 import { toJS } from "mobx";
+import "react-datepicker/dist/react-datepicker.css";
 
 const App = observer(() => {
   const location = useLocation();
