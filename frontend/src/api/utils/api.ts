@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { getStoredAuthToken, removeStoredAuthToken } from "./authToken";
 
-axios.defaults.baseURL = "https://larek.itatmisis.ru";
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 const get = <T>(path: string, config?: AxiosRequestConfig<unknown>): Promise<T> =>
   new Promise((resolve, reject) => {
