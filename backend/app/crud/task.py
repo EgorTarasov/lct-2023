@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.models.task import TaskCreate, SqlTask
 
 
-async def get_task_by_id(db: Session, task_id: int) -> SqlTask:
+def get_task_by_id(db: Session, task_id: int) -> SqlTask:
     """Получение задачи пользователя"""
     task = db.query(SqlTask).where(SqlTask.id == task_id).one()
     return task

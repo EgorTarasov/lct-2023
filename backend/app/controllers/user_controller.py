@@ -16,7 +16,6 @@ class UserController:
     def __init__(self, db: Session) -> None:
         self.db = db
 
-
     async def create_user(self, payload: UserCreate) -> UserDto | None:
         password = PasswordManager.generate_password()
         try:

@@ -13,7 +13,7 @@ from app.core.sql import Sql
 from app.auth.jwt import UserTokenData
 from app.models.task import TaskDto, TaskCreate, TaskStatus
 from app.auth.dependency import get_current_user
-from app.worker import notify_admin_about_task_done
+
 
 router = APIRouter(prefix="/task", tags=["task"])
 
@@ -120,12 +120,8 @@ async def change_task(
 ) -> TaskDto:
     """Выполнение задачи пользователем или отмена выполнения"""
     try:
-        task = await TaskController(db).get_task_by_id(task_id)
-        task.status = task_status
-        task = await TaskController(db).change_task(task_id, task)
-        if task_status == TaskStatus.finished:
-            await AdminController(db).notify_about_task_done(task)
-        return task
+
+        return await TaskController(db).change_task_status(task_id, task_status)
     except Exception as e:
         logging.error(e)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
