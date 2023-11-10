@@ -17,8 +17,11 @@ const App = observer(() => {
   const location = useLocation();
   const navigate = useNavigate();
   const routeFallback = useMemo(() => {
-    if (AuthService.auth.state === "anonymous" || AuthService.auth.state === "loading") {
+    if (AuthService.auth.state === "anonymous") {
       return "/login";
+    }
+    if (AuthService.auth.state === "loading") {
+      return "/";
     }
     if (AuthService.auth.user.user_role.name === "hr") {
       return "/admin/employees";
