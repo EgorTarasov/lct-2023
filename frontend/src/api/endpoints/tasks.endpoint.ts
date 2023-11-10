@@ -12,6 +12,14 @@ export namespace TasksEndpoint {
   };
 
   export const create = async (data: TaskDto.Create) => {
-    return await api.post<TaskDto.Result>("/api/task", data);
+    return await api.post<TaskDto.Result>("/api/task/", data);
+  };
+
+  export const remove = async (id: number) => {
+    return await api.delete(`/api/task/${id}`);
+  };
+
+  export const update = async (id: number, data: TaskDto.Create) => {
+    return await api.put<TaskDto.Result>(`/api/task/${id}`, data);
   };
 }

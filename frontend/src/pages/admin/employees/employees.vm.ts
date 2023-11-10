@@ -53,7 +53,16 @@ export class EmployeesPageViewModel {
   }
 
   createTask = async (item: TaskDto.Create) => {
-    await TasksEndpoint.create(item);
-    return true;
+    const res = await TasksEndpoint.create(item);
+    return res;
+  };
+
+  removeTask = async (id: number) => {
+    await TasksEndpoint.remove(id);
+  };
+
+  updateTask = async (id: number, item: TaskDto.Create) => {
+    const res = await TasksEndpoint.update(id, item);
+    return res;
   };
 }

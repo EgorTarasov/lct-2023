@@ -13,11 +13,12 @@ export const convertMinutes = (minutes: number, screenReader?: boolean) => {
 };
 
 export const convertDate = (date: Date) => {
+  const fixedDate = new Date(date);
   // dd.mm в hh:mm
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
+  const day = fixedDate.getDate();
+  const month = fixedDate.getMonth() + 1;
+  const hours = fixedDate.getHours();
+  const minutes = fixedDate.getMinutes();
 
   return `${day < 10 ? "0" + day : day}.${month < 10 ? "0" + month : month} в ${
     hours < 10 ? "0" + hours : hours

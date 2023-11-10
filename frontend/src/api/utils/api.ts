@@ -86,8 +86,35 @@ const put = <T>(
       });
   });
 
+const del = <T>(path: string, config?: AxiosRequestConfig<unknown>): Promise<T> =>
+  new Promise((resolve, reject) => {
+    axios
+      .delete(path, {
+        headers: {
+          Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined,
+          "Access-Control-Allow-Origin": "*"
+        },
+        ...config
+      })
+      .then((response: AxiosResponse) => resolve(response.data))
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 401) {
+            removeStoredAuthToken();
+            if (window?.location) {
+              window.location.replace("/login");
+            }
+          }
+          reject(error.response.data);
+        } else {
+          reject(error);
+        }
+      });
+  });
+
 export default {
   get,
   post,
-  put
+  put,
+  delete: del
 };
