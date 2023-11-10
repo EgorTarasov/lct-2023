@@ -42,6 +42,12 @@ class Config(BaseSettings):
 
     admin_email: str = "misis.larek.deda@mail.ru"
     admin_password: str = "Test123456"
+    test_users: dict = {
+        "lead": "belova.designer@gmail.com",
+        "director": "proscom.muraviev@yandex.ru",
+        "team_1": "proscom.ledakov@yandex.ru",
+        "team_2": "kuznetsova.hr@mail.ru"
+    }
 
     @property
     def rabbitmq_url(self) -> str:

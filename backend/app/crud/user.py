@@ -16,6 +16,14 @@ def create_user(db: Session, payload: UserCreate, password: str) -> SqlUser:
     return db_user
 
 
+def create_users(db: Session, payload: list[UserCreate], password: str):
+    """Создание пользователей"""
+    hashed_password = PasswordManager.hash_password(password)
+    db_users = [SqlUser(**user.model_dump(), password=hashed_password) for user in payload]
+    db.bulk_save_objects(db_users)
+    db.commit()
+
+
 async def get_user_by_id(db: Session, user_id: int) -> SqlUser:
     """Получение пользователя по id"""
     user = db.query(SqlUser).where(SqlUser.id == user_id).one_or_none()
@@ -45,6 +53,15 @@ def get_user_by_email(db: Session, email: str) -> SqlUser:
     user = db.query(SqlUser).where(SqlUser.email == email).one_or_none()
     if user:
         return user
+    else:
+        raise Exception("User not found")
+
+
+async def get_my_team(db: Session, user_id: int) -> dict[str, UserDto]:
+    """Получение пользователя по id"""
+    user = db.query(SqlUser).where(SqlUser.id == user_id).one_or_none()
+    if user:
+        return
     else:
         raise Exception("User not found")
 

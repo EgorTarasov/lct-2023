@@ -41,6 +41,11 @@ class UserDto(UserCreate):
     position: PositionDto
 
 
+class UserTeam(BaseModel):
+    lead: UserDto
+    director: UserDto
+    team: list[UserDto]
+
 class SqlUser(Base):
     __tablename__ = "users"
 

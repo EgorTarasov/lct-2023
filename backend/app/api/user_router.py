@@ -17,7 +17,7 @@ from app.models.role import RoleCreate, RoleDto
 from app.controllers.user_controller import UserController
 
 from app.core.sql import Sql
-from app.models.user import UserDto
+from app.models.user import UserDto, UserTeam
 
 router = APIRouter(prefix="/user", tags=["user"])
 
@@ -40,6 +40,14 @@ async def get_my_role(
         user: UserTokenData = Depends(get_current_user)):
     user = await crud.user.get_user_by_id(db, user.user_id)
     return user.user_role
+
+
+@router.get("/my-team", response_model=UserTeam)
+async def get_my_team(
+        db: Session = Depends(Sql.get_session),
+        user: UserTokenData = Depends(get_current_user)):
+    team = await UserController(db).get_my_team(user.user_id)
+    return team
 
 
 @interest_router.get("/", response_model=list[InterestDto])
