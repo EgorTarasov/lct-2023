@@ -21,7 +21,7 @@ export class EmployeesPageViewModel {
   }
 
   async init() {
-    this.mentees = await UserEndpoint.getMentees();
+    this.mentees = await AdminEndpoint.getMentees();
     this.positions = await PositionEndpoint.getAll();
   }
 

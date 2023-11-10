@@ -10,6 +10,6 @@ export namespace UserEndpoint {
   };
 
   export const getMentees = async () => {
-    return await api.get<UserDto.Item[]>("/api/mentee");
+    return await api.get<UserDto.Item[]>("/api/mentee/my");
   };
 }
