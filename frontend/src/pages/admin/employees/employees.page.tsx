@@ -16,6 +16,7 @@ import { EmployeesPageViewModel } from "./employees.vm";
 import DropdownMultiple from "@/ui/DropdownMultiple";
 import { CommonDto } from "@/utils/common-dto";
 import { observer } from "mobx-react-lite";
+import DatePicker from "react-datepicker";
 
 interface IAdminCourseCardProps {
   item: CourseDto.Item;
@@ -106,18 +107,17 @@ const MyHomues = () => {
 };
 
 type UserFormFields = "first_name" | "last_name" | "middle_name" | "phone" | "email" | "goal";
+type TaskFormFields = "title" | "task_link" | "time_estimate" | "points";
 
 export const EmployeesPage = observer(() => {
-  const newUserForm = useRef<HTMLFormElement>(null);
   const [vm] = useState(() => new EmployeesPageViewModel());
   const [showNewUserDialog, setShowNewUserDialog] = useState(false);
+  const [showNewTaskDialog, setShowNewTaskDialog] = useState(false);
+  const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleCreateUser = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = newUserForm.current!.elements as unknown as Record<
-      UserFormFields,
-      HTMLInputElement
-    >;
+    const data = e.currentTarget.elements as unknown as Record<UserFormFields, HTMLInputElement>;
 
     const result = await vm.registerUser({
       first_name: data.first_name.value,
@@ -130,6 +130,25 @@ export const EmployeesPage = observer(() => {
 
     if (result) {
       setShowNewUserDialog(false);
+    }
+  };
+
+  const handleCreateTask = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!deadlineDate) return;
+
+    const data = e.currentTarget.elements as unknown as Record<TaskFormFields, HTMLInputElement>;
+
+    const result = await vm.createTask({
+      title: data.title.value,
+      task_link: data.task_link.value,
+      deadline: deadlineDate,
+      time_estimate: data.time_estimate.value,
+      points: data.points.value
+    });
+
+    if (result) {
+      setShowNewTaskDialog(false);
     }
   };
 
@@ -163,7 +182,7 @@ export const EmployeesPage = observer(() => {
         title="Новый сотрудник"
         onCancel={() => setShowNewUserDialog(false)}
         confirmText="Добавить сотрудника">
-        <form ref={newUserForm} className="flex flex-col gap-5" onSubmit={handleSubmit}>
+        <form className="flex flex-col gap-5" onSubmit={handleCreateUser}>
           <div className="flex gap-5">
             <Input id="first_name" label="Имя" placeholder="Иван" required />
             <Input id="last_name" label="Фамилия" placeholder="Иванович" required />
@@ -207,6 +226,58 @@ export const EmployeesPage = observer(() => {
               "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
             }>
             Добавить сотрудника
+          </button>
+        </form>
+      </DialogBase>
+      <DialogBase
+        isOpen={showNewTaskDialog}
+        width={555}
+        title="Новый сотрудник"
+        onCancel={() => setShowNewUserDialog(false)}
+        confirmText="Добавить сотрудника">
+        <form className="flex flex-col gap-5" onSubmit={handleCreateTask}>
+          <Input id="title" label="Название" placeholder="Новое задание" required />
+          <Input
+            id="task_link"
+            label="Ссылка на описание"
+            placeholder="https://example.com"
+            required
+          />
+          <div className="flex gap-5 items-end">
+            <div className="flex flex-col">
+              <label htmlFor="deadline" className="text-text-primary/60">
+                Дедлайн
+              </label>
+              <DatePicker
+                id="deadline"
+                selected={deadlineDate}
+                onChange={(date) => setDeadlineDate(date)}
+                placeholderText="1 января"
+                className="rounded-lg px-3 py-2 mt-2 border broder-text-primary/20 w-28"
+              />
+            </div>
+            <Input
+              id="time_estimate"
+              label="Трудозатратность (мин)"
+              placeholder="60 мин"
+              className="flex-1"
+              required
+            />
+            <div className="flex flex-col flex-1 gap-2">
+              <label htmlFor="points" className="text-text-primary/60">
+                Баллы за выполнение
+              </label>
+              <div className="flex items-center gap-2">
+                <LightningIcon className="text-text-primary w-6 min-w-[24px]" />
+                <Input id="points" className="remove-arrow" type="number" required />
+              </div>
+            </div>
+          </div>
+          <button
+            className={
+              "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
+            }>
+            Добавить задание
           </button>
         </form>
       </DialogBase>
