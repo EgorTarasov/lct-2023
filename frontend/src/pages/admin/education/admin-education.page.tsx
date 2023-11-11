@@ -9,23 +9,27 @@ import EditSvg from "@/assets/edit.svg";
 import { FormEvent, useState } from "react";
 import DragDropFile from "@/components/dragAndDrop/index.tsc.tsx";
 import { UploadedFile } from "@/components/uploadedFile/uploadedFile.tsx";
-import { CourseDto, MockCourses } from "api/models/course.model.ts";
+import { CourseDto } from "api/models/course.model.ts";
+import { AdminEducationViewModel } from "./admin-education.vm.ts";
+import { observer } from "mobx-react-lite";
+import { Loading } from "@/components/loading/Loading.tsx";
 
 interface ICourseCardProps {
   item: CourseDto.Item;
+  vm: AdminEducationViewModel;
 }
 
+type CourseFormFields = "title" | "time_estimate" | "points";
 const CourseCard = (x: ICourseCardProps) => {
   const [isEditMode, setEditMode] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
 
-  const handleUpdateCourse = () => {
-    console.log("update course");
+  const handleUpdateCourse = (e: FormEvent<HTMLFormElement>) => {
+    const data = e.currentTarget.elements as unknown as Record<CourseFormFields, HTMLInputElement>;
     setEditMode(false);
   };
-  const handleDeleteCourse = () => {
-    console.log("delete course");
-    setEditMode(false);
+  const handleDeleteCourse = async () => {
+    await x.vm.removeCourse(x.item.id);
   };
 
   return (
@@ -129,13 +133,21 @@ const CourseCard = (x: ICourseCardProps) => {
     </>
   );
 };
-export const AdminEducationPage = () => {
+export const AdminEducationPage = observer(() => {
+  const [vm] = useState(() => new AdminEducationViewModel());
   const [files, setFiles] = useState<File[]>([]);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("submit");
+    const data = e.currentTarget.elements as unknown as Record<CourseFormFields, HTMLInputElement>;
+    const template: CourseDto.Template = {
+      name: data.title.value,
+      duration: parseInt(data.time_estimate.value),
+      data: files
+    };
+    await vm.createCourse(template);
+    setShowCreateDialog(false);
   };
+  if (vm.isLoading) return <Loading />;
   return (
     <>
       <div className="flex flex-col gap-4 px-4 mx-auto mt-6 max-w-screen-desktop fade-enter-done sm:mt-10">
@@ -145,10 +157,10 @@ export const AdminEducationPage = () => {
             Добавить курс
           </Button>
         </div>
-        <Input placeholder="Поиск по курсам" />
+        <Input placeholder="Поиск по курсам" onChange={(val) => (vm.query = val)} />
         <ul className="grid gap items-center gap-4 grid-cols-1 desktop:grid-cols-2">
-          {MockCourses.map((v, i) => (
-            <CourseCard key={i} item={v} />
+          {vm.filteredCourses.map((v, i) => (
+            <CourseCard key={i} item={v} vm={vm} />
           ))}
         </ul>
       </div>
@@ -158,7 +170,7 @@ export const AdminEducationPage = () => {
         title="Новый образовательный материал"
         onCancel={() => setShowCreateDialog(false)}
         confirmText="Добавить образовательный материал">
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={onSubmit}>
           <Input placeholder="Новый курс" required id="title" label={"Название"} />
           <div className="flex flex-col gap-2">
             <span className="text-text-primary/60">Загрузите необходимые материалы</span>
@@ -207,4 +219,4 @@ export const AdminEducationPage = () => {
       </DialogBase>
     </>
   );
-};
+});

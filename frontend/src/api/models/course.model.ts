@@ -53,6 +53,7 @@ export const MockCourses: CourseDto.Item[] = [
 
 export namespace CourseDto {
   export type CourseType = "webinar" | "article" | "program" | "course" | "test" | "book";
+
   export interface Item {
     id: number;
     type: CourseType;
@@ -72,6 +73,13 @@ export namespace CourseDto {
     id: number;
     quizes: Quiz[];
     files: CourseFile[];
+  }
+
+  /** Для создания курса */
+  export interface Template {
+    name: string;
+    duration: number;
+    data: File[];
   }
 
   export const convertDtoToItem = (dto: Result): Item => {

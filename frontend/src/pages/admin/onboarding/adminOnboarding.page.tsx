@@ -1,13 +1,13 @@
-import { Button, Input } from "@/ui";
+import { Button } from "@/ui";
 import DragDropFile from "@/components/dragAndDrop/index.tsc";
 import Collapsible from "@/ui/Collapsible.tsx";
 import { UploadedFile } from "@/components/uploadedFile/uploadedFile.tsx";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { AdminOnboardingPageViewModel } from "./adminOnboarding.vm";
-import { Link } from "react-router-dom";
 import { PositionsSection } from "./positions.section";
 import { CourseDto } from "api/models/course.model";
+import { Loading } from "@/components/loading/Loading.tsx";
 
 export const AdminTaskCard = ({ file }: { file: CourseDto.CourseFile }) => (
   <li className={"appear flex items-center justify-between border-b border-text-primary/20 py-3"}>
@@ -19,7 +19,7 @@ export const AdminTaskCard = ({ file }: { file: CourseDto.CourseFile }) => (
 
 export const AdminOnboardingPage = observer(() => {
   const [vm] = useState(() => new AdminOnboardingPageViewModel());
-
+  if (vm.isLoading) return <Loading />;
   return (
     <div className="flex flex-col px-4 mx-auto mt-6 max-w-screen-desktop fade-enter-done sm:mt-10">
       <h1 className={"text-2xl font-medium sm:text-2xl mb-7"}>Общий онбординг</h1>

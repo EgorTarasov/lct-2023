@@ -26,7 +26,7 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) =
   const ariaLabel = useMemo(
     () =>
       `Мероприятие ${item.title}, которое пройдет ${convertDate(item.deadline)} по адресу "${
-        item.location
+        item.place
       }" и будет длиться ${convertMinutes(item.durationMin, true)}`,
     [item]
   );
@@ -54,9 +54,7 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) =
             alt="Продолжительность"
           />
           <IconText icon={LightningIcon} iconPrimary text={item.points.toString()} alt="Баллы" />
-          {item.location && (
-            <IconText icon={MarkerIcon} text={item.location} alt="Место проведения" />
-          )}
+          {item.place && <IconText icon={MarkerIcon} text={item.place} alt="Место проведения" />}
         </ul>
         <Button
           className="relative z-10 mt-auto"
