@@ -18,6 +18,7 @@ import { observer } from "mobx-react-lite";
 import { UserDto } from "api/models/user.model.ts";
 import { TaskDto } from "api/models/task.model.ts";
 import DatePicker from "react-datepicker";
+import { Loading } from "@/components/loading/Loading.tsx";
 
 interface IAdminCourseCard {
   item: TaskDto.Item;
@@ -302,7 +303,7 @@ type TaskFormFields = "title" | "task_link" | "time_estimate" | "points";
 export const EmployeesPage = observer(() => {
   const [vm] = useState(() => new EmployeesPageViewModel());
   const [showNewUserDialog, setShowNewUserDialog] = useState(false);
-  if (vm.isLoading) return <div>Загрузка...</div>;
+  if (vm.isLoading) return <Loading />;
   const handleCreateUser = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = e.currentTarget.elements as unknown as Record<UserFormFields, HTMLInputElement>;
