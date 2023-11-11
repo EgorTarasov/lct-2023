@@ -113,6 +113,9 @@ class UserController:
         position = await crud.position.add_course(self.db, position_id, course_id)
         return [CourseDto.model_validate(obj) for obj in position.courses]
 
+    async def delete_position_course(self, position_id: int, course_id: int):
+        await crud.position.delete_course(self.db, position_id, course_id)
+
     async def prepare_test_users(self):
         try:
             users = [
