@@ -332,7 +332,7 @@ export const EmployeesPage = observer(() => {
         <section className="flex flex-col gap-4 mt-4">
           <DragDropFile
             onUpload={() => {}}
-            acceptableFormats={[".cvc"]}
+            acceptableFormats={[".csv"]}
             dropZone={
               <p>
                 Перетащите сюда или выберите <b>.csv</b> файл

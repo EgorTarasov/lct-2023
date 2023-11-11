@@ -84,12 +84,10 @@ const CourseCard = (x: ICourseCardProps) => {
               onUpload={(files) => setFiles(files)}
               dropZone={
                 <span>
-                  Перетащите сюда или выберите <b>.zip</b>
-                  <br />
-                  или <b>текстовый файл</b>
+                  Перетащите сюда или выберите <b>.docx</b>
                 </span>
               }
-              acceptableFormats={[".zip", ".txt"]}
+              acceptableFormats={[".docx"]}
             />
           </div>
           {x.item.files.map((file, index) => (
@@ -168,12 +166,10 @@ export const AdminEducationPage = () => {
               onUpload={(files) => setFiles(files)}
               dropZone={
                 <span>
-                  Перетащите сюда или выберите <b>.zip</b>
-                  <br />
-                  или <b>текстовый файл</b>
+                  Перетащите сюда или выберите <b>.docx</b>
                 </span>
               }
-              acceptableFormats={[".zip", ".txt"]}
+              acceptableFormats={[".docx"]}
             />
           </div>
           {files.map((file, index) => (

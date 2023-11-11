@@ -51,4 +51,8 @@ export namespace CourseEndpoint {
   export const addCourseToPosition = async (positionId: number, courseId: number) => {
     return await api.post(`/api/user/position/${positionId}/course?course_id=${courseId}`);
   };
+
+  export const getQuiz = async (id: number) => {
+    return await api.get<CourseDto.QuizFull>(`/api/quiz/quiz/${id}`);
+  };
 }
