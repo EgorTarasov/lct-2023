@@ -15,7 +15,7 @@ export const CourseTask: FCVM<EducationPageViewModel> = observer(({ vm }) => {
   const state = vm.pageState;
 
   return (
-    <section className="flex flex-col pt-6 flex-1 max-h-full overflow-hidden">
+    <section className="flex flex-col flex-1 max-h-full overflow-hidden">
       <Button
         appearance="secondary"
         className="w-fit gap-1 text-text-primary/60 px-2 h-10"
@@ -26,9 +26,16 @@ export const CourseTask: FCVM<EducationPageViewModel> = observer(({ vm }) => {
       {/* {state.taskTitle && (
         <h2 className="text-4xl font-medium mt-6 mb-4">{state.taskTitle.replace(".docx", "")}</h2>
       )} */}
-      <div className="flex-1 overflow-y-auto prose mt-6">
-        <ReactMarkdown rehypePlugins={[rehypeRaw]}>{state.markdown}</ReactMarkdown>
-      </div>
+      {/* eslint-disable-next-line prettier/prettier */}
+      {state.markdown === "{\"detail\":\"Not Found\"}" ? (
+        <div className="flex-1 overflow-y-auto prose mt-6">
+          <p className="text-xl">Данная задача пока не доступна ⌛</p>
+        </div>
+      ) : (
+        <div className="flex-1 overflow-y-auto prose mt-6">
+          <ReactMarkdown rehypePlugins={[rehypeRaw]}>{state.markdown}</ReactMarkdown>
+        </div>
+      )}
     </section>
   );
 });

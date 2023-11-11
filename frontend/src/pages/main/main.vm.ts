@@ -7,7 +7,7 @@ import { TaskDto } from "api/models/task.model";
 import { makeAutoObservable } from "mobx";
 
 export class MainPageViewModel {
-  public events: EventDto.Item[] | null = null;
+  public events: EventDto.Item[] | null = MockEvents;
   public courses: CourseDto.Item[] | null = null;
   public tasks: TaskDto.Item[] | null = null;
   public isLoading = true;
@@ -25,7 +25,7 @@ export class MainPageViewModel {
     ]);
     this.courses = coursesRes.map(CourseDto.convertDtoToItem);
     this.tasks = tasksRes.map(TaskDto.convertDtoToItem);
-    this.events = eventsRes.map(EventDto.convertDtoToItem);
+    // this.events = eventsRes.map(EventDto.convertDtoToItem);
     this.isLoading = false;
   }
 }
