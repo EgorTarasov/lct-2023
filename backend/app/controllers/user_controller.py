@@ -1,4 +1,6 @@
 import datetime
+from fastapi import UploadFile
+
 
 from sqlalchemy.orm import Session
 import logging
@@ -15,6 +17,8 @@ from app.models.role import RoleCreate, RoleDto
 from app.auth import PasswordManager, JWTEncoder
 from app import crud
 from app.worker import notify_user_about_registration, send_recover_password
+from app.controllers.file_controller import FileController
+from app.models.file import FileDto
 
 
 class UserController:
@@ -28,7 +32,8 @@ class UserController:
             logging.info(f"User {user.email} created with password {password}")
             notify_user_about_registration.delay(
                 fullname=f"{user.last_name} {user.first_name} {user.middle_name}",
-                email=user.email, password=password
+                email=user.email,
+                password=password,
             )
             return UserDto.model_validate(user)
         except Exception as e:
@@ -41,8 +46,8 @@ class UserController:
         if not PasswordManager.verify_password(payload.password, user.password):
             raise Exception("Incorrect password")
         await crud.action.create(
-            self.db,
-            ActionCreate(action=ActionType.login, user_id=user.id))
+            self.db, ActionCreate(action=ActionType.login, user_id=user.id)
+        )
         return Token(
             access_token=JWTEncoder.create_access_token(
                 user.id, user.email, user.role_id
@@ -51,11 +56,12 @@ class UserController:
         )
 
     async def update_interest(
-            self, user: UserTokenData, payload: InterestUpdate
+        self, user: UserTokenData, payload: InterestUpdate
     ) -> list[InterestDto]:
         await crud.action.create(
             self.db,
-            ActionCreate(action=ActionType.update_interests, user_id=user.user_id))
+            ActionCreate(action=ActionType.update_interests, user_id=user.user_id),
+        )
         return [
             InterestDto.model_validate(obj)
             for obj in await crud.interest.update_user_interests(
@@ -75,6 +81,23 @@ class UserController:
         db_position = await crud.position.create(self.db, position)
         return PositionDto.model_validate(db_position)
 
+    async def add_position_file(
+        self, file: UploadFile, position_id: int
+    ) -> list[FileDto]:
+        f = FileController(self.db)
+        files = []
+        if file.content_type == "application/zip":
+            files = await f.save_files(await file.read(), file.filename)
+        else:
+            files = [await f.save_file(await file.read(), file.filename)]
+        position = await crud.position.add_files(self.db, position_id, files)
+        return [FileDto.model_validate(obj) for obj in position.files]
+
+    async def get_position_files(self, position_id: int) -> list[FileDto]:
+        position = await crud.position.get_position_by_id(self.db, position_id)
+        print(position.files)
+        return [FileDto.model_validate(obj) for obj in position.files]
+
     async def get_positions(self) -> list[PositionDto]:
         db_positions = await crud.position.get_all(self.db)
         return [PositionDto.model_validate(db_position) for db_position in db_positions]
@@ -87,8 +110,7 @@ class UserController:
                     last_name="Иванов",
                     middle_name="Иванович",
                     email=config.admin_email,
-                    adaptation_target=
-                    "Актуализация/получение и закрепление навыков для выполнения должностных обязанностей.",
+                    adaptation_target="Актуализация/получение и закрепление навыков для выполнения должностных обязанностей.",
                     starts_work_at=datetime.date.today(),
                     role_id=2,
                     position_id=1,
@@ -104,7 +126,7 @@ class UserController:
                     role_id=2,
                     position_id=1,
                     number="+7 (999) 123-45-67",
-                    password="UserExample"
+                    password="UserExample",
                 ),
                 UserCreate(
                     first_name="Егор",
@@ -116,7 +138,7 @@ class UserController:
                     role_id=2,
                     position_id=1,
                     number="+7 (999) 765-43-21",
-                    password="UserExample"
+                    password="UserExample",
                 ),
                 UserCreate(
                     first_name="Максим",
@@ -128,7 +150,7 @@ class UserController:
                     role_id=1,
                     position_id=1,
                     number="+7 (999) 765-43-22",
-                    password="UserExample"
+                    password="UserExample",
                 ),
                 UserCreate(
                     first_name="Кузнецова",
@@ -140,8 +162,8 @@ class UserController:
                     role_id=2,
                     position_id=1,
                     number="+7 (999) 765-43-23",
-                    password="UserExample"
-                )
+                    password="UserExample",
+                ),
             ]
             crud.user.create_users(self.db, users, config.admin_password)
         except Exception as e:
@@ -150,11 +172,22 @@ class UserController:
     async def get_my_team(self, user_id: int) -> UserTeam:
         user = await crud.user.get_user_by_id(self.db, user_id)
         team = UserTeam(
-            lead=UserDto.model_validate(user.mentees[0] if user.mentees else
-                                        crud.user.get_user_by_email(self.db, config.test_users["lead"])),
-            director=UserDto.model_validate(crud.user.get_user_by_email(self.db, config.test_users["director"])),
-            team=[UserDto.model_validate(crud.user.get_user_by_email(self.db, config.test_users["team_1"])),
-                  UserDto.model_validate(crud.user.get_user_by_email(self.db, config.test_users["team_2"]))]
+            lead=UserDto.model_validate(
+                user.mentees[0]
+                if user.mentees
+                else crud.user.get_user_by_email(self.db, config.test_users["lead"])
+            ),
+            director=UserDto.model_validate(
+                crud.user.get_user_by_email(self.db, config.test_users["director"])
+            ),
+            team=[
+                UserDto.model_validate(
+                    crud.user.get_user_by_email(self.db, config.test_users["team_1"])
+                ),
+                UserDto.model_validate(
+                    crud.user.get_user_by_email(self.db, config.test_users["team_2"])
+                ),
+            ],
         )
         return team
 
