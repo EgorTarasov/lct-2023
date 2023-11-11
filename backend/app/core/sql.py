@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
 from app.models.base import Base
+from app import utils
 
 
 class Sql:
@@ -30,6 +31,7 @@ class Sql:
         self.engine = create_engine(
             self.get_connection_uri(),
             pool_pre_ping=True,
+            # json_deserializer=utils._custom_json_serializer,
         )
         self.db_session = sessionmaker(bind=self.engine)
 
