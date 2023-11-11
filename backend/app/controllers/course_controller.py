@@ -24,7 +24,7 @@ class CourseController:
         if file:
             f_controller = FileController(self.db)
             db_files = []
-            if filetype == "application/zip":
+            if filetype == "application/zip" or filetype == "application/x-zip-compressed":
                 db_files = await f_controller.save_files(file, filename)
             else:
                 db_files = [await f_controller.save_file(file, filename)]
@@ -85,3 +85,16 @@ class CourseController:
         db_courses = await crud.course.get_for_position(self.db, db_user.position_id)
 
         return [CourseDto.model_validate(course) for course in db_courses]
+
+    async def get_course_progress(self, user_id: int, course_id: int) -> int:
+        """
+        Получить прогресс пользователя по курсу
+        """
+        db_onboarding = await crud.course.get(self.db, course_id)
+        correct_answers = 0
+        for quiz in db_onboarding.quizes:
+            db_quiz, answers = await crud.quiz.get_quiz_with_answers(self.db, quiz.id, user_id)
+            if all(answer[2] for answer in answers):
+                correct_answers += 1
+        return round(correct_answers / max(1, len(db_onboarding.quizes)) * 100)
+

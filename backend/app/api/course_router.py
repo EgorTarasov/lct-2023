@@ -76,8 +76,8 @@ async def create_onboarding(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Доступ запрещён"
         )
-
     if data and data.content_type not in [
+        "application/x-zip-compressed",
         "application/zip",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ]:
@@ -131,3 +131,13 @@ async def get_courses_by_position(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Позиция не найдена"
         )
+
+
+@router.get("/get-onboarding-progress", response_model=int)
+async def get_progress(
+    user: UserTokenData = Depends(get_current_user),
+    db: Session = Depends(Sql.get_session),
+) -> int:
+    """Возвращает процент завершенности онбординга = кол-во правильно пройденных тестов / кол-во тестов"""
+    return await CourseController(db).get_course_progress(user.user_id, 1)
+
