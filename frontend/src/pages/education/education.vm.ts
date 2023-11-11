@@ -12,13 +12,15 @@ export type EducationPageState =
     }
   | {
       view: "course";
-      id: string;
+      courseId: string;
       course: CourseDto.Item;
     }
   | {
       view: "courseTask";
-      id: string;
+      courseId: string;
       taskId: string;
+      taskTitle?: string;
+      markdown: string;
     };
 
 export type ViewType = EducationPageState extends { view: infer V } ? V : never;
@@ -27,8 +29,8 @@ export class EducationPageViewModel {
   private courses: CourseDto.Item[] | null = null;
   public pageState: EducationPageState = { view: "loading" };
 
-  constructor() {
-    console.log("render constructor");
+  constructor(courseId?: string, taskId?: string) {
+    console.log(courseId, taskId);
     makeAutoObservable(this);
   }
 
@@ -43,9 +45,16 @@ export class EducationPageViewModel {
   public async loadCourse(id: string, taskId?: string) {
     const res = await CourseEndpoint.get(id);
     if (taskId) {
-      this.pageState = { view: "courseTask", id, taskId };
+      const task = res.files.find((f) => f.id.toString() === taskId);
+      if (!task) {
+        window.location.href = "/education";
+        return;
+      }
+
+      const markdown = await CourseEndpoint.getTask(task.path);
+      this.pageState = { view: "courseTask", courseId: id, taskId, markdown, taskTitle: task.name };
     } else {
-      this.pageState = { view: "course", id, course: CourseDto.convertDtoToItem(res) };
+      this.pageState = { view: "course", courseId: id, course: CourseDto.convertDtoToItem(res) };
     }
   }
 

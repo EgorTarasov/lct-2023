@@ -29,7 +29,7 @@ const TaskLink = ({ item, courseId }: { item: CourseDto.CourseFile; courseId: nu
         )}>
         <Checkbox checked={false} className={"mt-1 text-primary"} disabled ariaHidden />
         <div className="flex flex-col">
-          <p className="text-lg leading-none">{item.name}</p>
+          <p className="text-lg leading-none">{item.name.replace(".docx", "")}</p>
           <ul className="flex flex-wrap gap-2 mt-3">
             <IconText
               icon={ClockIcon}
@@ -51,7 +51,7 @@ export const CourseSection: FCVM<EducationPageViewModel> = observer(({ vm }) => 
   const course = vm.pageState.course;
 
   return (
-    <>
+    <section className="flex flex-col gap-8 py-6">
       <Button
         appearance="secondary"
         className="w-fit gap-1 text-text-primary/60 px-2"
@@ -67,6 +67,6 @@ export const CourseSection: FCVM<EducationPageViewModel> = observer(({ vm }) => 
           ))}
         </ul>
       </div>
-    </>
+    </section>
   );
 });
