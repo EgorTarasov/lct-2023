@@ -52,8 +52,8 @@ class CourseController:
         # TODO: если zip, то распаковать и вернуть вместе с курсом
 
         db_course = await crud.course.create(self.db, payload)
-        quizes = await crud.quiz.get_quizes(self.db, payload.quizes)
-        db_course = await crud.course.assign_quizes(self.db, db_course, quizes)
+        # quizes = await crud.quiz.get_quizes(self.db, )
+        # db_course = await crud.course.assign_quizes(self.db, db_course, quizes)
         if file:
             f_controller = FileController(self.db)
             db_files = []
