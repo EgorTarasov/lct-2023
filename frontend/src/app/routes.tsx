@@ -1,5 +1,4 @@
 import { ComponentType } from "react";
-import { Login, MainPage, ResetPassword } from "../pages";
 import { ProfilePage } from "../pages/profile/profile.page.tsx";
 import { EventsPage } from "../pages/events/events.page.tsx";
 import { EducationPage } from "../pages/education/education.page.tsx";
@@ -16,6 +15,10 @@ import { AnalyticsPage } from "../pages/admin/analytics/analytics.page.tsx";
 import { observer } from "mobx-react-lite";
 import { AuthService } from "@/stores/auth.service.ts";
 import { autorun, makeAutoObservable } from "mobx";
+import { OnboardingPage } from "../pages/onboarding/onboarding.page.tsx";
+import { MainPage } from "../pages/main/main.page.tsx";
+import { Login } from "../pages/login/Login.tsx";
+import { ResetPassword } from "../pages/reset-password/ResetPassword.tsx";
 
 export interface RouteType {
   path: string;
@@ -35,6 +38,16 @@ const userRoutes: RouteType[] = [
       </PrivateRoute>
     ),
     title: "Главная",
+    showInNav: true
+  },
+  {
+    path: "/onboarding",
+    component: () => (
+      <PrivateRoute>
+        <OnboardingPage />
+      </PrivateRoute>
+    ),
+    title: "Онбординг",
     showInNav: true
   },
   {
