@@ -143,7 +143,7 @@ export const AdminEducationPage = () => {
       <div className="flex flex-col gap-4 px-4 mx-auto mt-6 max-w-screen-desktop fade-enter-done sm:mt-10">
         <div className="flex-col item-center gap-4 sm:flex sm:flex-row sm:justify-between">
           <h1 className={"text-2xl font-medium sm:text-2xl"}>Все образовательные материалы</h1>
-          <Button className="max-w-[128px]" onClick={() => setShowCreateDialog(true)}>
+          <Button className="max-w-[156px]" onClick={() => setShowCreateDialog(true)}>
             Добавить курс
           </Button>
         </div>
