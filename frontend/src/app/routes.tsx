@@ -180,7 +180,7 @@ const adminRoutes: RouteType[] = [
       </PrivateRoute>
     ),
     showInNav: true,
-    title: "Данные о брендинге"
+    title: "Оформление"
   },
   {
     path: "/admin/education",

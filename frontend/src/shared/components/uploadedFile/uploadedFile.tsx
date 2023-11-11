@@ -15,7 +15,7 @@ export const UploadedFile = (x: IFile) => {
   };
 
   return (
-    <li className={"flex items-center justify-between border-b border-text-primary/20 py-3"}>
+    <li className={"appear flex items-center justify-between border-b border-text-primary/20 py-3"}>
       <div className="inline">
         <span className="underline">{x.title}</span>
         {x.fileSize && (

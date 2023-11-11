@@ -6,6 +6,10 @@ export namespace CourseEndpoint {
     return await api.get<CourseDto.Result[]>("/api/course/my");
   };
 
+  export const getAll = async () => {
+    return await api.get<CourseDto.Result[]>("/api/course/");
+  };
+
   export const getQuizes = async () => {
     return await api.get<CourseDto.Quiz[]>("/api/quiz/all");
   };
@@ -34,5 +38,17 @@ export namespace CourseEndpoint {
 
   export const getByPositionId = async (positionId: number) => {
     return await api.get<CourseDto.Result[]>(`/api/course/for-position/${positionId}`);
+  };
+
+  export const getFilesByPositionId = async (positionId: number) => {
+    return await api.get<CourseDto.CourseFile[]>(`/api/user/position/${positionId}/file`);
+  };
+
+  export const deleteCourseFromPosition = async (positionId: number, courseId: number) => {
+    return await api.delete(`/api/user/position/${positionId}/course?course_id=${courseId}`);
+  };
+
+  export const addCourseToPosition = async (positionId: number, courseId: number) => {
+    return await api.post(`/api/user/position/${positionId}/course?course_id=${courseId}`);
   };
 }

@@ -7,14 +7,16 @@ import { ReactNode } from "react";
 const Collapsible = ({
   title,
   children,
-  withoutPadding
+  withoutPadding,
+  defaultOpen = true
 }: {
   title: string;
   children: ReactNode;
   withoutPadding?: boolean;
+  defaultOpen?: boolean;
 }) => {
   return (
-    <Disclosure defaultOpen>
+    <Disclosure defaultOpen={defaultOpen}>
       {({ open }) => (
         <>
           <Disclosure.Button className={"w-full flex flex-col items-center justify-between"}>
