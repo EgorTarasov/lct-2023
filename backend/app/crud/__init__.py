@@ -9,4 +9,4 @@ from . import position
 from . import file
 from . import action
 from . import telegram
-
+from . import recover_password_token
