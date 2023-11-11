@@ -1,57 +1,43 @@
-import { MockCourses } from "api/models/course.model.ts";
-import { Input } from "@/ui/Input.tsx";
-import SearchIcon from "@/assets/search.svg";
-import { Chip } from "@/ui";
-import { useState } from "react";
-import { CourseCard } from "@/components/cards/course-card.widget";
+import { ReactNode, useEffect, useMemo, useState } from "react";
+import { observer } from "mobx-react-lite";
+import { EducationPageViewModel, ViewType } from "./education.vm";
+import { useParams, useSearchParams } from "react-router-dom";
+import { CourseListSection } from "./views/course-list.section";
+import { CourseSection } from "./views/course.section";
+import { Loading } from "@/components/loading/Loading";
 
-enum Filter {
-  All,
-  Assigned,
-  NotAssigned,
-  Completed
-}
+export const EducationPage = observer(() => {
+  const [vm] = useState(() => new EducationPageViewModel());
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { id } = useParams();
 
-export const EducationPage = () => {
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<Filter>(Filter.All);
+  useEffect(() => {
+    if (id) {
+      vm.loadCourse(id);
+    } else {
+      vm.load();
+    }
+
+    // if (searchParams.has("search")) {
+    //   setSearch(searchParams.get("search")!);
+    // }
+  }, [searchParams]);
+
+  const pages: Record<ViewType, ReactNode> = useMemo(
+    () => ({
+      all: <CourseListSection vm={vm} />,
+      course: <CourseSection vm={vm} />,
+      courseTask: <div>CourseTask</div>,
+      loading: <Loading />
+    }),
+    [vm]
+  );
+
   return (
-    <div className="flex flex-col gap-4 px-4 py-6">
-      <Input
-        id={"search"}
-        placeholder={"Поиск"}
-        rightIcon={<SearchIcon />}
-        className=""
-        value={search}
-        onChange={setSearch}
-      />
-      <div className={"flex items-center gap-2 flex-wrap"}>
-        <Chip
-          title={"Все"}
-          onClick={() => setFilter(Filter.All)}
-          isActive={filter === Filter.All}
-        />
-        <Chip
-          title={"Назначенные"}
-          onClick={() => setFilter(Filter.Assigned)}
-          isActive={filter === Filter.Assigned}
-        />
-        <Chip
-          title={"Не назначенные"}
-          onClick={() => setFilter(Filter.NotAssigned)}
-          isActive={filter === Filter.NotAssigned}
-        />
-        <Chip
-          title={"Завершенные"}
-          onClick={() => setFilter(Filter.Completed)}
-          isActive={filter === Filter.Completed}
-        />
+    <div className="flex flex-col gap-4 px-4 py-6 h-full w-full items-center">
+      <div className="flex-1 max-w-screen-desktop w-full flex flex-col">
+        {pages[vm.pageState.view]}
       </div>
-      <ul className="flex flex-col justify-between items-center gap-4">
-        {MockCourses.map((v, i) => (
-          <CourseCard item={v} key={v.id} wide />
-        ))}
-      </ul>
     </div>
   );
-};
+});

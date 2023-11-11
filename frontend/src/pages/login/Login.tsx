@@ -9,6 +9,7 @@ import { ThemeService } from "@/stores/theme.service.ts";
 import { observer } from "mobx-react-lite";
 import { MOCK_USER } from "@/constants/mocks";
 import { PasswordField } from "@/components/fields/PasswordField";
+import { TLoginButton, TLoginButtonSize, TUser } from "react-telegram-auth";
 
 export const Login = observer(() => {
   const navigate = useNavigate();
@@ -30,6 +31,19 @@ export const Login = observer(() => {
       }
     } catch {
       setShowError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleTelegramLogin = async (user: TUser) => {
+    setIsLoading(true);
+    setShowError(false);
+    try {
+      const isSuccess = await AuthService.loginWithTelegram(user);
+      if (isSuccess) {
+        navigate("/");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -95,15 +109,17 @@ export const Login = observer(() => {
           <Button disabled={isLoading} type="submit">
             Войти
           </Button>
-          <Button
-            disabled={isLoading}
-            appearance={"secondary"}
-            type={"button"}
-            aria-label={"Вход через Telegram"}
-            className={"flex items-center justify-center gap-1 text-text-primary/60"}>
-            <TelegramIcon className={"w-5 h-5"} aria-hidden="true" /> Войти через Telegram
-          </Button>
         </form>
+        <div className="h-4" />
+        <TLoginButton
+          botName="discrete_third_bot"
+          buttonSize={TLoginButtonSize.Large}
+          lang="ru"
+          usePic={false}
+          cornerRadius={8}
+          requestAccess="write"
+          onAuthCallback={handleTelegramLogin}
+        />
       </div>
     </div>
   );

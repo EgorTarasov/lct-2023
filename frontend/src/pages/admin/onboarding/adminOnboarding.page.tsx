@@ -1,4 +1,4 @@
-import { Input } from "@/ui";
+import { Button, Input } from "@/ui";
 import DragDropFile from "@/components/dragAndDrop/index.tsc";
 import Collapsible from "@/ui/Collapsible.tsx";
 import { UploadedFile } from "@/components/uploadedFile/uploadedFile.tsx";
@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { AdminOnboardingPageViewModel } from "./adminOnboarding.vm";
 import { Link } from "react-router-dom";
+import { PositionsSection } from "./positions.section";
 
 export const AdminOnboardingPage = observer(() => {
   const [vm] = useState(() => new AdminOnboardingPageViewModel());
@@ -19,7 +20,7 @@ export const AdminOnboardingPage = observer(() => {
             <li
               key={index}
               className={"flex items-center justify-between border-b border-text-primary/20 py-3"}>
-              <a href={import.meta.env.VITE_API_URL + course.path} className="underline">
+              <a href={`${import.meta.env.VITE_API_URL}/api/${course.path}`} className="underline">
                 {course.name}
               </a>
             </li>
@@ -44,11 +45,17 @@ export const AdminOnboardingPage = observer(() => {
             }
           />
         </div>
+        {vm.uploadedFiles.length > 0 && (
+          <Button
+            type="button"
+            className="mt-6 px-6 w-60"
+            onClick={() => vm.uploadOnboardingFiles()}
+            disabled={vm.isLoading}>
+            {vm.isLoading ? "Загрузка..." : "Сохранить файлы"}
+          </Button>
+        )}
       </Collapsible>
-      <section className="flex flex-col gap-4 mt-4">
-        <h2 className={"text-2xl font-medium sm:text-2xl"}>Онбординг по специальностям</h2>
-        <Input placeholder="Поиск по специальностям" />
-      </section>
+      <PositionsSection vm={vm} />
     </div>
   );
 });
