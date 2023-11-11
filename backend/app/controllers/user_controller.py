@@ -147,7 +147,7 @@ class UserController:
                     email=config.test_users["team_1"],
                     adaptation_target="",
                     starts_work_at=datetime.date.today(),
-                    role_id=2,
+                    role_id=1,
                     position_id=1,
                     number="+7 (999) 765-43-22",
                     password="UserExample",
