@@ -27,6 +27,24 @@ def _custom_json_serializer(*args, **kwargs) -> str:
     return json.dumps(*args, default=pydantic.json.pydantic_encoder, **kwargs)
 
 
+def check_content_type(content_type: str) -> bool:
+    """если zip -> true
+    если docx -> false
+    остальное exception
+    """
+    allowed_zip_formats = [
+        "application/zip",
+        "application/x-zip-compressed",
+    ]
+    allowed_doc_formats = [
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ]
+    if content_type in allowed_zip_formats:
+        return True
+    elif content_type in allowed_doc_formats:
+        return False
+
+
 def check_telegram_response(data, bot_token: str):
     d = data.copy()
     del d["hash"]

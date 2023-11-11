@@ -19,6 +19,8 @@ from app import crud
 from app.worker import notify_user_about_registration, send_recover_password
 from app.controllers.file_controller import FileController
 from app.models.file import FileDto
+from app import utils
+from app.models.course import CourseDto
 
 
 class UserController:
@@ -86,7 +88,7 @@ class UserController:
     ) -> list[FileDto]:
         f = FileController(self.db)
         files = []
-        if file.content_type == "application/zip":
+        if utils.check_content_type(file.content_type):
             files = await f.save_files(await file.read(), file.filename)
         else:
             files = [await f.save_file(await file.read(), file.filename)]
@@ -101,6 +103,10 @@ class UserController:
     async def get_positions(self) -> list[PositionDto]:
         db_positions = await crud.position.get_all(self.db)
         return [PositionDto.model_validate(db_position) for db_position in db_positions]
+
+    async def add_position_course(self, position_id: int, course_id: int):
+        position = await crud.position.add_course(self.db, position_id, course_id)
+        return [CourseDto.model_validate(obj) for obj in position.courses]
 
     async def prepare_test_users(self):
         try:

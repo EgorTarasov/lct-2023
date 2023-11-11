@@ -5,6 +5,7 @@ from app.models.course import CourseCreate, CourseDto
 from .file_controller import FileController
 
 from app import crud
+from app import utils
 
 
 class CourseController:
@@ -24,7 +25,10 @@ class CourseController:
         if file:
             f_controller = FileController(self.db)
             db_files = []
-            if filetype == "application/zip" or filetype == "application/x-zip-compressed":
+            if (
+                filetype == "application/zip"
+                or filetype == "application/x-zip-compressed"
+            ):
                 db_files = await f_controller.save_files(file, filename)
             else:
                 db_files = [await f_controller.save_file(file, filename)]
@@ -53,7 +57,7 @@ class CourseController:
         if file:
             f_controller = FileController(self.db)
             db_files = []
-            if filetype == "application/zip":
+            if utils.check_content_type(filetype):
                 db_files = await f_controller.save_files(file, filename)
             else:
                 db_files = [await f_controller.save_file(file, filename)]
@@ -93,8 +97,9 @@ class CourseController:
         db_onboarding = await crud.course.get(self.db, course_id)
         correct_answers = 0
         for quiz in db_onboarding.quizes:
-            db_quiz, answers = await crud.quiz.get_quiz_with_answers(self.db, quiz.id, user_id)
+            db_quiz, answers = await crud.quiz.get_quiz_with_answers(
+                self.db, quiz.id, user_id
+            )
             if all(answer[2] for answer in answers):
                 correct_answers += 1
         return round(correct_answers / max(1, len(db_onboarding.quizes)) * 100)
-

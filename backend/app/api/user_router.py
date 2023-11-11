@@ -148,6 +148,20 @@ async def get_position_files(
         raise HTTPException(status_code=400, detail=str(e))
 
 
+@position_router.post("/{position_id}/course")
+async def add_position_course(
+    position_id: int,
+    course_id: int,
+    user: UserTokenData = Depends(get_current_user),
+    db: Session = Depends(Sql.get_session),
+):
+    try:
+        courses = await UserController(db).add_position_course(position_id, course_id)
+        return courses
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
 @position_router.get(
     "/", response_model=list[PositionDto], status_code=status.HTTP_200_OK
 )
