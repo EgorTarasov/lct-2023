@@ -13,7 +13,7 @@ export const ShopPage = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<Filter>(Filter.All);
   return (
-    <div className="flex flex-col gap-4 px-4 py-6">
+    <div className="flex flex-col gap-4 px-4 mx-auto max-w-screen-desktop mt-10">
       <Input
         id={"search"}
         placeholder={"Поиск"}
@@ -39,7 +39,7 @@ export const ShopPage = () => {
           isActive={filter === Filter.Digital}
         />
       </div>
-      <ul className="flex flex-col justify-between items-center gap-4">
+      <ul className="flex flex-col justify-between items-center gap-4 mt-10">
         <p>Закрыто на инвентаризацию 🛒</p>
       </ul>
     </div>

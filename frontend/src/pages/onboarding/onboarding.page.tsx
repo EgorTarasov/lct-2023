@@ -9,8 +9,8 @@ export const OnboardingPage = observer(() => {
   const [vm] = useState(() => new OnboardingPageViewModel());
 
   return (
-    <div className="flex flex-col gap-4 sm:px-4 mx-auto max-w-screen-desktop">
-      <div className="flex justify-between pt-6">
+    <div className="flex flex-col gap-4 sm:px-4 mx-auto mt-10 max-w-screen-desktop">
+      <div className="flex justify-between">
         <h2 className="text-4xl font-medium">Мой онбординг</h2>
         <span className="text-primary text-2xl"></span>
       </div>

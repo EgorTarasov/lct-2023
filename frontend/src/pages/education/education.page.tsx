@@ -22,7 +22,7 @@ export const EducationPage = observer(() => {
   );
 
   return (
-    <div className="flex flex-col gap-4 px-4 py-6 h-full w-full items-center">
+    <div className="flex flex-col gap-4 px-4 py-6 mt-4 h-full w-full items-center">
       <div className="flex-1 max-w-screen-desktop w-full flex flex-col">
         {pages[vm.pageState.view]}
       </div>
