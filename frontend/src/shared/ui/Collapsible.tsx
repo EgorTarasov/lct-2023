@@ -2,6 +2,7 @@ import { Disclosure } from "@headlessui/react";
 import ChevronSvg from "@/assets/chevron2.svg";
 import { twMerge } from "tailwind-merge";
 import { Separator } from ".";
+import { ReactNode } from "react";
 
 const Collapsible = ({
   title,
@@ -9,7 +10,7 @@ const Collapsible = ({
   withoutPadding
 }: {
   title: string;
-  children: JSX.Element[] | JSX.Element;
+  children: ReactNode;
   withoutPadding?: boolean;
 }) => {
   return (
