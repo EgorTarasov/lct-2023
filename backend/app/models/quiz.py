@@ -145,6 +145,7 @@ class QuizWithAnswersDto(BaseModel):
     title: str
     description_text: str
     questions: list[UserAnswerDto] = Field(..., default_factory=list)
+    file: FileDto
 
 
 class QuizCreate(QuizBase):
