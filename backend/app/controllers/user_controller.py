@@ -2,6 +2,7 @@ import datetime
 
 from sqlalchemy.orm import Session
 import logging
+import uuid
 
 from app.auth.jwt import UserTokenData
 from app.config import config
@@ -13,7 +14,7 @@ from app.models.position import PositionCreate, PositionDto
 from app.models.role import RoleCreate, RoleDto
 from app.auth import PasswordManager, JWTEncoder
 from app import crud
-from app.worker import notify_user_about_registration
+from app.worker import notify_user_about_registration, send_recover_password
 
 
 class UserController:
@@ -147,18 +148,15 @@ class UserController:
             raise e
 
     async def get_my_team(self, user_id: int) -> UserTeam:
-        try:
-            user = await crud.user.get_user_by_id(self.db, user_id)
-            team = UserTeam(
-                lead=UserDto.model_validate(user.mentees[0] if user.mentees else
-                                            crud.user.get_user_by_email(self.db, config.test_users["lead"])),
-                director=UserDto.model_validate(crud.user.get_user_by_email(self.db, config.test_users["director"])),
-                team=[UserDto.model_validate(crud.user.get_user_by_email(self.db, config.test_users["team_1"])),
-                      UserDto.model_validate(crud.user.get_user_by_email(self.db, config.test_users["team_2"]))]
-            )
-            return team
-        except Exception as e:
-            raise e
+        user = await crud.user.get_user_by_id(self.db, user_id)
+        team = UserTeam(
+            lead=UserDto.model_validate(user.mentees[0] if user.mentees else
+                                        crud.user.get_user_by_email(self.db, config.test_users["lead"])),
+            director=UserDto.model_validate(crud.user.get_user_by_email(self.db, config.test_users["director"])),
+            team=[UserDto.model_validate(crud.user.get_user_by_email(self.db, config.test_users["team_1"])),
+                  UserDto.model_validate(crud.user.get_user_by_email(self.db, config.test_users["team_2"]))]
+        )
+        return team
 
     async def create_role(self, payload: RoleCreate) -> RoleDto | None:
         try:
@@ -174,3 +172,22 @@ class UserController:
             ]
         except Exception as e:
             raise e
+
+    async def send_recover_password(self, email: str):
+        user = crud.user.get_user_by_email(self.db, email)
+        token_existed = crud.recover_password_token.get_by_user_id(self.db, user.id)
+        if token_existed:
+            crud.recover_password_token.delete(self.db, token_existed.token)
+        token = str(uuid.uuid4())
+        crud.recover_password_token.create(self.db, token, user.id)
+        fullname = f"{user.last_name} {user.first_name} {user.middle_name}"
+        print(fullname, user.email, token)
+        send_recover_password.delay(fullname, user.email, token)
+
+    async def recover_password(self, token: str, new_password: str):
+        token = crud.recover_password_token.get_by_token(self.db, token)
+        if not token:
+            raise Exception("Токена не существует")
+        token.user.password = PasswordManager.hash_password(new_password)
+        self.db.add(token.user)
+        self.db.commit()

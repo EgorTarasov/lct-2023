@@ -8,3 +8,4 @@ from . import quiz
 from . import position
 from . import file
 from . import action
+from . import recover_password_token
