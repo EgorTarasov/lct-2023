@@ -52,6 +52,31 @@ export namespace CourseEndpoint {
     return await api.post(`/api/user/position/${positionId}/course?course_id=${courseId}`);
   };
 
+  export const create = async (x: CourseDto.Template) => {
+    const formData = new FormData();
+    x.data.forEach((file) => formData.append("files", file));
+    const query = new URLSearchParams();
+    query.set("name", x.name);
+    query.set("duration", x.duration.toString());
+    return await api.post<CourseDto.Result>(
+      `/api/course/?name=${x.name}&duration=${x.duration}`,
+      x.data.length > 0 ? formData : undefined,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }
+    );
+  };
+
+  export const remove = async (courseId: number) => {
+    return await api.delete(`/api/course/${courseId}`);
+  };
+
+  export const update = async (courseId: number, course: CourseDto.Result) => {
+    return await api.put<CourseDto.Result>(`/api/course/${courseId}`, course);
+  };
+
   export const getQuiz = async (id: number) => {
     return await api.get<CourseDto.QuizFull>(`/api/quiz/quiz/${id}`);
   };

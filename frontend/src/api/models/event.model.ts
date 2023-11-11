@@ -6,7 +6,7 @@ export const MockEvents: EventDto.Item[] = [
     deadline: new Date(Date.now()),
     durationMin: 120,
     points: 12,
-    location: "Синий зал главного корпуса",
+    place: "Синий зал главного корпуса",
     imgSrc: null
   },
   {
@@ -16,7 +16,7 @@ export const MockEvents: EventDto.Item[] = [
     deadline: new Date(Date.now()),
     durationMin: 800,
     points: 45,
-    location: "Национальный парк «Угра»",
+    place: "Национальный парк «Угра»",
     imgSrc: null
   },
   {
@@ -26,7 +26,7 @@ export const MockEvents: EventDto.Item[] = [
     deadline: new Date(Date.now()),
     durationMin: 75,
     points: 20,
-    location: "Синий зал главного корпуса",
+    place: "Синий зал главного корпуса",
     imgSrc: null
   }
 ];
@@ -41,7 +41,8 @@ export namespace EventDto {
     deadline: Date;
     durationMin: number;
     points: number;
-    location?: string;
+    place: string;
+    isEnrolled?: boolean;
     imgSrc: string | null;
   }
 
@@ -74,8 +75,8 @@ export namespace EventDto {
       id: dto.id,
       category: (
         {
-          1: "sport",
-          2: "education",
+          1: "education",
+          2: "sport",
           3: "charity",
           4: "art"
         } as Record<number, EventType>
@@ -84,8 +85,20 @@ export namespace EventDto {
       deadline: new Date(dto.starts_at),
       durationMin: 0,
       points: 0,
-      location: dto.place,
+      place: dto.place,
       imgSrc: null
     };
   };
+
+  export interface Template {
+    title: string;
+    place: string;
+    type_id: number;
+    starts_at: string; //date-time
+  }
+
+  export interface BackendEventType {
+    id: number;
+    name: string;
+  }
 }

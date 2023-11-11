@@ -1,7 +1,7 @@
 import { CourseEndpoint } from "api/endpoints/course.endpoint";
 import { PositionEndpoint } from "api/endpoints/position.endpoint";
 import { CourseDto } from "api/models/course.model";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 
 export interface PositionItem {
   id: number;
@@ -18,47 +18,25 @@ export class AdminOnboardingPageViewModel {
   public courses: CourseDto.Result[] = [];
   public positions: PositionItem[] = [];
   public query = "";
-  get filteredPositions() {
-    return this.positions.filter((position) => {
-      if (!this.query) return true;
-      return position.name.toLowerCase().includes(this.query.toLowerCase());
-    });
-  }
+  public isUploading = false;
   public isLoading = false;
 
   constructor() {
     makeAutoObservable(this);
 
-    void this.loadOnboarding();
-    void this.loadPositions();
-    void this.loadCourses();
+    runInAction(() => {
+      void this.loadOnboarding();
+      void this.loadPositions();
+      void this.loadCourses();
+    });
+    this.isLoading = false;
   }
 
-  private async loadCourses() {
-    this.courses = await CourseEndpoint.getAll();
-  }
-
-  private async loadOnboarding() {
-    this.onboarding = await CourseEndpoint.onboarding();
-  }
-
-  private async loadPositions() {
-    const positions = await PositionEndpoint.getAll();
-    this.positions = await Promise.all(
-      positions.map(async (position) => {
-        const res = await CourseEndpoint.getByPositionId(position.id);
-        const files = await CourseEndpoint.getFilesByPositionId(position.id);
-        // api/user/position/position_id/file
-        return {
-          id: position.id,
-          name: position.name,
-          uploadedFiles: [],
-          files: files,
-          item: res,
-          updatedCourses: res.map((course) => course.id)
-        } as PositionItem;
-      })
-    );
+  get filteredPositions() {
+    return this.positions.filter((position) => {
+      if (!this.query) return true;
+      return position.name.toLowerCase().includes(this.query.toLowerCase());
+    });
   }
 
   public async updatePosition(position: PositionItem) {
@@ -105,5 +83,32 @@ export class AdminOnboardingPageViewModel {
   public async updatePositionCourses(positionId: number, courseIds: number[]) {
     // await CourseEndpoint.updatePositionCourses(positionId, courseIds);
     this.loadPositions();
+  }
+
+  private async loadCourses() {
+    this.courses = await CourseEndpoint.getAll();
+  }
+
+  private async loadOnboarding() {
+    this.onboarding = await CourseEndpoint.onboarding();
+  }
+
+  private async loadPositions() {
+    const positions = await PositionEndpoint.getAll();
+    this.positions = await Promise.all(
+      positions.map(async (position) => {
+        const res = await CourseEndpoint.getByPositionId(position.id);
+        const files = await CourseEndpoint.getFilesByPositionId(position.id);
+        // api/user/position/position_id/file
+        return {
+          id: position.id,
+          name: position.name,
+          uploadedFiles: [],
+          files: files,
+          item: res,
+          updatedCourses: res.map((course) => course.id)
+        } as PositionItem;
+      })
+    );
   }
 }

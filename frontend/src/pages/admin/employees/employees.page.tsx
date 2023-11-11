@@ -18,8 +18,6 @@ import { observer } from "mobx-react-lite";
 import { UserDto } from "api/models/user.model.ts";
 import { TaskDto } from "api/models/task.model.ts";
 import DatePicker from "react-datepicker";
-import { toJS } from "mobx";
-import { Loading } from "@/components/loading/Loading";
 
 interface IAdminCourseCard {
   item: TaskDto.Item;
@@ -304,9 +302,7 @@ type TaskFormFields = "title" | "task_link" | "time_estimate" | "points";
 export const EmployeesPage = observer(() => {
   const [vm] = useState(() => new EmployeesPageViewModel());
   const [showNewUserDialog, setShowNewUserDialog] = useState(false);
-
-  if (vm.isLoading) return <Loading />;
-
+  if (vm.isLoading) return <div>Загрузка...</div>;
   const handleCreateUser = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = e.currentTarget.elements as unknown as Record<UserFormFields, HTMLInputElement>;
@@ -327,7 +323,7 @@ export const EmployeesPage = observer(() => {
 
   return (
     <>
-      <div className="appear flex flex-col gap-4 px-4 mx-auto mt-6 max-w-screen-desktop fade-enter-done sm:mt-10">
+      <div className="flex flex-col gap-4 px-4 mx-auto mt-6 max-w-screen-desktop fade-enter-done sm:mt-10">
         <h1 className={"text-2xl font-medium sm:text-2xl"}>Добавление сотрудников</h1>
         <section className="flex flex-col gap-4 mt-4">
           <DragDropFile
