@@ -49,9 +49,5 @@ export class EducationPageViewModel {
     }
   }
 
-  public backToAll() {
-    this.load();
-  }
-
   dispose() {}
 }
