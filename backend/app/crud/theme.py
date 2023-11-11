@@ -29,8 +29,8 @@ async def update(db: Session, theme: ThemeDto) -> ThemeDto:
     db_theme.company_logo = theme.company_logo
     db_theme.company_name = theme.company_name
     db_theme.main_color = theme.main_color
-    
+
     db.add(db_theme)
     db.commit()
     db.refresh(db_theme)
-    return ThemeDto.model_validate(SqlTheme)
+    return ThemeDto.model_validate(db_theme)
