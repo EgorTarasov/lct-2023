@@ -6,8 +6,7 @@ from app.auth.jwt import UserTokenData
 
 async def create_quiz(db: Session, quiz: QuizCreate) -> SqlQuiz:
     db_quiz = SqlQuiz(
-        title=quiz.title,
-        description_text=quiz.description_text,
+        title=quiz.title, description_text=quiz.description_text, file_id=quiz.file_id
     )
 
     if quiz.questions:
