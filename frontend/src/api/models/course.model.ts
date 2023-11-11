@@ -113,7 +113,7 @@ export namespace CourseDto {
     id: number;
     title: string;
     description_text: string;
-    questions: Question[];
+    questions?: Question[];
     file: CourseFile;
   }
 
@@ -125,10 +125,15 @@ export namespace CourseDto {
   }
 
   export interface Question {
-    question_id: number;
+    id: number;
     question_text: string;
     is_correct: boolean;
-    answer: string[];
+    options: QuestionOption[];
+  }
+
+  export interface QuestionOption {
+    id: string;
+    text: string;
   }
 
   export interface AdminResult {
