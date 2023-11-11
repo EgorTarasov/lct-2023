@@ -5,11 +5,13 @@ import { twMerge } from "tailwind-merge";
 
 export const Logo = observer(
   ({ width, className }: { width?: CSSProperties["width"]; className?: string }) => (
-    <img
-      src={ThemeService.themeConfig?.logoUrl}
-      alt={`Логотип компании: ${ThemeService.themeConfig?.companyName}`}
+    <div
+      aria-label={`Логотип компании: ${ThemeService.themeConfig?.companyName}`}
       className={twMerge("h-auto", className)}
-      width={width ?? 200}
-    />
+      style={{
+        width: width ?? 200
+      }}>
+      <div dangerouslySetInnerHTML={{ __html: ThemeService.themeConfig?.logoSvg ?? "" }} />
+    </div>
   )
 );

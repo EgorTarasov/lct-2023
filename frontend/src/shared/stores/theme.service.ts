@@ -1,33 +1,30 @@
 /** Этот класс будет отвечать за работу с темой от бэкенда */
 import { makeAutoObservable } from "mobx";
 import logo from "@/assets/moc/logo.svg?url";
+import api from "api/utils/api";
+import { ThemeEndpoint } from "api/endpoints/theme.endpoint";
+import { hexToRgb, shouldUseWhiteText } from "@/utils/hexToRgb";
+import { ThemeDto } from "api/models/theme.model";
 
 //TODO: Создать и перенести в папку с моделями
 interface exampleStyleConfig {
-  font: {
-    fontName: string;
-    link: string;
-  };
   color: string;
   companyName: string;
-  logoUrl: string;
+  logoSvg: string;
 }
 
 //Моковый конфиг для тестирования
 const exampleStyleConfig: exampleStyleConfig = {
-  font: {
-    fontName: "SF Pro Display",
-    link: "https://fonts.cdnfonts.com/css/sf-pro-display"
-  },
   color: "44 85 222",
   companyName: "PROSCOM",
-  logoUrl: logo
+  logoSvg: logo
 };
 
 const LOADING_TIME = 500;
 
 export class ThemeServiceViewModel {
   themeConfig: exampleStyleConfig | null = null;
+  item: ThemeDto.Item | null = null;
   isLoaded = false;
 
   constructor() {
@@ -35,17 +32,29 @@ export class ThemeServiceViewModel {
     this._init();
   }
 
-  private _init() {
-    setTimeout(() => {
-      this.themeConfig = exampleStyleConfig;
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = exampleStyleConfig.font.link;
-      document.head.appendChild(link);
-      document.body.style.fontFamily = `${exampleStyleConfig.font.fontName}, Arial, sans-serif`;
-      document.body.style;
-      this.isLoaded = true;
-    }, LOADING_TIME);
+  public async _init() {
+    const res = await ThemeEndpoint.current();
+    //   body {
+    //     --color-primary: 44, 85, 222;
+    //     --color-onPrimary: 255, 255, 255;
+    // }
+    this.item = res;
+    document.body.style.setProperty("--color-primary", hexToRgb(res.main_color.replace("#", "")));
+    document.body.style.setProperty(
+      "--color-onPrimary",
+      shouldUseWhiteText(res.main_color) ? "255, 255, 255" : "29, 29, 29"
+    );
+    this.themeConfig = {
+      color: res.main_color,
+      companyName: res.company_name,
+      logoSvg: res.company_logo
+    };
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://fonts.cdnfonts.com/css/sf-pro-display";
+    document.head.appendChild(link);
+    document.body.style.fontFamily = "SF Pro Display, Arial, sans-serif";
+    this.isLoaded = true;
   }
 }
 
