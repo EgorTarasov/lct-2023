@@ -15,6 +15,7 @@ if tp.TYPE_CHECKING:
     from .quiz import SqlUserQuiz
     from .interest import SqlInterest
     from .event import SqlEvent
+    from .telegram import SqlTelegram
 
 
 class UserCreate(BaseModel):
@@ -45,6 +46,7 @@ class UserTeam(BaseModel):
     lead: UserDto
     director: UserDto
     team: list[UserDto]
+
 
 class SqlUser(Base):
     __tablename__ = "users"
@@ -90,6 +92,7 @@ class SqlUser(Base):
         back_populates="mentors",
     )
 
+    telegram: Mapped["SqlTelegram"] = relationship("SqlTelegram")
     # quiz_results: Mapped[list["SqlUserQuiz"]] = relationship(
     #     "SqlUserQuiz", back_populates="user"
     # )

@@ -1,7 +1,11 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from contextlib import asynccontextmanager
 import logging
+import hashlib
+import hmac
 
 from app.api import main_router
 from app.config import config
@@ -11,6 +15,34 @@ from app.models.base import Base
 from app import crud
 from app.models.position import PositionCreate
 from app.models.role import RoleCreate
+from app.controllers.course_controller import CourseController
+from app.models.course import CourseCreate
+
+
+async def load_data(sql: Sql):
+    # checks if users not exists load admin data from .env and create user
+    db = next(sql.get_session())
+    try:
+        _ = crud.user.get_user_by_email(db, config.admin_email)
+    except Exception as e:
+        await crud.role.create_role(
+            db, RoleCreate(name="user", permissions={"editing": False})
+        )
+
+        await crud.role.create_role(
+            db, RoleCreate(name="hr", permissions={"editing": True})
+        )
+        await crud.position.create(db, PositionCreate(name="hr"))
+        await crud.event.create_event_types(
+            db, ["Спорт", "Образование", "Волонтёрство", "Творчество"]
+        )
+
+        await crud.position.create(db, PositionCreate(name="Client Service"))
+        await crud.position.create(db, PositionCreate(name="Design"))
+        await crud.position.create(db, PositionCreate(name="Engineering"))
+        await crud.position.create(db, PositionCreate(name="Project Management"))
+
+        await UserController(db).prepare_test_users()
 
 
 @asynccontextmanager
@@ -26,23 +58,7 @@ async def lifespan(app: FastAPI):
     )
     Base.metadata.create_all(bind=sql.get_engine())
 
-    # checks if users not exists load admin data from .env and create user
-    db = next(sql.get_session())
-    try:
-        _ = crud.user.get_user_by_email(db, config.admin_email)
-    except Exception as e:
-        role = await crud.role.create_role(
-            db, RoleCreate(name="user", permissions={"editing": False})
-        )
-
-        role = await crud.role.create_role(
-            db, RoleCreate(name="hr", permissions={"editing": True})
-        )
-        position = await crud.position.create(db, PositionCreate(name="hr"))
-        await crud.event.create_event_types(
-            db,
-            ["Спорт", "Образование", "Волонтёрство", "Творчество"])
-        await UserController(db).prepare_test_users()
+    await load_data(sql)
     yield
 
     # shutdown
@@ -72,17 +88,13 @@ def create_app():
         allow_headers=["*"],
     )
 
+    _app.mount("/api/static", StaticFiles(directory="static"), name="static")
     _app.include_router(main_router.router, prefix="/api")
 
     return _app
 
 
 app = create_app()
-
-
-@app.get("/api")
-async def root():
-    return {"message": "Hello from Котики МИСИС!"}
 
 
 if __name__ == "__main__":

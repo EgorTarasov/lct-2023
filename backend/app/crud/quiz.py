@@ -14,6 +14,7 @@ async def create_quiz(db: Session, quiz: QuizCreate) -> SqlQuiz:
         db_questions = [
             SqlQuestion(
                 question_text=question.question_text,
+                options=[option.model_dump_json() for option in question.options],
                 answer=question.answer,
             )
             for question in quiz.questions
@@ -44,7 +45,7 @@ async def get_quiz_with_answers(
             SqlQuestion.id,
             SqlQuestion.question_text,
             SqlAnswer.is_correct,
-            SqlAnswer.answer_text,
+            SqlAnswer.answer,
         )
         .join(SqlAnswer)
         .filter(SqlQuestion.id == SqlAnswer.question_id)
@@ -52,6 +53,7 @@ async def get_quiz_with_answers(
         .filter(SqlAnswer.user_id == user_id)
         .all()
     )
+
     if not db_quiz:
         raise Exception("Quiz not found")
     return db_quiz, answers
@@ -88,14 +90,18 @@ async def get_question(db: Session, question_id: int) -> SqlQuestion:
 
 
 async def create_answer(
-    db: Session, question_id: int, user_id: int, answer: str, is_correct: bool = False
+    db: Session,
+    question_id: int,
+    user_id: int,
+    answer: list[str],
+    is_correct: bool = False,
 ) -> SqlAnswer:
 
     try:
         db_answer = SqlAnswer(
             question_id=question_id,
             user_id=user_id,
-            answer_text=answer,
+            answer=answer,
             is_correct=is_correct,
         )
         db.add(db_answer)

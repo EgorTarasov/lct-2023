@@ -10,11 +10,13 @@ from app.api import (
     course_router,
     quiz_router,
     file_router,
-    analytics_router
+    analytics_router,
+    test_router,
 )
 
 
 router = APIRouter()
+router.include_router(test_router.router)
 router.include_router(auth_router.router)
 router.include_router(quiz_router.router)
 router.include_router(user_router.router)

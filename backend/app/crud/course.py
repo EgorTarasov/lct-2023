@@ -7,7 +7,9 @@ from ..models.course import SqlCourse, CourseCreate, QuizCourse
 from ..models.position import SqlPosition
 
 
-async def update(db: Session, payload: CourseCreate, course_id: int) -> SqlCourse:
+async def update_endpoints(
+    db: Session, payload: CourseCreate, course_id: int
+) -> SqlCourse:
     db_course = db.query(SqlCourse).filter(SqlCourse.id == 1).first()
     if not db_course:
         db_course = SqlCourse(
