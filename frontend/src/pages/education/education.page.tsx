@@ -11,18 +11,6 @@ export const EducationPage = observer(() => {
   const { id, taskId } = useParams();
   const [vm] = useState(() => new EducationPageViewModel(id, taskId));
 
-  useEffect(() => {
-    if (id) {
-      vm.loadCourse(id, taskId);
-    } else {
-      vm.load();
-    }
-
-    // if (searchParams.has("search")) {
-    //   setSearch(searchParams.get("search")!);
-    // }
-  }, []);
-
   const pages: Record<ViewType, ReactNode> = useMemo(
     () => ({
       all: <CourseListSection vm={vm} />,

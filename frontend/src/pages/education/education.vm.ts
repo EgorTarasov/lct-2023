@@ -30,8 +30,8 @@ export class EducationPageViewModel {
   public pageState: EducationPageState = { view: "loading" };
 
   constructor(courseId?: string, taskId?: string) {
-    console.log(courseId, taskId);
     makeAutoObservable(this);
+    void this.loadCourse(courseId, taskId);
   }
 
   public async load() {
@@ -42,9 +42,19 @@ export class EducationPageViewModel {
     this.pageState = { view: "all", courses: this.courses };
   }
 
-  public async loadCourse(id: string, taskId?: string) {
-    const res = await CourseEndpoint.get(id);
-    if (taskId) {
+  public async loadCourse(id?: string, taskId?: string) {
+    if (!id) {
+      this.load();
+      return;
+    }
+
+    try {
+      const res = await CourseEndpoint.get(id);
+      if (!taskId) {
+        this.pageState = { view: "course", courseId: id, course: CourseDto.convertDtoToItem(res) };
+        return;
+      }
+
       const task = res.files.find((f) => f.id.toString() === taskId);
       if (!task) {
         window.location.href = "/education";
@@ -52,9 +62,15 @@ export class EducationPageViewModel {
       }
 
       const markdown = await CourseEndpoint.getTask(task.path);
-      this.pageState = { view: "courseTask", courseId: id, taskId, markdown, taskTitle: task.name };
-    } else {
-      this.pageState = { view: "course", courseId: id, course: CourseDto.convertDtoToItem(res) };
+      this.pageState = {
+        view: "courseTask",
+        courseId: id,
+        taskId,
+        markdown,
+        taskTitle: task.name
+      };
+    } catch {
+      window.location.href = "/education";
     }
   }
 
