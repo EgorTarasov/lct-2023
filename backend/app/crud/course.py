@@ -11,6 +11,7 @@ async def update_endpoints(
     db: Session, payload: CourseCreate, course_id: int
 ) -> SqlCourse:
     db_course = db.query(SqlCourse).filter(SqlCourse.id == 1).first()
+    print(db_course)
     if not db_course:
         db_course = SqlCourse(
             name="Общий инбординг",
@@ -21,6 +22,9 @@ async def update_endpoints(
         db_course.duration = 0
         db_course.quizes = []
     db.add(db_course)
+    db.commit()
+    db.refresh(db_course)
+    return db_course
 
 
 async def create(db: Session, payload: CourseCreate) -> SqlCourse:

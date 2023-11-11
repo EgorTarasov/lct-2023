@@ -86,7 +86,6 @@ async def create_onboarding(
             detail="Поддерживаемые форматы '.zip' '.docx'",
         )
     return await CourseController(db).update_onboarding(
-        None,
         data.file.read() if data else None,
         data.filename if data else None,
         data.content_type if data else None,
