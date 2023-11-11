@@ -70,7 +70,7 @@ async def get_question(
 @router.post("/question/{question_id}")
 async def submit_answer(
     question_id: int,
-    answer: list[str] = Body(..., description="Ответ на вопрос", example=["a", "b"]),
+    answer: str = Body(..., description="Ответ на вопрос", example="a"),
     user: UserTokenData = Depends(get_current_user),
     db: Session = Depends(Sql.get_session),
 ):
