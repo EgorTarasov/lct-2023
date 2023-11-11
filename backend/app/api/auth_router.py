@@ -13,7 +13,7 @@ from app.config import config
 from app.utils import check_telegram_response
 from app.auth.dependency import get_current_user
 from app.auth.jwt import UserTokenData
-from backend.app.models.telegram import TelegramLoginData
+from app.models.telegram import TelegramLoginData
 
 
 router = APIRouter(prefix="/auth", tags=["auth"])
