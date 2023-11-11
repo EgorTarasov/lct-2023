@@ -10,7 +10,7 @@ import { PositionsSection } from "./positions.section";
 import { CourseDto } from "api/models/course.model";
 
 export const AdminTaskCard = ({ file }: { file: CourseDto.CourseFile }) => (
-  <li className={"flex items-center justify-between border-b border-text-primary/20 py-3"}>
+  <li className={"appear flex items-center justify-between border-b border-text-primary/20 py-3"}>
     <a href={`${import.meta.env.VITE_API_URL}/api/${file.path}`} className="underline">
       {file.name}
     </a>

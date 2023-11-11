@@ -64,7 +64,7 @@ const DragDropFile = (x: DragDropFileProps) => {
         <label
           className="py-4 justify-center w-full cursor-pointer px-6 flex gap-2 items-center"
           htmlFor="file">
-          <AttatchmentSvg className={"w-5 h-5"} />
+          <AttatchmentSvg className={"w-5 h-5 min-w-[20px]"} />
           {x.dropZone ? x.dropZone : "Перетащите файлы сюда или нажмите, чтобы выбрать файлы"}
         </label>
       </div>

@@ -4,6 +4,7 @@ import CheckSvg from "@/assets/check.svg";
 import { FC, Fragment, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { twMerge } from "tailwind-merge";
+import { toJS } from "mobx";
 
 interface ComboboxMultipleProps<T> {
   value: T[];
@@ -44,10 +45,8 @@ const DropdownMultiple = observer(<T,>(p: ComboboxMultipleProps<T>) => {
           <Combobox.Input
             className="whitespace-nowrap w-full cursor-pointer pr-8 text-ellipsis border border-text-primary/20 rounded-lg p-3"
             placeholder={placeholder}
-            onFocus={(e) => {
-              setInputFocused(true);
-              setQuery("");
-            }}
+            onClick={() => setInputFocused((v) => !v)}
+            onFocus={() => setQuery("")}
             onBlur={() => setInputFocused(false)}
             displayValue={(value: T[]) => (inputFocused ? "" : placeholder)}
             onChange={(event) => setQuery(event.target.value)}

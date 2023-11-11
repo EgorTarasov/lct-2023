@@ -15,7 +15,7 @@ export const CourseTask: FCVM<EducationPageViewModel> = observer(({ vm }) => {
   const state = vm.pageState;
 
   return (
-    <section className="flex flex-col flex-1 max-h-full overflow-hidden">
+    <section className="appear flex flex-col flex-1 max-h-full overflow-hidden">
       <Button
         appearance="secondary"
         className="w-fit gap-1 text-text-primary/60 px-2 h-10"

@@ -31,8 +31,8 @@ export const DesktopHeading = observer(() => {
       />
       <aside className="hidden sm:flex fixed left-0 bottom-0 top-0 w-[190px] desktop:w-[300px] flex-col px-2 desktop:px-4 py-8">
         <Logo className="w-3/4 max-w-[150px]" />
-        <nav className="flex-1 h-full flex flex-col overflow-hidden w-full">
-          <ul className="flex flex-col gap-1 mt-10 overflow-y-auto">
+        <nav className="flex-1 h-full flex flex-col overflow-y-hidden overflow-x-visible w-full">
+          <ul className="flex flex-col gap-1 mt-10 overflow-y-auto overflow-x-visible">
             <li
               className={twMerge(
                 "flex text-text-primary/30 justify-between items-center px-4 py-3 w-full cursor-default rounded-xl select-none"

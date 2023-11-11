@@ -51,7 +51,7 @@ export const CourseSection: FCVM<EducationPageViewModel> = observer(({ vm }) => 
   const course = vm.pageState.course;
 
   return (
-    <section className="flex flex-col gap-8">
+    <section className="flex flex-col gap-8 appear">
       <Button
         appearance="secondary"
         className="w-fit gap-1 text-text-primary/60 px-2"
