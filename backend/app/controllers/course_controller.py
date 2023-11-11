@@ -14,16 +14,13 @@ class CourseController:
     async def update_onboarding(
         self,
         file: bytes | None,
-        filename: str = "test.docx",
-        filetype: tp.Literal[
-            "application/zip",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        ] = "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        filename: str | None = "test.docx",
+        filetype: str | None = None,
     ) -> CourseDto:
 
         db_course = await crud.course.update_endpoints(self.db, None, course_id=1)
-        quizes = await crud.quiz.get_quizes(self.db, None)
-        db_course = await crud.course.assign_quizes(self.db, db_course, quizes)
+        # quizes = await crud.quiz.get_quizes(self.db, None)
+        # db_course = await crud.course.assign_quizes(self.db, db_course, quizes)
         if file:
             f_controller = FileController(self.db)
             db_files = []
