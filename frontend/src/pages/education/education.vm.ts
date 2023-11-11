@@ -8,6 +8,7 @@ export type EducationPageState =
     }
   | {
       view: "all";
+      courses: CourseDto.Item[];
     }
   | {
       view: "course";
@@ -23,17 +24,20 @@ export type EducationPageState =
 export type ViewType = EducationPageState extends { view: infer V } ? V : never;
 
 export class EducationPageViewModel {
-  public courses: CourseDto.Item[] = [];
+  private courses: CourseDto.Item[] | null = null;
   public pageState: EducationPageState = { view: "loading" };
 
   constructor() {
+    console.log("render constructor");
     makeAutoObservable(this);
   }
 
   public async load() {
-    const res = await CourseEndpoint.current();
-    this.courses = res.map(CourseDto.convertDtoToItem);
-    this.pageState = { view: "all" };
+    if (this.courses === null) {
+      const res = await CourseEndpoint.current();
+      this.courses = res.map(CourseDto.convertDtoToItem);
+    }
+    this.pageState = { view: "all", courses: this.courses };
   }
 
   public async loadCourse(id: string, taskId?: string) {
@@ -43,6 +47,10 @@ export class EducationPageViewModel {
     } else {
       this.pageState = { view: "course", id, course: CourseDto.convertDtoToItem(res) };
     }
+  }
+
+  public backToAll() {
+    this.load();
   }
 
   dispose() {}
