@@ -82,6 +82,6 @@ export namespace CourseEndpoint {
   };
 
   export const checkAnswer = async (id: number, answer: string) => {
-    return await api.post(`/api/quiz/question/${id}`, answer);
+    return await api.post<{ is_correct: boolean }>(`/api/quiz/question/${id}`, answer);
   };
 }

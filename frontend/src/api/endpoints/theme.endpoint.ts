@@ -6,7 +6,7 @@ export namespace ThemeEndpoint {
     return await api.get<ThemeDto.Item>("/api/theme/?id=1");
   };
 
-  export const put = async (theme: string) => {
-    return await api.put<ThemeDto.Item & { id: string }>("/api/theme/", theme);
+  export const update = async (theme: ThemeDto.Item) => {
+    return await api.put("/api/theme/", { ...theme, id: 1 });
   };
 }

@@ -8,7 +8,7 @@ export const Footer = () => {
         "[grid-area:footer] block sm:hidden w-full border-t border-text-primary/20 bg-white h-fit mt-auto pt-4"
       }>
       <div className={"flex flex-row justify-between items-center h-full py-2 px-4"}>
-        {ThemeService.themeConfig?.logoUrl && <Logo width={78} />}
+        <Logo width={78} />
         <p className={"text-black text-sm"}>{new Date().getFullYear()}</p>
       </div>
     </footer>

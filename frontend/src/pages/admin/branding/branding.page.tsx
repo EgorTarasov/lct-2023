@@ -1,5 +1,9 @@
+import { ThemeService } from "@/stores/theme.service";
 import { Button, Input } from "@/ui";
+import { hexToRgb } from "@/utils/hexToRgb";
 import { Popover } from "@headlessui/react";
+import { ThemeEndpoint } from "api/endpoints/theme.endpoint";
+import { ThemeDto } from "api/models/theme.model";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { BlockPicker, ColorResult, RGBColor } from "react-color";
@@ -9,7 +13,26 @@ const textareaPlaceholder =
   "<svg fill=\"none\" shape-rendering=\"geometricPrecision\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path d=\"M20 6L9 17l-5-5\"></path></svg>";
 
 export const BrandingPage = observer(() => {
-  const [color, setColor] = useState<string>("#000000");
+  const [color, setColor] = useState<string>(ThemeService.item?.main_color ?? "");
+  const [logo, setLogo] = useState(ThemeService.item?.company_logo ?? "");
+  const [comanyName, setComanyName] = useState<string>(ThemeService.item?.company_name ?? "");
+
+  const onSubmit = async () => {
+    if (!color || !logo || !comanyName) return;
+
+    const rgb = hexToRgb(color);
+    if (!rgb) return;
+
+    const data: ThemeDto.Item = {
+      company_logo: logo,
+      company_name: comanyName,
+      main_color: rgb
+    };
+
+    await ThemeEndpoint.update(data);
+
+    ThemeService._init();
+  };
 
   return (
     <div className="flex flex-col gap-4 px-4 mx-auto mt-6 max-w-screen-desktop fade-enter-done sm:mt-10">
@@ -51,7 +74,13 @@ export const BrandingPage = observer(() => {
             <label htmlFor={"company-name"} className={"text-text-primary/50"}>
               Название компании
             </label>
-            <Input placeholder="Название" title={"Название компании"} id={"company-name"} />
+            <Input
+              placeholder="Название"
+              value={comanyName}
+              onChange={(v) => setComanyName(v)}
+              title={"Название компании"}
+              id={"company-name"}
+            />
           </div>
         </div>
       </section>
@@ -59,11 +88,15 @@ export const BrandingPage = observer(() => {
         <h2 className={"text-2xl font-medium sm:text-2xl"}>Логотип</h2>
         <textarea
           id="goal"
+          value={logo}
+          onChange={(e) => setLogo(e.target.value)}
           className="px-3 py-2 h-28 text-text-primary text-base border border-primary/20 rounded-lg w-full"
           placeholder={textareaPlaceholder}
         />
       </section>
-      <Button className="mt-4">Обновить брендинг</Button>
+      <Button className="mt-4" onClick={() => onSubmit()}>
+        Обновить брендинг
+      </Button>
     </div>
   );
 });

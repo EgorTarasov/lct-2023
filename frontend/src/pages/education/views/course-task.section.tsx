@@ -7,15 +7,18 @@ import ChevronIcon from "@/assets/chevron2.svg";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { RadioGroup } from "@headlessui/react";
+import { useState } from "react";
 
 export const Quiz: FCVM<EducationPageViewModel> = observer(({ vm }) => {
+  const [correctAnswers, setCorrectAnswers] = useState<number | null>(null);
   if (vm.pageState.view !== "courseTask") return null;
   const state = vm.pageState;
 
   if (!state.quiz.questions) return null;
 
   const checkAnswers = async () => {
-    await vm.checkAnswers();
+    const res = await vm.checkAnswers();
+    setCorrectAnswers(res);
   };
 
   return (
@@ -47,6 +50,11 @@ export const Quiz: FCVM<EducationPageViewModel> = observer(({ vm }) => {
           </li>
         ))}
       </ol>
+      {correctAnswers !== null && (
+        <p className="text-xl">
+          Вы ответили правильно на {correctAnswers} из {state.quiz.questions.length} вопросов
+        </p>
+      )}
       <Button className="w-fit px-8" onClick={checkAnswers}>
         Завершить тестирование
       </Button>
