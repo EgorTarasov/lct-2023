@@ -9,6 +9,7 @@ from .base import Base
 if tp.TYPE_CHECKING:
     from .user import SqlUser
     from .course import SqlCourse
+    from .file import SqlFile
 
 
 class PositionBase(BaseModel):
@@ -33,6 +34,21 @@ class SqlPosition(Base):
     users: Mapped["SqlUser"] = relationship("SqlUser", back_populates="position")
     courses: Mapped[list["SqlCourse"]] = relationship(
         "SqlCourse", secondary="position_course"
+    )
+    files: Mapped[list["SqlFile"]] = relationship("SqlFile", secondary="position_file")
+
+    def __repr__(self) -> str:
+        return f"<Position(id={self.id}, name={self.name}, files={len(self.files)})>"
+
+
+class PositionFile(Base):
+    __tablename__ = "position_file"
+
+    position_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("positions.id"), primary_key=True
+    )
+    file_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("file.id"), primary_key=True
     )
 
 
