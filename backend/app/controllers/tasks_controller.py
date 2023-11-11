@@ -17,7 +17,7 @@ class TaskController:
         return [TaskDto.model_validate(obj) for obj in user_tasks]
 
     async def get_task_by_id(self, task_id: int) -> TaskDto:
-        task = await crud.task.get_task_by_id(self.db, task_id)
+        task = crud.task.get_task_by_id(self.db, task_id)
         return TaskDto.model_validate(task)
 
     async def get_tasks_for_mentor(self, mentor_id: int) -> list[TaskDto]:

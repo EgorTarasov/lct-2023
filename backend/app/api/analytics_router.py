@@ -48,7 +48,8 @@ async def get_statistics_on_users_onboarding(
         db: Session = Depends(Sql.get_session),
 ) -> FileResponse:
     users = UserController(db).get_users()
-    headers = ['ФИО', 'Почта', 'Специальность', 'Дата регистрации', 'Прогресс онбординга (%)', 'Последнее прохождение этапа онбординга в']
+    headers = ['ФИО', 'Почта', 'Специальность', 'Дата регистрации', 'Прогресс онбординга (%)',
+               'Последнее прохождение этапа онбординга в', 'Курсов пройдено', 'Дедлайнов просрочено']
     data = []
     for user in users:
         try:
@@ -59,7 +60,9 @@ async def get_statistics_on_users_onboarding(
                 user.email,
                 user.position.name,
                 registration_datetime,
-                await CourseController(db).get_course_progress(user.id, 1)
+                await CourseController(db).get_course_progress(user.id, 1),
+                0,
+                0
             ]
             last_answer = QuizController(db).get_last_answer(user.id)
             if last_answer:
