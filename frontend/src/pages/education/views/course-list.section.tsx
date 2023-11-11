@@ -10,9 +10,13 @@ export const CourseListSection: FCVM<EducationPageViewModel> = observer(({ vm })
   return (
     <section className="flex flex-col gap-3">
       <EducationFilters vm={vm} />
-      <ul className="flex flex-col justify-between items-center gap-4">
+      <ul
+        className="grid gap items-center gap-4"
+        style={{
+          gridTemplateColumns: "repeat(auto-fit, minmax(256px, 1fr))"
+        }}>
         {vm.pageState.courses.map((v, i) => (
-          <CourseCard item={v} key={v.id} wide />
+          <CourseCard key={i} item={v} />
         ))}
       </ul>
     </section>
