@@ -156,6 +156,7 @@ class AnswerBase(BaseModel):
 
 class AnswerDto(AnswerBase):
     id: int
+    created_at: dt.datetime
 
 
 class SqlQuiz(Base):

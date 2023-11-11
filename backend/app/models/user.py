@@ -96,3 +96,8 @@ class SqlUser(Base):
     # quiz_results: Mapped[list["SqlUserQuiz"]] = relationship(
     #     "SqlUserQuiz", back_populates="user"
     # )
+
+
+def get_fullname_for_user(user: UserDto | SqlUser):
+    fullname = f"{user.last_name} {user.first_name} {user.middle_name}"
+    return fullname

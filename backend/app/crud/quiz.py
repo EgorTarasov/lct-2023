@@ -112,3 +112,8 @@ async def create_answer(
         raise Exception("Answer not created, invalid question_id or user_id")
 
     return db_answer
+
+
+def get_last_answer(db: Session, user_id: int) -> SqlAnswer | None:
+    db_answer = db.query(SqlAnswer).filter(SqlAnswer.user_id == user_id).first()
+    return db_answer

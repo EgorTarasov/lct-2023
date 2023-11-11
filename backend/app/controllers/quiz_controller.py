@@ -89,6 +89,12 @@ class QuizController:
         )
         await crud.action.create(
             self.db,
-            ActionCreate(action=ActionType.enroll_on_event, user_id=user.user_id),
+            ActionCreate(action=ActionType.submit_answer, user_id=user.user_id),
         )
         return AnswerDto.model_validate(db_answer)
+
+    def get_last_answer(self, user_id: int) -> AnswerDto | None:
+        db_answer = crud.quiz.get_last_answer(self.db, user_id)
+        if db_answer:
+            return AnswerDto.model_validate(db_answer)
+        return db_answer

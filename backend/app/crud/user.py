@@ -57,6 +57,11 @@ def get_user_by_email(db: Session, email: str) -> SqlUser:
         raise Exception("User not found")
 
 
+def get_users(db: Session) -> list[SqlUser]:
+    users = db.query(SqlUser).all()
+    return users
+
+
 async def get_my_team(db: Session, user_id: int) -> dict[str, UserDto]:
     """Получение пользователя по id"""
     user = db.query(SqlUser).where(SqlUser.id == user_id).one_or_none()
