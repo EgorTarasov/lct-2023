@@ -10,7 +10,7 @@ import ClockIcon from "@/assets/clock.svg";
 import { convertMinutes } from "@/utils/dateConverters";
 import { useMemo } from "react";
 
-const TaskLink = ({ item, courseId }: { item: CourseDto.CourseFile; courseId: number }) => {
+export const TaskLink = ({ item, courseId }: { item: CourseDto.CourseFile; courseId: number }) => {
   const randomTimeMin = useMemo(() => {
     const hash = item.name
       .split("")
