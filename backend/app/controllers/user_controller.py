@@ -1,6 +1,6 @@
 import datetime
 from fastapi import UploadFile
-from pytest import File
+
 
 from sqlalchemy.orm import Session
 import logging
