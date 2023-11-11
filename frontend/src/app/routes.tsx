@@ -58,6 +58,16 @@ const userRoutes: RouteType[] = [
     showInNav: false
   },
   {
+    path: "/education/:id/task/:taskId",
+    component: () => (
+      <PrivateRoute>
+        <EducationPage />
+      </PrivateRoute>
+    ),
+    title: "Обучение",
+    showInNav: false
+  },
+  {
     path: "/tasks",
     component: () => (
       <PrivateRoute>
