@@ -7,7 +7,7 @@ from app.auth.dependency import get_current_user
 from app.auth.jwt import UserTokenData
 from app.controllers.event_controller import EventController
 from app.core.sql import Sql
-from app.models.event import EventDto, EventCreate
+from app.models.event import EventDto, EventCreate, EventTypeDto
 
 router = APIRouter(prefix="/event", tags=["event"])
 
@@ -109,7 +109,7 @@ async def delete_event(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 
-@router.get("/types", response_model=list[str])
+@router.get("/types", response_model=list[EventTypeDto])
 async def get_available_event_types(
         db: Session = Depends(Sql.get_session),
         _: UserTokenData = Depends(get_current_user),

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.models.event import SqlEvent, EventCreate, SqlEnrollment, SqlEventType
+from app.models.event import SqlEvent, EventCreate, SqlEnrollment, SqlEventType, EventTypeDto
 from app.models.user import SqlUser
 
 
@@ -52,10 +52,10 @@ async def enroll_on_event(db: Session, event_id: int, user_id: int) -> SqlEnroll
     return db_enrollment
 
 
-async def get_available_event_types(db: Session) -> list[str]:
+async def get_available_event_types(db: Session) -> list[EventTypeDto]:
     """Получение всех типов мероприятий"""
-    event_types = db.query(SqlEventType, SqlEventType.name).all()
-    return [event_type.name for event_type in event_types]
+    event_types = db.query(SqlEventType).all()
+    return [EventTypeDto.model_validate(event_type) for event_type in event_types]
 
 
 async def change_event(db: Session, event_id: int, payload: EventCreate) -> SqlEvent:
