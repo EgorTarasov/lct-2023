@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import AttatchmentSvg from "@/assets/attatchment.svg";
 
@@ -10,6 +10,7 @@ interface DragDropFileProps {
 
 const DragDropFile = (x: DragDropFileProps) => {
   const [drag, setDrag] = useState(false);
+  const id = useId();
 
   const onDragStart = (e: React.DragEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,7 +46,7 @@ const DragDropFile = (x: DragDropFileProps) => {
       onDrop={onDrop}>
       <input
         className="hidden"
-        id="file"
+        id={id}
         type="file"
         accept={x.acceptableFormats?.join(",")}
         multiple
@@ -63,7 +64,7 @@ const DragDropFile = (x: DragDropFileProps) => {
         )}
         <label
           className="py-4 justify-center w-full cursor-pointer px-6 flex gap-2 items-center"
-          htmlFor="file">
+          htmlFor={id}>
           <AttatchmentSvg className={"w-5 h-5 min-w-[20px]"} />
           {x.dropZone ? x.dropZone : "Перетащите файлы сюда или нажмите, чтобы выбрать файлы"}
         </label>

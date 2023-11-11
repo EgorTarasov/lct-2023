@@ -38,10 +38,10 @@ export const AdminOnboardingPage = observer(() => {
         <div className="mt-6">
           <DragDropFile
             onUpload={(files) => vm.addFiles(files)}
-            acceptableFormats={[".zip"]}
+            acceptableFormats={[".docx"]}
             dropZone={
               <div>
-                Перетащите сюда или выберите <b>.zip</b> файл
+                Перетащите сюда или выберите <b>.docx</b> файл
               </div>
             }
           />

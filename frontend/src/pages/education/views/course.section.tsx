@@ -10,9 +10,9 @@ import ClockIcon from "@/assets/clock.svg";
 import { convertMinutes } from "@/utils/dateConverters";
 import { useMemo } from "react";
 
-export const TaskLink = ({ item, courseId }: { item: CourseDto.CourseFile; courseId: number }) => {
+export const TaskLink = ({ item, courseId }: { item: CourseDto.Quiz; courseId: number }) => {
   const randomTimeMin = useMemo(() => {
-    const hash = item.name
+    const hash = item.title
       .split("")
       .reduce((acc, char) => char.charCodeAt(0) + ((acc << 5) - acc), 0);
 
@@ -29,7 +29,7 @@ export const TaskLink = ({ item, courseId }: { item: CourseDto.CourseFile; cours
         )}>
         <Checkbox checked={false} className={"mt-1 text-primary"} disabled ariaHidden />
         <div className="flex flex-col">
-          <p className="text-lg leading-none">{item.name.replace(".docx", "")}</p>
+          <p className="text-lg leading-none">{item.title}</p>
           <ul className="flex flex-wrap gap-2 mt-3">
             <IconText
               icon={ClockIcon}
@@ -62,8 +62,8 @@ export const CourseSection: FCVM<EducationPageViewModel> = observer(({ vm }) => 
       <div className="p-5 bg-white flex flex-col gap-4 rounded-2xl">
         <h2 className="font-medium text-2xl">{course.title}</h2>
         <ul>
-          {course.files.map((file, i) => (
-            <TaskLink key={i} item={file} courseId={course.id} />
+          {course.quizes.map((q, i) => (
+            <TaskLink key={i} item={q} courseId={course.id} />
           ))}
         </ul>
       </div>
