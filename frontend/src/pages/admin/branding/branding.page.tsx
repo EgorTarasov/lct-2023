@@ -20,13 +20,10 @@ export const BrandingPage = observer(() => {
   const onSubmit = async () => {
     if (!color || !logo || !comanyName) return;
 
-    const rgb = hexToRgb(color);
-    if (!rgb) return;
-
     const data: ThemeDto.Item = {
       company_logo: logo,
       company_name: comanyName,
-      main_color: rgb
+      main_color: color
     };
 
     await ThemeEndpoint.update(data);
