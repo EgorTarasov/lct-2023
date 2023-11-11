@@ -3,9 +3,9 @@ from sqlalchemy.orm import Session
 
 from app.models.action import ActionCreate, ActionType
 from app.models.quiz import (
-    QuestionDto,
+    QuestionInfo,
     QuestionWithAnswerDto,
-    QuestionWithUserAnswerDto,
+    UserAnswerDto,
     QuizCreate,
     QuizDto,
     AnswerDto,
@@ -47,12 +47,12 @@ class QuizController:
         questions = []
         if answers:
             questions = [
-                QuestionWithUserAnswerDto.model_validate(
+                UserAnswerDto.model_validate(
                     {
-                        "id": answer[0],
+                        "question_id": answer[0],
                         "question_text": answer[1],
                         "is_correct": answer[2] if answer[2] else False,
-                        "answer_text": answer[3],
+                        "answer": answer[3],
                     }
                 )
                 for answer in answers
@@ -78,14 +78,17 @@ class QuizController:
             print(res)
             return res
         else:
-            return QuestionDto.model_validate(db_question)
+            return QuestionInfo.model_validate(db_question)
 
-    async def submit_answer(self, question_id: int, user: UserTokenData, answer: str):
+    async def submit_answer(
+        self, question_id: int, user: UserTokenData, answer: list[str]
+    ):
         db_question = await crud.quiz.get_question(self.db, question_id)
         db_answer = await crud.quiz.create_answer(
             self.db, question_id, user.user_id, answer, db_question.answer == answer
         )
         await crud.action.create(
             self.db,
-            ActionCreate(action=ActionType.enroll_on_event, user_id=user.user_id))
+            ActionCreate(action=ActionType.enroll_on_event, user_id=user.user_id),
+        )
         return AnswerDto.model_validate(db_answer)
