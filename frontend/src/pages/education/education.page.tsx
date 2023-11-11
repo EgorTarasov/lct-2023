@@ -5,15 +5,16 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { CourseListSection } from "./views/course-list.section";
 import { CourseSection } from "./views/course.section";
 import { Loading } from "@/components/loading/Loading";
+import { CourseTask } from "./views/course-task.section";
 
 export const EducationPage = observer(() => {
   const [vm] = useState(() => new EducationPageViewModel());
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { id } = useParams();
+  const { id, taskId } = useParams();
 
   useEffect(() => {
+    console.log("render effect");
     if (id) {
-      vm.loadCourse(id);
+      vm.loadCourse(id, taskId);
     } else {
       vm.load();
     }
@@ -21,13 +22,13 @@ export const EducationPage = observer(() => {
     // if (searchParams.has("search")) {
     //   setSearch(searchParams.get("search")!);
     // }
-  }, [searchParams]);
+  }, []);
 
   const pages: Record<ViewType, ReactNode> = useMemo(
     () => ({
       all: <CourseListSection vm={vm} />,
       course: <CourseSection vm={vm} />,
-      courseTask: <div>CourseTask</div>,
+      courseTask: <CourseTask vm={vm} />,
       loading: <Loading />
     }),
     [vm]

@@ -5,7 +5,10 @@ export const convertMinutes = (minutes: number, screenReader?: boolean) => {
   const hoursText = screenReader ? "часов" : "ч";
   const minText = screenReader ? "минут" : "мин";
 
-  const result = [`${hours} ${hoursText}`];
+  const result = [];
+  if (hours !== 0) {
+    result.push(`${hours} ${hoursText}`);
+  }
   if (min !== 0) {
     result.push(`${min} ${minText}`);
   }

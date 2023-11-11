@@ -79,7 +79,6 @@ export namespace CourseDto {
       deadline: subDays(new Date(), 5),
       title: dto.name,
       isCompleted: false,
-      files: [],
       files: dto.files
     };
   };
@@ -94,6 +93,20 @@ export namespace CourseDto {
     id: number;
     title: string;
     description_text: string;
+  }
+
+  export interface QuizLong {
+    id: number;
+    title: string;
+    description_text: string;
+    questions: Question[];
+  }
+
+  export interface Question {
+    question_id: number;
+    question_text: string;
+    is_correct: boolean;
+    answer: string[];
   }
 
   export interface AdminResult {
