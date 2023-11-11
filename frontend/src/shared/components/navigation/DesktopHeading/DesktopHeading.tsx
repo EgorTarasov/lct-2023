@@ -1,4 +1,4 @@
-import { Button, Logo, Separator } from "@/ui";
+import { Logo, Separator } from "@/ui";
 import { NavLink } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { RouteType, RoutesStore } from "../../../../app/routes";
