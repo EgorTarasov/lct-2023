@@ -73,4 +73,4 @@ services:
     env_file:
       - ../frontend/.env
     ports:
-      - "80:5173"
+      - "8080:5173"
