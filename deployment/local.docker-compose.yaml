@@ -8,8 +8,6 @@ services:
       - ../backend/.env
     volumes:
       - ../docker/data:/var/lib/postgresql/data
-    ports:
-        - "5432:5432"
   backend:
     build:
       context: ../backend/
@@ -21,6 +19,8 @@ services:
     environment:
       - POSTGRES_HOST=db
       - RABBITMQ_HOST=rabbitmq
+    volumes:
+      - ../static:/static
     depends_on:
       - db
     ports:

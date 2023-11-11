@@ -88,7 +88,7 @@ def create_app():
         allow_headers=["*"],
     )
 
-    _app.mount("/api/static", StaticFiles(directory="static"), name="static")
+    _app.mount("/api/static", StaticFiles(directory="../../static"), name="static")
     _app.include_router(main_router.router, prefix="/api")
 
     return _app

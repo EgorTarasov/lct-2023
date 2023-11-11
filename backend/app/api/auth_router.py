@@ -45,6 +45,7 @@ async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(Sql.get_session),
 ):
+    """Вход по почте и паролю"""
     try:
         token = await UserController(db).authenticate_user(
             UserLogin(email=form_data.username, password=form_data.password)
@@ -98,6 +99,7 @@ async def send_recover_password(
     email: EmailStr,
     db: Session = Depends(Sql.get_session),
 ):
+    """Отправить письмо для восстановления пароля"""
     try:
         await UserController(db).send_recover_password(email)
     except Exception as e:
@@ -112,6 +114,7 @@ async def recover_password(
     new_password: str,
     db: Session = Depends(Sql.get_session),
 ):
+    """Восстановить пароль"""
     try:
         await UserController(db).recover_password(token, new_password)
     except Exception as e:

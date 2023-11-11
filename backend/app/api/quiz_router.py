@@ -19,6 +19,7 @@ async def create_quiz(
     _: UserTokenData = Depends(get_current_user),
     db: Session = Depends(Sql.get_session),
 ):
+    """Создать тест"""
     quiz_controller = QuizController(db)
     quiz = await quiz_controller.create_quiz(file, name)
     return quiz
@@ -33,7 +34,6 @@ async def get_quiz(
     """
     Получение теста по id для страницы с тестом
     Если у пользователя уже есть попытки с ответом на вопросы, то отображаем is_correct
-
     """
     quiz_controller = QuizController(db)
     quiz = await quiz_controller.get_quiz(quiz_id, user)
@@ -45,6 +45,7 @@ async def get_all_quizes(
     user: UserTokenData = Depends(get_current_user),
     db: Session = Depends(Sql.get_session),
 ) -> list[QuizDescription]:
+    """Получить список всех тестов"""
     quiz_controller = QuizController(db)
     quizes = await quiz_controller.get_quizes()
 
@@ -73,5 +74,6 @@ async def submit_answer(
     user: UserTokenData = Depends(get_current_user),
     db: Session = Depends(Sql.get_session),
 ):
+    """Отправить решение теста"""
     quiz_controller = QuizController(db)
     return await quiz_controller.submit_answer(question_id, user, answer)

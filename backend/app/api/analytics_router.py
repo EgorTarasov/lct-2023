@@ -24,6 +24,7 @@ async def get_statistics_on_users_actions(
         _: UserTokenData = Depends(get_current_user),
         db: Session = Depends(Sql.get_session),
 ) -> FileResponse:
+    """Excel файл для получения активности пользователей на платформе"""
     actions = await AnalyticController(db).get_actions()
     headers = ['ФИО', 'Почта', 'Специальность', 'Действие', 'Доп. информация', 'Время']
     data = [[
@@ -47,6 +48,7 @@ async def get_statistics_on_users_onboarding(
         _: UserTokenData = Depends(get_current_user),
         db: Session = Depends(Sql.get_session),
 ) -> FileResponse:
+    """Excel файл для получения статистики по прогрессу онбординга пользователей"""
     users = UserController(db).get_users()
     headers = ['ФИО', 'Почта', 'Специальность', 'Дата регистрации', 'Прогресс онбординга (%)',
                'Последнее прохождение этапа онбординга в', 'Курсов пройдено', 'Дедлайнов просрочено']

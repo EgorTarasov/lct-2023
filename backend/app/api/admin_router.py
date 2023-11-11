@@ -31,6 +31,7 @@ async def register_user(
     user: UserTokenData = Depends(get_current_user),
     db: Session = Depends(Sql.get_session),
 ):
+    """Регистрация одного пользователя"""
     if user.role_id == 1:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Доступ запрещён"
@@ -49,6 +50,7 @@ async def register_user_from_file(
     db: Session = Depends(Sql.get_session),
 ):
     """
+    Регистрация пользователей из файла
     CSV файл с кодировкой UTF-8
     Пример файла:\n
     Почта, ФИО, Номер телефона, ФИО Руководителя, Должность, День выхода (в формате DD.MM), Цель адаптации

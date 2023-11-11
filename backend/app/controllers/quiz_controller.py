@@ -86,11 +86,12 @@ class QuizController:
             return QuestionInfo.model_validate(db_question)
 
     async def submit_answer(
-        self, question_id: int, user: UserTokenData, answer: list[str]
+        self, question_id: int, user: UserTokenData, answer: str
     ):
         db_question = await crud.quiz.get_question(self.db, question_id)
+
         db_answer = await crud.quiz.create_answer(
-            self.db, question_id, user.user_id, answer, db_question.answer == answer
+            self.db, question_id, user.user_id, [answer], answer in db_question.answer
         )
         await crud.action.create(
             self.db,
