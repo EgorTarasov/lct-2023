@@ -8,11 +8,10 @@ import { Loading } from "@/components/loading/Loading";
 import { CourseTask } from "./views/course-task.section";
 
 export const EducationPage = observer(() => {
-  const [vm] = useState(() => new EducationPageViewModel());
   const { id, taskId } = useParams();
+  const [vm] = useState(() => new EducationPageViewModel(id, taskId));
 
   useEffect(() => {
-    console.log("render effect");
     if (id) {
       vm.loadCourse(id, taskId);
     } else {

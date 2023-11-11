@@ -28,6 +28,10 @@ export namespace CourseEndpoint {
     });
   };
 
+  export const getTask = async (path: string) => {
+    return await fetch(`${import.meta.env.VITE_API_URL}/api/${path}`).then((res) => res.text());
+  };
+
   export const getByPositionId = async (positionId: number) => {
     return await api.get<CourseDto.Result>(`/api/course/for-position/${positionId}`);
   };

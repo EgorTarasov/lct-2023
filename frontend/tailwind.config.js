@@ -59,4 +59,5 @@ export default {
     "text-task-work",
     "bg-task-work",
   ],
+  plugins: [require("@tailwindcss/typography")]
 };
