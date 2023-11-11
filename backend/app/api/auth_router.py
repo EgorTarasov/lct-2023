@@ -36,7 +36,7 @@ def index():
     </body>
 </html>
     """
-    return HTMLResponse(content=html_content, status_code=200)
+    return HTMLResponse(ntent=html_content, status_code=200)
 
 
 @router.post("/login", response_model=Token)
@@ -66,7 +66,7 @@ async def add_telegram(
 
 
 @router.get("/telegram")
-def login_telegram(
+async def login_telegram(
     id: str,
     hash: str,
     first_name: str | None = None,
@@ -85,7 +85,7 @@ def login_telegram(
         "auth_date": auth_date,
         "hash": hash,
     }
-    if check_telegram_response(telegram_data):
+    if check_telegram_response(telegram_data, config.telegram_bot_token):
         # Authorize user
         return telegram_data
     else:

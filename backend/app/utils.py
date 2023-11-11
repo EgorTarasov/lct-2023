@@ -33,7 +33,7 @@ def check_telegram_response(data, bot_token: str):
     d_list = []
     for key in sorted(d.keys()):
         if d[key] is not None:
-            d_list.append(key + "=" + d[key])
+            d_list.append(key + "=" + str(d[key]))
     data_string = bytes("\n".join(d_list), "utf-8")
 
     secret_key = hashlib.sha256(bot_token.encode("utf-8")).digest()
