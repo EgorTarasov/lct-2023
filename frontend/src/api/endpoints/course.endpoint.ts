@@ -33,6 +33,6 @@ export namespace CourseEndpoint {
   };
 
   export const getByPositionId = async (positionId: number) => {
-    return await api.get<CourseDto.Result>(`/api/course/for-position/${positionId}`);
+    return await api.get<CourseDto.Result[]>(`/api/course/for-position/${positionId}`);
   };
 }

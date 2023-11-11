@@ -7,6 +7,15 @@ import { useState } from "react";
 import { AdminOnboardingPageViewModel } from "./adminOnboarding.vm";
 import { Link } from "react-router-dom";
 import { PositionsSection } from "./positions.section";
+import { CourseDto } from "api/models/course.model";
+
+export const AdminTaskCard = ({ file }: { file: CourseDto.CourseFile }) => (
+  <li className={"flex items-center justify-between border-b border-text-primary/20 py-3"}>
+    <a href={`${import.meta.env.VITE_API_URL}/api/${file.path}`} className="underline">
+      {file.name}
+    </a>
+  </li>
+);
 
 export const AdminOnboardingPage = observer(() => {
   const [vm] = useState(() => new AdminOnboardingPageViewModel());
@@ -16,15 +25,7 @@ export const AdminOnboardingPage = observer(() => {
       <h1 className={"text-2xl font-medium sm:text-2xl mb-7"}>Общий онбординг</h1>
       <Collapsible title={"Файлы общего онбординга"} withoutPadding>
         <ul className="flex flex-col">
-          {vm.onboarding?.files.map((course, index) => (
-            <li
-              key={index}
-              className={"flex items-center justify-between border-b border-text-primary/20 py-3"}>
-              <a href={`${import.meta.env.VITE_API_URL}/api/${course.path}`} className="underline">
-                {course.name}
-              </a>
-            </li>
-          ))}
+          {vm.onboarding?.files.map((course, index) => <AdminTaskCard key={index} file={course} />)}
           {vm.uploadedFiles.map((file, index) => (
             <UploadedFile
               key={index}
