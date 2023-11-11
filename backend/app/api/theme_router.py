@@ -6,7 +6,7 @@ from app import crud
 from app.core.sql import Sql
 
 
-router = APIRouter("/theme", tags=["theme"])
+router = APIRouter(prefix="/theme", tags=["theme"])
 
 
 @router.get("/")
