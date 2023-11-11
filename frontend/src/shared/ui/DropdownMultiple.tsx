@@ -1,7 +1,7 @@
 import { Combobox, Transition } from "@headlessui/react";
 import ChevronSvg from "@/assets/chevron.svg";
 import CheckSvg from "@/assets/check.svg";
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { twMerge } from "tailwind-merge";
 
@@ -29,9 +29,13 @@ const DropdownMultiple = observer(<T,>(p: ComboboxMultipleProps<T>) => {
             .includes(query.toLowerCase().replace(/\s+/g, ""))
         );
   const placeholder = p.value.map((v) => p.render(v)).join(", ");
+  const selectedOptions = useMemo(
+    () => p.options.filter((v) => p.value.some((vv) => p.render(vv) === p.render(v))),
+    [p.value, p.options]
+  );
 
   return (
-    <Combobox value={p.value} multiple onChange={p.onChange}>
+    <Combobox value={selectedOptions} multiple onChange={p.onChange}>
       <div className="relative text-sm">
         {p.label && (
           <Combobox.Label className="text-text-primary/60 text-base">{p.label}</Combobox.Label>
@@ -60,7 +64,7 @@ const DropdownMultiple = observer(<T,>(p: ComboboxMultipleProps<T>) => {
           show={inputFocused}
           afterLeave={() => setQuery("")}>
           <Combobox.Options
-            className="absolute z-10 mt-1 max-h-60 w-full border border-text-primary/20 overflow-auto rounded-xl py-1 bg-white"
+            className="absolute z-10 mt-1 max-h-60 w-full border border-text-primary/20 overflow-auto rounded-xl py-2 bg-white"
             style={{
               scrollbarWidth: "thin"
             }}>
@@ -72,7 +76,10 @@ const DropdownMultiple = observer(<T,>(p: ComboboxMultipleProps<T>) => {
                   key={index}
                   value={option}
                   className={({ active }) =>
-                    twMerge("p-2 cursor-pointer flex justify-between", active && "bg-primary/5")
+                    twMerge(
+                      "p-2 cursor-pointer flex justify-between hover:bg-text-primary/5",
+                      active && "bg-primary/5"
+                    )
                   }>
                   {({ selected, active }) => (
                     <>

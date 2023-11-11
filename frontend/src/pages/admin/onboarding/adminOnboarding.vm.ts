@@ -9,13 +9,15 @@ export class AdminOnboardingPageViewModel {
   public quizes: CourseDto.Quiz[] = [];
   public positions: {
     uploadedFiles: File[];
-    item: CourseDto.Result;
+    items: CourseDto.Result[];
   }[] = [];
   public query = "";
   get filteredPositions() {
     return this.positions.filter((position) => {
       if (!this.query) return true;
-      return position.item.name.toLowerCase().includes(this.query.toLowerCase());
+      return position.items.some((item) =>
+        item.name.toLowerCase().includes(this.query.toLowerCase())
+      );
     });
   }
   public isLoading = false;
@@ -24,8 +26,8 @@ export class AdminOnboardingPageViewModel {
     makeAutoObservable(this);
 
     void this.loadOnboarding();
-    // void this.loadPositions();
-    // void this.loadQuizes();
+    void this.loadPositions();
+    void this.loadQuizes();
   }
 
   private async loadQuizes() {
@@ -42,7 +44,7 @@ export class AdminOnboardingPageViewModel {
       positions.map(async (position) => {
         const res = await CourseEndpoint.getByPositionId(position.id);
         return {
-          item: res,
+          items: res,
           uploadedFiles: [] as File[]
         };
       })
