@@ -12,6 +12,7 @@ from app.api import (
     file_router,
     analytics_router,
     test_router,
+    theme_router,
 )
 
 
@@ -27,3 +28,4 @@ router.include_router(event_router.router)
 router.include_router(course_router.router)
 router.include_router(file_router.router)
 router.include_router(analytics_router.router)
+router.include_router(theme_router.router)
