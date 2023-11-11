@@ -47,11 +47,11 @@ class Config(BaseSettings):
         "lead": "belova.designer@gmail.com",
         "director": "proscom.muraviev@yandex.ru",
         "team_1": "proscom.ledakov@yandex.ru",
-        "team_2": "kuznetsova.hr@mail.ru"
+        "team_2": "kuznetsova.hr@mail.ru",
     }
-
-    # TELEGRAM_BOT_TOKEN = "6593582253:AAHXwtqVM4tI44NzOaq6k2T3dIJB4RzJZs4"
-    # TELEGRAM_BOT_NAME: str = "discrete_third_bot"
+    # TELEGRAM_BOT_TOKEN
+    telegram_bot_token: str = "6593582253:AAHXwtqVM4tI44NzOaq6k2T3dIJB4RzJZs4"
+    telegram_bot_name: str = "discrete_third_bot"
 
     @property
     def rabbitmq_url(self) -> str:

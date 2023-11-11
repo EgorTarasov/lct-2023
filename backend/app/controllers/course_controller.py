@@ -13,7 +13,6 @@ class CourseController:
 
     async def update_onboarding(
         self,
-        payload: CourseCreate,
         file: bytes | None,
         filename: str = "test.docx",
         filetype: tp.Literal[
@@ -22,8 +21,8 @@ class CourseController:
         ] = "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ) -> CourseDto:
 
-        db_course = await crud.course.update(self.db, payload, course_id=1)
-        quizes = await crud.quiz.get_quizes(self.db, payload.quizes)
+        db_course = await crud.course.update_endpoints(self.db, None, course_id=1)
+        quizes = await crud.quiz.get_quizes(self.db, None)
         db_course = await crud.course.assign_quizes(self.db, db_course, quizes)
         if file:
             f_controller = FileController(self.db)
