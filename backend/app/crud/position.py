@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models.position import PositionFile, SqlPosition, PositionCreate
 from app.models.file import SqlFile
+from app.models.course import SqlCourse
 
 
 async def create(db: Session, position: PositionCreate) -> SqlPosition:
@@ -16,6 +17,18 @@ async def get_position_by_name(db: Session, name: str) -> SqlPosition:
     position = db.query(SqlPosition).filter(SqlPosition.name == name).one_or_none()
     if not position:
         raise Exception("Должности не существует")
+    return position
+
+
+async def add_course(db: Session, course_id: int, position_id: int) -> SqlPosition:
+    position = await get_position_by_id(db, position_id)
+    course = db.query(SqlCourse).filter(SqlCourse.id == course_id).one_or_none()
+    if not course:
+        raise Exception("Курс не существует")
+    position.courses.append(course)
+    db.add(position)
+    db.commit()
+    db.refresh(position)
     return position
 
 
