@@ -66,3 +66,11 @@ services:
       - backend
       - rabbitmq
       - db
+  web:
+    build:
+      context: ../frontend/
+      dockerfile: Dockerfile
+    env_file:
+      - ../frontend/.env
+    ports:
+      - "80:5173"
