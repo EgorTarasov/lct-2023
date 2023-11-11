@@ -10,7 +10,8 @@ export const MockCourses: CourseDto.Item[] = [
     deadline: subDays(new Date(), 5),
     title: "Вебинар по деловым коммуникациям",
     isCompleted: false,
-    files: []
+    files: [],
+    quizes: []
   },
   {
     id: 0,
@@ -21,7 +22,8 @@ export const MockCourses: CourseDto.Item[] = [
     deadline: subDays(new Date(), 3),
     title: "Статья",
     isCompleted: false,
-    files: []
+    files: [],
+    quizes: []
   },
   {
     id: 0,
@@ -32,7 +34,8 @@ export const MockCourses: CourseDto.Item[] = [
     deadline: subDays(new Date(), 1),
     title: "Программа",
     isCompleted: true,
-    files: []
+    files: [],
+    quizes: []
   },
   {
     id: 0,
@@ -43,7 +46,8 @@ export const MockCourses: CourseDto.Item[] = [
     deadline: subDays(new Date(), 5),
     title: "Курс по дизайну",
     isCompleted: false,
-    files: []
+    files: [],
+    quizes: []
   }
 ];
 
@@ -59,6 +63,7 @@ export namespace CourseDto {
     title: string;
     isCompleted: boolean;
     files: CourseFile[];
+    quizes: Quiz[];
   }
 
   export interface Result {
@@ -79,7 +84,8 @@ export namespace CourseDto {
       deadline: subDays(new Date(), 5),
       title: dto.name,
       isCompleted: false,
-      files: dto.files
+      files: dto.files,
+      quizes: dto.quizes
     };
   };
 
@@ -93,6 +99,14 @@ export namespace CourseDto {
     id: number;
     title: string;
     description_text: string;
+  }
+
+  export interface QuizFull {
+    id: number;
+    title: string;
+    description_text: string;
+    questions: Question[];
+    file: CourseFile;
   }
 
   export interface QuizLong {

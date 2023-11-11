@@ -1,4 +1,3 @@
-import DragDropFile from "@/components/dragAndDrop/index.tsc";
 import { Button, Input } from "@/ui";
 import { Popover } from "@headlessui/react";
 import { observer } from "mobx-react-lite";

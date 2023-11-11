@@ -16,6 +16,7 @@ export const PositionsSection: FCVM<AdminOnboardingPageViewModel> = observer(({ 
   // const [addCourseDialog, setAddCourseDialog] = useState<PositionItem | null>(null);
 
   const isUpdatedCoursesDiffers = (position: PositionItem) => {
+    if (position.uploadedFiles.length > 0) return true;
     return (
       !position.item.every((v) => position.updatedCourses.some((vv) => vv === v.id)) ||
       !position.updatedCourses.every((v) => position.item.some((vv) => vv.id === v))
@@ -45,7 +46,17 @@ export const PositionsSection: FCVM<AdminOnboardingPageViewModel> = observer(({ 
                       gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))"
                     }}>
                     <div className="flex flex-col bg-white px-8 rounded-2xl py-5">
-                      <DragDropFile onUpload={console.log} />
+                      <DragDropFile
+                        onUpload={(files) => position.uploadedFiles.push(...files)}
+                        dropZone={
+                          <span>
+                            Перетащите сюда или выберите <b>.docx</b>
+                            <br />
+                            или <b>текстовый файл</b>
+                          </span>
+                        }
+                        acceptableFormats={[".docx"]}
+                      />
                       <h5 className="text-lg font-medium my-4">Обучение</h5>
                       <DropdownMultiple<CourseDto.Result>
                         options={vm.courses}
@@ -68,6 +79,14 @@ export const PositionsSection: FCVM<AdminOnboardingPageViewModel> = observer(({ 
                       <h5 className="text-lg font-medium">Загруженные файлы</h5>
                       {position.files.map((file, index) => (
                         <AdminTaskCard key={index} file={file} />
+                      ))}
+                      {position.uploadedFiles.map((file, index) => (
+                        <UploadedFile
+                          key={index}
+                          title={file.name}
+                          onRemove={() => position.uploadedFiles.splice(index, 1)}
+                          fileSize={file.size}
+                        />
                       ))}
                     </ul>
                   </div>

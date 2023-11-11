@@ -55,19 +55,21 @@ export class EducationPageViewModel {
         return;
       }
 
-      const task = res.files.find((f) => f.id.toString() === taskId);
+      const task = res.quizes.find((f) => f.id.toString() === taskId);
       if (!task) {
         window.location.href = "/education";
         return;
       }
 
-      const markdown = await CourseEndpoint.getTask(task.path);
+      const quiz = await CourseEndpoint.getQuiz(task.id);
+
+      const markdown = await CourseEndpoint.getTask(quiz.file.path);
       this.pageState = {
         view: "courseTask",
         courseId: id,
         taskId,
         markdown,
-        taskTitle: task.name
+        taskTitle: quiz.title
       };
     } catch {
       window.location.href = "/education";
