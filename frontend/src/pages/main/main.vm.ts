@@ -10,6 +10,7 @@ export class MainPageViewModel {
   public events: EventDto.Item[] | null = null;
   public courses: CourseDto.Item[] | null = null;
   public tasks: TaskDto.Item[] | null = null;
+  public isLoading = true;
 
   constructor() {
     makeAutoObservable(this);
@@ -25,5 +26,6 @@ export class MainPageViewModel {
     this.courses = coursesRes.map(CourseDto.convertDtoToItem);
     this.tasks = tasksRes.map(TaskDto.convertDtoToItem);
     this.events = eventsRes.map(EventDto.convertDtoToItem);
+    this.isLoading = false;
   }
 }

@@ -55,7 +55,7 @@ export const CourseSection: FCVM<EducationPageViewModel> = observer(({ vm }) => 
       <Button
         appearance="secondary"
         className="w-fit gap-1 text-text-primary/60 px-2"
-        onClick={() => navigate("/education", { replace: true })}>
+        onClick={() => navigate("/education")}>
         <ChevronIcon className="w-6 h-6 rotate-180" />
         Назад к курсам
       </Button>

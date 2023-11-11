@@ -14,17 +14,19 @@ export const MainPage = observer(() => {
   return (
     <div className="flex flex-col gap-4 sm:px-4 mx-auto max-w-screen-desktop">
       <AssistantSection vm={vm} />
-      <div className="flex flex-col gap-4 w-full mx-auto max-w-screen-desktop">
-        <div className={card}>
-          <CourseSection vm={vm} />
+      {!vm.isLoading && (
+        <div className="flex flex-col gap-4 w-full mx-auto max-w-screen-desktop appear">
+          <div className={card}>
+            <CourseSection vm={vm} />
+          </div>
+          <div className={card}>
+            <DiveinSection vm={vm} />
+          </div>
+          <div className={card}>
+            <EventsSection vm={vm} />
+          </div>
         </div>
-        <div className={card}>
-          <DiveinSection vm={vm} />
-        </div>
-        <div className={card}>
-          <EventsSection vm={vm} />
-        </div>
-      </div>
+      )}
     </div>
   );
 });
