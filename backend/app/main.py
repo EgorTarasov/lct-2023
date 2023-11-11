@@ -97,12 +97,12 @@ def create_app():
 app = create_app()
 
 
-@app.get("/api")
-async def root():
-    return {"message": "Hello from Котики МИСИС!"}
+# @app.get("/api")
+# async def root():
+#     return {"message": "Hello from Котики МИСИС!"}
 
 
-@app.get("api/", response_class=HTMLResponse)
+@app.get("/api", response_class=HTMLResponse)
 def index():
     html_content = f"""
 <html>
