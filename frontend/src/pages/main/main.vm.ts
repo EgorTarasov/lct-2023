@@ -4,6 +4,7 @@ import { TasksEndpoint } from "api/endpoints/tasks.endpoint";
 import { CourseDto, MockCourses } from "api/models/course.model";
 import { EventDto, MockEvents } from "api/models/event.model";
 import { TaskDto } from "api/models/task.model";
+import api from "api/utils/api";
 import { makeAutoObservable } from "mobx";
 
 export class MainPageViewModel {
@@ -27,5 +28,9 @@ export class MainPageViewModel {
     this.tasks = tasksRes.map(TaskDto.convertDtoToItem);
     // this.events = eventsRes.map(EventDto.convertDtoToItem);
     this.isLoading = false;
+  }
+
+  public async sendAssistantMessage(message: string) {
+    const res = await api.post("/api/assistant", { message });
   }
 }

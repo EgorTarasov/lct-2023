@@ -2,20 +2,26 @@ import { FCVM } from "@/utils/fcvm";
 import { MainPageViewModel } from "../main.vm";
 import SendIcon from "@/assets/send.svg";
 import ChatBotIcon from "@/assets/chatBot.svg";
-import { useId, useState } from "react";
+import { FormEvent, useId, useState } from "react";
 import { Input } from "@/ui";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import AssistantIllustration from "../assets/assistant.svg";
+import { observer } from "mobx-react-lite";
 
 const mocData = [
   "Какие у меня есть льготы?",
   "Какой у меня режим работы?",
   "Расскажи про корпоративную культуру!"
 ];
-export const AssistantSection: FCVM<MainPageViewModel> = ({ vm }) => {
+export const AssistantSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
   const assistantId = useId();
   const [inputValue, setInputValue] = useState("");
   const isMobile = useIsMobile();
+
+  const submitForm = async () => {
+    // vm.sendMessage(inputValue);
+    setInputValue("");
+  };
 
   return (
     <div className="flex bg-primary sm:rounded-2xl sm:mt-10">
@@ -41,6 +47,7 @@ export const AssistantSection: FCVM<MainPageViewModel> = ({ vm }) => {
             placeholder="Введите вопрос"
             aria-label="Введите ваш вопрос здесь"
             value={inputValue}
+            onChange={(v) => setInputValue(v)}
           />
         </form>
         <ul className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -71,4 +78,4 @@ export const AssistantSection: FCVM<MainPageViewModel> = ({ vm }) => {
       </div>
     </div>
   );
-};
+});
