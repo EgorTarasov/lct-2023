@@ -40,7 +40,7 @@ async def get_statistics_on_users_actions(
     excel_file = 'action_statistics.xlsx'
     df.to_excel(excel_file, index=False)
 
-    return FileResponse(excel_file, filename='action_statistics.xlsx')
+    return FileResponse(excel_file, filename='action_statistics.xlsx', media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 
 @router.get("/onboarding")
@@ -79,4 +79,4 @@ async def get_statistics_on_users_onboarding(
     excel_file = 'onboarding_statistics.xlsx'
     df.to_excel(excel_file, index=False)
 
-    return FileResponse(excel_file, filename='onboarding_statistics.xlsx')
+    return FileResponse(excel_file, filename='onboarding_statistics.xlsx', media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")

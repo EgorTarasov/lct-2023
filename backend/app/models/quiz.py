@@ -165,6 +165,7 @@ class AnswerDto(AnswerBase):
     created_at: dt.datetime
     is_correct: bool
 
+
 class SqlQuiz(Base):
     """
     create table if NOT EXISTS quiz(
