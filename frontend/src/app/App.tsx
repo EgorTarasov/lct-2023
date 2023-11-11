@@ -16,7 +16,6 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const App = observer(() => {
   const location = useLocation();
-  const navigate = useNavigate();
   const routeFallback = useMemo(() => {
     if (AuthService.auth.state === "anonymous") {
       return "/login";
