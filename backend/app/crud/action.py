@@ -11,10 +11,10 @@ async def create(db: Session, payload: ActionCreate):
 
 
 async def get_actions_by_user_id(db: Session, user_id: int) -> list[SqlAction]:
-    db_actions = db.query(SqlAction).filter(SqlAction.user_id == user_id).all()
+    db_actions = db.query(SqlAction).filter(SqlAction.user_id == user_id).order_by(SqlAction.created_at).all()
     return db_actions
 
 
 async def get_all(db: Session) -> list[SqlAction]:
-    db_actions = db.query(SqlAction).all()
+    db_actions = db.query(SqlAction).order_by(SqlAction.user_id, SqlAction.created_at).all()
     return db_actions

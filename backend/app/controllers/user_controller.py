@@ -55,6 +55,11 @@ class UserController:
             token_type="bearer",
         )
 
+    def get_users(self) -> list[UserDto]:
+        users = crud.user.get_users(self.db)
+        return [UserDto.model_validate(user)for user in users]
+
+
     async def update_interest(
         self, user: UserTokenData, payload: InterestUpdate
     ) -> list[InterestDto]:
