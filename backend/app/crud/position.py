@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models.position import PositionFile, SqlPosition, PositionCreate
+from app.models.position import PositionFile, SqlPosition, PositionCreate, PositionCourse
 from app.models.file import SqlFile
 from app.models.course import SqlCourse
 
@@ -30,6 +30,14 @@ async def add_course(db: Session, course_id: int, position_id: int) -> SqlPositi
     db.commit()
     db.refresh(position)
     return position
+
+
+async def delete_course(db: Session, course_id: int, position_id: int):
+    position_course = db.query(PositionCourse).filter(PositionCourse.position_id == position_id)\
+        .filter(PositionCourse.course_id == course_id).one_or_none()
+    db.delete(position_course)
+    db.commit()
+
 
 
 async def get_position_by_id(db: Session, id: int) -> SqlPosition:
