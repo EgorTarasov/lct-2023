@@ -3,30 +3,30 @@ export const MockEvents: EventDto.Item[] = [
     id: 0,
     category: "education",
     title: "Книжный клуб",
-    date: new Date(Date.now()),
+    deadline: new Date(Date.now()),
     durationMin: 120,
     points: 12,
-    location: "Синий зал главного корпуса",
+    place: "Синий зал главного корпуса",
     imgSrc: null
   },
   {
     id: 0,
-    category: "art",
+    category: "sport",
     title: "Трекинговый поход",
-    date: new Date(Date.now()),
+    deadline: new Date(Date.now()),
     durationMin: 800,
     points: 45,
-    location: "Национальный парк «Угра»",
+    place: "Национальный парк «Угра»",
     imgSrc: null
   },
   {
     id: 0,
     category: "charity",
     title: "Zero Waste День",
-    date: new Date(Date.now()),
+    deadline: new Date(Date.now()),
     durationMin: 75,
     points: 20,
-    location: "Синий зал главного корпуса",
+    place: "Синий зал главного корпуса",
     imgSrc: null
   }
 ];
@@ -38,10 +38,67 @@ export namespace EventDto {
     id: number;
     category: EventType;
     title: string;
-    date: Date;
+    deadline: Date;
     durationMin: number;
     points: number;
-    location: string;
+    place: string;
+    isEnrolled?: boolean;
     imgSrc: string | null;
+  }
+
+  export interface Result {
+    title: string;
+    place: string;
+    type_id: number;
+    starts_at: string;
+    id: number;
+    is_enrolled: boolean;
+    event_type: {
+      id: number;
+      name: string;
+    };
+  }
+
+  export const getRussianCategory = (category: EventType): string => {
+    return (
+      {
+        sport: "Спорт",
+        education: "Образование",
+        charity: "Благотворительность",
+        art: "Искусство"
+      } as Record<EventType, string>
+    )[category];
+  };
+
+  export const convertDtoToItem = (dto: Result): Item => {
+    return {
+      id: dto.id,
+      category: (
+        {
+          1: "education",
+          2: "sport",
+          3: "charity",
+          4: "art"
+        } as Record<number, EventType>
+      )[dto.type_id],
+      title: dto.title,
+      deadline: new Date(dto.starts_at),
+      durationMin: 0,
+      points: 0,
+      place: dto.place,
+      imgSrc: null
+    };
+  };
+
+  export interface Template {
+    title: string;
+    place: string;
+    type_id: number;
+    starts_at: string; //date-time
+  }
+
+  export interface BackendEventType {
+    id: number;
+    name: string;
   }
 }

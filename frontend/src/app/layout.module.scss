@@ -1,0 +1,11 @@
+.layout {
+    display: grid;
+    width: 100%;
+    min-height: 100%;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+        "desktop header"
+        "desktop main"
+        "desktop footer";
+    grid-template-rows: auto 1fr auto;
+}

@@ -11,24 +11,29 @@ const EventCategoryMap: Readonly<
     {
       illustration: React.FC<HTMLProps<SVGElement>>;
       locale: string;
+      textColor: string;
     }
   >
 > = {
   art: {
-    illustration: SportEvent,
-    locale: "Творчество"
+    illustration: ArtEvent,
+    locale: "Творчество",
+    textColor: "text-event-art"
   },
   charity: {
     illustration: CharityEvent,
-    locale: "Волонтёрство"
+    locale: "Волонтёрство",
+    textColor: "text-event-charity"
   },
   education: {
     illustration: EducationEvent,
-    locale: "Обучение"
+    locale: "Обучение",
+    textColor: "text-event-education"
   },
   sport: {
-    illustration: ArtEvent,
-    locale: "Спорт"
+    illustration: SportEvent,
+    locale: "Спорт",
+    textColor: "text-event-sport"
   }
 };
 

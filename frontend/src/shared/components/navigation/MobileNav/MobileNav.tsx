@@ -2,26 +2,26 @@ import { useState } from "react";
 import NavIcon from "./assets/nav.svg";
 import { NavLink, useLocation } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
-import { routes } from "../../../../app/routes.ts";
 import LightningIcon from "@/assets/lightning.svg";
 import UserIcon from "@/assets/user.svg";
 import ChevronIcon from "@/assets/chevron2.svg";
-import { twMerge } from "tailwind-merge";
 import CloseIcon from "@/assets/clear.svg";
-import { ThemeService } from "@/stores/theme.service.ts";
+import { RoutesStore } from "../../../../app/routes";
+import { Logo } from "@/ui";
+import { observer } from "mobx-react-lite";
 
-export const MobileNav = () => {
+export const MobileNav = observer(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const currentRoute = routes.find((route) => route.path === location.pathname);
+  const currentRoute = RoutesStore.routes.find((route) => route.path === location.pathname);
 
   const toggleMenu = () => {
     setIsMenuOpen((v) => !v);
   };
 
   return (
-    <nav className="sticky block sm:hidden top-0 z-10 w-full bg-nav-background flex justify-between items-center px-4 py-2 shadow">
-      <div className="flex items-center">
+    <nav className="[grid-area:header] sticky sm:hidden top-0 z-10 w-full bg-nav-background flex justify-between items-center px-3 py-2 shadow">
+      <div className="flex items-center gap-2">
         <button
           id="nav-button"
           aria-expanded={isMenuOpen}
@@ -38,10 +38,12 @@ export const MobileNav = () => {
         <h1 className="text-xl font-normal text-nav-text">{currentRoute?.title || ""}</h1>
       </div>
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2" aria-label={"Ваша активность: 100%"}>
-          <LightningIcon className="w-6 h-6 text-primary" />
-          <span className="text-base text-text-primary">100</span>
-        </div>
+        <NavLink to={"/shop"} aria-label="Перейти в магазин">
+          <div className="flex items-center gap-2" aria-label={"Ваша баланс: 100"}>
+            <LightningIcon className="w-6 h-6 text-primary" />
+            <span className="text-base text-text-primary">100</span>
+          </div>
+        </NavLink>
         <NavLink to={"/me"} aria-label="Перейти в профиль">
           <UserIcon className="w-10 h-10 text-primary" />
         </NavLink>
@@ -49,9 +51,9 @@ export const MobileNav = () => {
       <Dialog open={isMenuOpen} onClose={toggleMenu} className="relative z-40">
         <Dialog.Panel>
           <Dialog.Title>Навигационное меню</Dialog.Title>
-          <div id="mobile-menu" className="fixed inset-0 z-40 bg-nav-background">
-            <div className="flex justify-between px-4 py-2 items-center">
-              <div className="flex items-center">
+          <div id="mobile-menu" className="appear fixed inset-0 z-40 bg-nav-background">
+            <div className="flex justify-between px-3 py-2 items-center">
+              <div className="flex items-center gap-3">
                 <button onClick={toggleMenu} className="p-1">
                   <span className="sr-only">Закрыть меню</span>
                   <CloseIcon
@@ -60,7 +62,7 @@ export const MobileNav = () => {
                     className="w-10 h-10 text-text-primary"
                   />
                 </button>
-                <img src={ThemeService.themeConfig?.logoUrl} alt="Логотип" className="h-8" />
+                <Logo width={128} />
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2" aria-label={"Ваша активность: 100%"}>
@@ -72,20 +74,19 @@ export const MobileNav = () => {
                 </NavLink>
               </div>
             </div>
-            <ul className="px-4">
-              {routes
+            <ul className="px-4 gap-1 flex flex-col">
+              {RoutesStore.routes
                 .filter((route) => route.showInNav)
                 .map((item) => (
                   <li
                     key={item.path}
-                    className={twMerge(
-                      "border-b border-nav-text py-3",
-                      item.path === currentRoute?.path ? "text-primary" : ""
-                    )}>
+                    className={
+                      item.path === currentRoute?.path ? "text-primary" : "text-text-primary/80"
+                    }>
                     <NavLink
                       to={item.path}
                       onClick={toggleMenu}
-                      className="flex items-center justify-between">
+                      className="flex items-center justify-between border-b border-nav-text py-3">
                       {item.title}
                       {item.path !== currentRoute?.path && <ChevronIcon className="w-6 h-6" />}
                     </NavLink>
@@ -97,4 +98,4 @@ export const MobileNav = () => {
       </Dialog>
     </nav>
   );
-};
+});

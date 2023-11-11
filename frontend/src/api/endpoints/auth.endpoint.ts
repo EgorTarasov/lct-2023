@@ -2,6 +2,7 @@ import { AuthDto } from "api/models/auth.model";
 import api from "api/utils/api";
 import { setStoredAuthToken } from "api/utils/authToken";
 import { parseJwt } from "api/utils/parseJwt";
+import { TUser } from "react-telegram-auth";
 
 export namespace AuthEndpoint {
   export const login = async (username: string, password: string) => {
@@ -17,5 +18,12 @@ export namespace AuthEndpoint {
 
     setStoredAuthToken(result.access_token);
     return parseJwt<AuthDto.Item>(result.access_token);
+  };
+
+  export const loginWithTelegram = async (user: TUser) => {
+    const result = await api.post<string>("/api/auth/add/telegram", { ...user });
+
+    setStoredAuthToken(result);
+    return parseJwt<AuthDto.Item>(result);
   };
 }

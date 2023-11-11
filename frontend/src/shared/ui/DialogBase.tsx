@@ -1,17 +1,16 @@
 import { Button } from "@/ui/Button";
 import { Dialog, Transition } from "@headlessui/react";
 import { FC, Fragment } from "react";
+import CrossIcon from "@/assets/cross.svg";
 
 interface DialogBaseProps {
   isOpen: boolean;
   onCancel?: () => void;
   children?: JSX.Element | JSX.Element[];
   title: string;
-  onConfirm: () => void;
-  confirmText: string;
-  subtitle?: string;
+  onConfirm?: () => void;
+  confirmText?: string;
   width?: string | number;
-  coolBlur?: boolean;
   bottom?: JSX.Element;
   confirmDisabled?: boolean;
 }
@@ -23,9 +22,7 @@ export const DialogBase: FC<DialogBaseProps> = ({
   title,
   onConfirm,
   confirmText,
-  subtitle,
   width,
-  coolBlur,
   bottom,
   confirmDisabled
 }) => {
@@ -35,7 +32,7 @@ export const DialogBase: FC<DialogBaseProps> = ({
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog className="relative z-10" onClose={closeModal}>
+      <Dialog className="relative z-100" onClose={closeModal} onSubmit={(e) => e.preventDefault()}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -44,10 +41,10 @@ export const DialogBase: FC<DialogBaseProps> = ({
           leave="ease-in duration-200"
           leaveFrom="opacity-100"
           leaveTo="opacity-0">
-          <div className="fixed inset-0 bg-black/30" />
+          <Dialog.Backdrop className="fixed inset-0 bg-black/30 z-10" />
         </Transition.Child>
 
-        <div className="fixed inset-0 overflow-y-auto">
+        <div className="fixed inset-0 overflow-y-auto z-[11]">
           <div className="flex min-h-full items-center justify-center p-4 text-center">
             <Transition.Child
               as={Fragment}
@@ -58,32 +55,30 @@ export const DialogBase: FC<DialogBaseProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95">
               <Dialog.Panel
-                className="w-full transform overflow-hidden rounded-xl text-text-primary bg-bg-primary border-border-primary border text-left align-middle shadow-xl transition-all"
+                onSubmit={(e) => e.preventDefault()}
+                className="w-fit transform text-text-primary bg-white border-border-primary border text-left align-middle transition-all rounded-2xl p-5"
                 style={{ width }}>
-                <Dialog.Title as="h3" className="text-xl font-medium p-6 flex flex-col gap-1">
+                <Dialog.Title className="text-xl font-medium flex justify-between gap-1 mb-5">
                   {title}
-                  {subtitle && <span className="text-text-secondary text-sm">{subtitle}</span>}
-                </Dialog.Title>
-                <Dialog.Description as="div" className="flex flex-col gap-3 px-6">
-                  {children}
-                </Dialog.Description>
-                <div className="flex border-t-[1px] border-border-primary p-3 mt-6 bg-bg-secondary">
                   {onCancel && (
-                    <Button appearance="secondary" onClick={closeModal} className="w-fit">
-                      Отмена
-                    </Button>
+                    <CrossIcon className="cursor-pointer" onClick={onCancel} width={24} />
                   )}
+                </Dialog.Title>
+                {children}
+                {onConfirm && (
                   <div className="flex items-center ml-auto gap-3">
                     {bottom}
-                    <Button
-                      appearance="primary"
+                    <button
+                      className={
+                        "w-full mt-5 bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
+                      }
+                      type="button"
                       onClick={onConfirm}
-                      disabled={confirmDisabled}
-                      className={`w-fit ${coolBlur ? "with-cool-blur" : ""}`}>
+                      disabled={confirmDisabled}>
                       {confirmText}
-                    </Button>
+                    </button>
                   </div>
-                </div>
+                )}
               </Dialog.Panel>
             </Transition.Child>
           </div>

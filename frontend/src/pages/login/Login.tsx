@@ -9,6 +9,7 @@ import { ThemeService } from "@/stores/theme.service.ts";
 import { observer } from "mobx-react-lite";
 import { MOCK_USER } from "@/constants/mocks";
 import { PasswordField } from "@/components/fields/PasswordField";
+import { TLoginButton, TLoginButtonSize, TUser } from "react-telegram-auth";
 
 export const Login = observer(() => {
   const navigate = useNavigate();
@@ -35,6 +36,19 @@ export const Login = observer(() => {
     }
   };
 
+  const handleTelegramLogin = async (user: TUser) => {
+    setIsLoading(true);
+    setShowError(false);
+    try {
+      const isSuccess = await AuthService.loginWithTelegram(user);
+      if (isSuccess) {
+        navigate("/");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handlePasswordChange = (value: string) => {
     setAuthData({ ...authData, password: value });
   };
@@ -43,14 +57,12 @@ export const Login = observer(() => {
     setAuthData({ ...authData, username: value });
   };
   return (
-    <div className={"w-full h-full flex items-center justify-center"}>
+    <div className={"w-full h-full flex items-center justify-center bg-white"}>
       <div className={"w-[300px] p-5"}>
         <div className={"mb-5 w-full flex items-center justify-center"}>
           <Logo />
         </div>
-        <div className={"h-5 flex"}>
-          {showError && <span className={"text-error text-sm"}>Неверный логин или пароль</span>}
-        </div>
+
         <form
           onSubmit={handleFormSubmit}
           aria-label="Два поля: почта и пароль, либо вход через Telegram"
@@ -91,18 +103,23 @@ export const Login = observer(() => {
               </Link>
             </div>
           </div>
+          {showError && (
+            <span className={"text-center text-error text-sm"}>Неверный логин или пароль</span>
+          )}
           <Button disabled={isLoading} type="submit">
             Войти
           </Button>
-          <Button
-            disabled={isLoading}
-            appearance={"secondary"}
-            type={"button"}
-            aria-label={"Вход через Telegram"}
-            className={"flex items-center justify-center gap-1 text-text-primary/60"}>
-            <TelegramIcon className={"w-5 h-5"} aria-hidden="true" /> Войти через Telegram
-          </Button>
         </form>
+        <div className="h-4" />
+        <TLoginButton
+          botName="discrete_third_bot"
+          buttonSize={TLoginButtonSize.Large}
+          lang="ru"
+          usePic={false}
+          cornerRadius={8}
+          requestAccess="write"
+          onAuthCallback={handleTelegramLogin}
+        />
       </div>
     </div>
   );

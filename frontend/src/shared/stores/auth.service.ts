@@ -1,35 +1,80 @@
 import { AuthEndpoint } from "api/endpoints/auth.endpoint";
+import { UserEndpoint } from "api/endpoints/user.endpoint";
 import { AuthDto } from "api/models/auth.model";
+import { UserDto } from "api/models/user.model";
 import { removeStoredAuthToken } from "api/utils/authToken";
 import { makeAutoObservable } from "mobx";
+import { TUser } from "react-telegram-auth";
 
-type AuthStatus = "loading" | "anonymous" | "authorized" | "unfinished";
+export type Auth =
+  | {
+      state: "loading";
+    }
+  | {
+      state: "anonymous";
+    }
+  | {
+      state: "authorized";
+      user: UserDto.Item;
+    };
 
 class AuthServiceViewModel {
-  public status: AuthStatus = "authorized";
-  public item: AuthDto.Item | null = null;
+  public auth: Auth = { state: "loading" };
 
   constructor() {
     makeAutoObservable(this);
+    void this.init();
   }
 
-  public async login(username: string, password: string) {
-    if (!username || !password) return false;
+  private async init() {
     try {
-      const response = await AuthEndpoint.login(username, password);
-      if (response) {
-        this.status = "authorized";
-        return true;
-      }
-      return false;
+      const user = await UserEndpoint.current();
+      this.auth = {
+        state: "authorized",
+        user
+      };
     } catch {
-      return false;
+      this.auth = { state: "anonymous" };
     }
   }
 
+  public async login(username: string, password: string): Promise<boolean> {
+    if (!username || !password) return false;
+    try {
+      const auth = await AuthEndpoint.login(username, password);
+      if (auth) {
+        const user = await UserEndpoint.current();
+        this.auth = {
+          state: "authorized",
+          user
+        };
+        return true;
+      }
+    } catch {
+      this.auth = { state: "anonymous" };
+    }
+    return false;
+  }
+
+  public async loginWithTelegram(user: TUser): Promise<boolean> {
+    try {
+      const auth = await AuthEndpoint.loginWithTelegram(user);
+      if (auth) {
+        const user = await UserEndpoint.current();
+        this.auth = {
+          state: "authorized",
+          user
+        };
+        return true;
+      }
+    } catch {
+      this.auth = { state: "anonymous" };
+    }
+    return false;
+  }
+
   async logout() {
-    this.status = "anonymous";
-    this.item = null;
+    this.auth = { state: "anonymous" };
     removeStoredAuthToken();
   }
 }

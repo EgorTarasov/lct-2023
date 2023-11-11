@@ -1,36 +1,20 @@
 import { observer } from "mobx-react-lite";
-import { Navigate } from "react-router-dom";
-import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import React, { useMemo } from "react";
 import { AuthService } from "@/stores/auth.service.ts";
-import { DesktopHeading, MobileNav } from "@/components/navigation";
-import { SkipToContent } from "@/components/SkipToContent";
-import { routes } from "../../app/routes";
-import { Footer } from "@/components/footer.tsx";
+import { RoutesStore } from "../../app/routes";
 
-const PrivateRoute: React.FC<React.PropsWithChildren<unknown>> = observer(({ children }) => {
-  const { status } = AuthService;
-  const currentRoute = routes.find((route) => route.path === location.pathname);
-  if (status === "loading") return null;
-  if (status === "anonymous") return <Navigate to="/login" />;
+export const PrivateRoute: React.FC<React.PropsWithChildren<unknown>> = observer(({ children }) => {
+  const location = useLocation();
+  const { auth: status } = AuthService;
+  if (status.state === "loading") return null;
+  if (status.state === "anonymous") return <Navigate to="/login" />;
+
+  const currentRoute = useMemo(
+    () => RoutesStore.routes.find((route) => route.path === location.pathname),
+    [RoutesStore.routes, location.pathname]
+  );
   document.title = currentRoute?.title || "?";
-  return (
-    <>
-      <SkipToContent />
 
-      <MobileNav />
-      <DesktopHeading />
-      <main id="content" tabIndex={-1} className={"flex-1 min-h-full h-max-content"}>
-        {children}
-      </main>
-      <Footer />
-    </>
-  );
+  return children;
 });
-
-export const withAuth = (Component: React.FC<unknown>) => {
-  return () => (
-    <PrivateRoute>
-      <Component />
-    </PrivateRoute>
-  );
-};
