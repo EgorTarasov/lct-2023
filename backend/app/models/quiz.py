@@ -163,7 +163,7 @@ class AnswerBase(BaseModel):
 class AnswerDto(AnswerBase):
     id: int
     created_at: dt.datetime
-
+    is_correct: bool
 
 class SqlQuiz(Base):
     """
