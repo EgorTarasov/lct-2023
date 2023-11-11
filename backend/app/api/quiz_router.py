@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Depends, UploadFile, File
 from sqlalchemy.orm import Session
 from app.core.sql import Sql
 
@@ -13,12 +13,14 @@ router = APIRouter(prefix="/quiz", tags=["quiz"])
 
 @router.post("/", response_model=QuizDto)
 async def create_quiz(
-    payload: QuizCreate,
+    name: str,
+    score: int,
+    file: UploadFile = File(...),
     _: UserTokenData = Depends(get_current_user),
     db: Session = Depends(Sql.get_session),
 ):
     quiz_controller = QuizController(db)
-    quiz = await quiz_controller.create_quiz(payload)
+    quiz = await quiz_controller.create_quiz(file, name)
     return quiz
 
 
@@ -67,9 +69,7 @@ async def get_question(
 @router.post("/question/{question_id}")
 async def submit_answer(
     question_id: int,
-    answer: list[str] = Body(
-        ..., description="Ответ на вопрос", example=["a", "b"]
-    ),
+    answer: list[str] = Body(..., description="Ответ на вопрос", example=["a", "b"]),
     user: UserTokenData = Depends(get_current_user),
     db: Session = Depends(Sql.get_session),
 ):

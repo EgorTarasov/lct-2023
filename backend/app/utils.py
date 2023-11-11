@@ -4,7 +4,10 @@ import mammoth
 import aiofiles
 import json
 import pydantic.json
-from app.models.telegram import TelegramLoginData
+import os
+import glob
+
+from app.models.quiz import QuestionCreate, QuizCreate
 
 
 async def docx_to_markdown_async(docx_content: bytes):
@@ -27,6 +30,24 @@ def _custom_json_serializer(*args, **kwargs) -> str:
     return json.dumps(*args, default=pydantic.json.pydantic_encoder, **kwargs)
 
 
+def check_content_type(content_type: str) -> bool:
+    """если zip -> true
+    если docx -> false
+    остальное exception
+    """
+    allowed_zip_formats = [
+        "application/zip",
+        "application/x-zip-compressed",
+    ]
+    allowed_doc_formats = [
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ]
+    if content_type in allowed_zip_formats:
+        return True
+    elif content_type in allowed_doc_formats:
+        return False
+
+
 def check_telegram_response(data, bot_token: str):
     d = data.copy()
     del d["hash"]
@@ -41,3 +62,35 @@ def check_telegram_response(data, bot_token: str):
     if hmac_string == data["hash"]:
         return True
     return False
+
+
+def load_questions(_filename: str, file_id: int, folder_path: str = "/proscom"):
+    folder_path = os.getcwd() + folder_path
+    files = glob.glob(os.path.join(folder_path, "*"))
+    file_dict = {}
+
+    for file in files:
+        filename, ext = os.path.splitext(os.path.basename(file))
+
+        if ext:
+            print(filename, ext)
+            if (
+                filename.startswith("~$")
+                or ext != ".docx"
+                or filename.startswith("FAQ")
+            ):
+                continue
+            file_dict[filename + ".docx"] = filename + ".json"
+
+    quiz = file_dict[_filename]
+    with open(f"{folder_path}/{quiz}", "r", encoding="utf-8") as f:
+        json_data = json.load(f)
+        json_data["file_id"] = file_id
+        quiz_data = QuizCreate.model_validate(json_data)
+
+    return quiz_data
+
+
+if __name__ == "__main__":
+
+    print(load_questions())
