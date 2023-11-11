@@ -4,6 +4,7 @@ import { AuthDto } from "api/models/auth.model";
 import { UserDto } from "api/models/user.model";
 import { removeStoredAuthToken } from "api/utils/authToken";
 import { makeAutoObservable } from "mobx";
+import { TUser } from "react-telegram-auth";
 
 export type Auth =
   | {
@@ -41,6 +42,23 @@ class AuthServiceViewModel {
     if (!username || !password) return false;
     try {
       const auth = await AuthEndpoint.login(username, password);
+      if (auth) {
+        const user = await UserEndpoint.current();
+        this.auth = {
+          state: "authorized",
+          user
+        };
+        return true;
+      }
+    } catch {
+      this.auth = { state: "anonymous" };
+    }
+    return false;
+  }
+
+  public async loginWithTelegram(user: TUser): Promise<boolean> {
+    try {
+      const auth = await AuthEndpoint.loginWithTelegram(user);
       if (auth) {
         const user = await UserEndpoint.current();
         this.auth = {

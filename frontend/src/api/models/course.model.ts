@@ -9,7 +9,8 @@ export const MockCourses: CourseDto.Item[] = [
     progress: 70,
     deadline: subDays(new Date(), 5),
     title: "Вебинар по деловым коммуникациям",
-    isCompleted: false
+    isCompleted: false,
+    files: []
   },
   {
     id: 0,
@@ -19,7 +20,8 @@ export const MockCourses: CourseDto.Item[] = [
     progress: 70,
     deadline: subDays(new Date(), 3),
     title: "Статья",
-    isCompleted: false
+    isCompleted: false,
+    files: []
   },
   {
     id: 0,
@@ -29,7 +31,8 @@ export const MockCourses: CourseDto.Item[] = [
     progress: 70,
     deadline: subDays(new Date(), 1),
     title: "Программа",
-    isCompleted: true
+    isCompleted: true,
+    files: []
   },
   {
     id: 0,
@@ -39,7 +42,8 @@ export const MockCourses: CourseDto.Item[] = [
     progress: 70,
     deadline: subDays(new Date(), 5),
     title: "Курс по дизайну",
-    isCompleted: false
+    isCompleted: false,
+    files: []
   }
 ];
 
@@ -54,22 +58,15 @@ export namespace CourseDto {
     deadline: Date;
     title: string;
     isCompleted: boolean;
+    files: CourseFile[];
   }
 
   export interface Result {
     name: string;
     duration: number;
     id: number;
-    quizes: {
-      title: string;
-      description_text: string;
-      id: number;
-    }[];
-    files: {
-      name: string;
-      path: string;
-      id: number;
-    }[];
+    quizes: Quiz[];
+    files: CourseFile[];
   }
 
   export const convertDtoToItem = (dto: Result): Item => {
@@ -81,23 +78,29 @@ export namespace CourseDto {
       progress: 70,
       deadline: subDays(new Date(), 5),
       title: dto.name,
-      isCompleted: false
+      isCompleted: false,
+      files: [],
+      files: dto.files
     };
   };
+
+  export interface CourseFile {
+    name: string;
+    path: string;
+    id: number;
+  }
+
+  export interface Quiz {
+    id: number;
+    title: string;
+    description_text: string;
+  }
 
   export interface AdminResult {
     name: string;
     duration: number;
     id: number;
-    quizes: {
-      title: string;
-      description_text: string;
-      id: number;
-    }[];
-    files: {
-      name: string;
-      path: string;
-      id: number;
-    }[];
+    quizes: Quiz[];
+    files: CourseFile[];
   }
 }

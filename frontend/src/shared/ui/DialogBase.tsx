@@ -56,7 +56,7 @@ export const DialogBase: FC<DialogBaseProps> = ({
               leaveTo="opacity-0 scale-95">
               <Dialog.Panel
                 onSubmit={(e) => e.preventDefault()}
-                className="w-fit transform overflow-hidden text-text-primary bg-white border-border-primary border text-left align-middle transition-all rounded-2xl p-5"
+                className="w-fit transform text-text-primary bg-white border-border-primary border text-left align-middle transition-all rounded-2xl p-5"
                 style={{ width }}>
                 <Dialog.Title className="text-xl font-medium flex justify-between gap-1 mb-5">
                   {title}

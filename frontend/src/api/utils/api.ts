@@ -34,11 +34,12 @@ const post = <T>(
   new Promise((resolve, reject) => {
     axios
       .post(path, variables, {
+        ...config,
         headers: {
           Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined,
-          "Access-Control-Allow-Origin": "*"
-        },
-        ...config
+          "Access-Control-Allow-Origin": "*",
+          ...config?.headers
+        }
       })
       .then((response: AxiosResponse) => resolve(response.data))
       .catch((error) => {
