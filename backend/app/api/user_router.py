@@ -170,7 +170,7 @@ async def delete_position_course(
     db: Session = Depends(Sql.get_session),
 ):
     try:
-        await UserController(db).add_position_course(position_id, course_id)
+        await UserController(db).delete_position_course(position_id, course_id)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
