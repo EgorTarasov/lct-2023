@@ -25,6 +25,7 @@
     "react-telegram-auth": "^1.0.4",
     "react-transition-group": "^4.4.5",
     "recharts": "^2.9.2",
+    "rehype-raw": "^7.0.0",
     "swiper": "^11.0.3",
     "tailwind-merge": "^2.0.0"
   },
