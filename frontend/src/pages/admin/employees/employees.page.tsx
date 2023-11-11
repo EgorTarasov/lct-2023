@@ -197,7 +197,7 @@ const MyHomues = observer(({ x, vm }: { x: UserDto.Item; vm: EmployeesPageViewMo
           <UserIcon className="w-11 h-11 text-primary" aria-hidden="true" />
           <div className="flex-col gap-1">
             <div className="flex gap-2 items-center" aria-label="Роли сотрудника">
-              <span className="text-sm text-primary">{x.user_role.name}</span>
+              <span className="text-sm text-primary">{x.position.name}</span>
             </div>
             <p id="staffName" aria-label={"ФИО сотрудника"}>
               {x.last_name} {x.first_name} {x.middle_name}
