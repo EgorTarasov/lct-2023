@@ -7,7 +7,7 @@ import { ContactListSection } from "./section/contactList.section.tsx";
 export const StaffPage = () => {
   const [search, setSearch] = useState("");
   return (
-    <div className="flex flex-col gap-4 py-6">
+    <div className="py-6 mt-4 flex flex-col gap-4 mx-auto max-w-screen-desktop">
       <Input
         id={"search"}
         placeholder={"Поиск"}
@@ -24,7 +24,7 @@ export const StaffPage = () => {
           },
           {
             title: "Знакомства",
-            element: <p>буй</p>
+            element: <p>В разработке</p>
           }
         ]}
       />
