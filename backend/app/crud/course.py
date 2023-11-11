@@ -49,6 +49,21 @@ async def get_all(db: Session) -> list[SqlCourse]:
     return db_courses
 
 
+async def delete(db: Session, course_id: int):
+    db_course = db.query(SqlCourse).filter(SqlCourse.id == course_id).first()
+    db.delete(db_course)
+    db.commit()
+
+
+async def change_course(db: Session, course_id: int, payload: CourseCreate):
+    db_course = db.query(SqlCourse).filter(SqlCourse.id == course_id).first()
+    if not db_course:
+        raise Exception("Такого курса не существует")
+    for key, value in payload.model_dump().items():
+        setattr(db_course, key, value) if value else None
+    db.commit()
+
+
 async def get_for_position(db: Session, position_id: int) -> list[SqlCourse]:
     db_position = db.query(SqlPosition).filter(SqlPosition.id == position_id).first()
     if not db_position:
