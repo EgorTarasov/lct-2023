@@ -1,12 +1,10 @@
 /** Этот класс будет отвечать за работу с темой от бэкенда */
 import { makeAutoObservable } from "mobx";
 import logo from "@/assets/moc/logo.svg?url";
-import api from "api/utils/api";
 import { ThemeEndpoint } from "api/endpoints/theme.endpoint";
 import { hexToRgb, shouldUseWhiteText } from "@/utils/hexToRgb";
 import { ThemeDto } from "api/models/theme.model";
 
-//TODO: Создать и перенести в папку с моделями
 interface exampleStyleConfig {
   color: string;
   companyName: string;
