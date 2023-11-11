@@ -67,3 +67,15 @@ def check_for_deadline(task_id: int):
         fullname = f"{task.mentee.last_name} {task.mentee.first_name} {task.mentee.middle_name}"
         data = {"fullname": fullname, "task_name": task.name}
         email_client.send_mailing(task.mentee.email, subject, template, data)
+
+
+@celery.task
+def send_recover_password(fullname: str, email: str, token: str):
+    logging.debug("sending email about password recover")
+    subject = "Восстановление пароля"
+    template = "password_recover.jinja"
+    print(fullname, email, token)
+    link_on_password_recover = f"{config.domain}/reset-password?token={token}"
+    print(link_on_password_recover)
+    data = {"fullname": fullname, "link_on_password_recover": link_on_password_recover}
+    email_client.send_mailing(email, subject, template, data)
