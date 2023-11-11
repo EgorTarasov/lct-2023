@@ -18,7 +18,7 @@ class BaseCourse(BaseModel):
 
 
 class CourseCreate(BaseCourse):
-    quizes: list[int] = []
+    quzes: list[int] = []
 
 
 class CourseDto(BaseCourse):
