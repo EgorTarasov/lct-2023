@@ -21,6 +21,8 @@ export type EducationPageState =
       taskId: string;
       taskTitle?: string;
       markdown: string;
+      quiz: CourseDto.QuizFull;
+      answers: Map<number, string | null>;
     };
 
 export type ViewType = EducationPageState extends { view: infer V } ? V : never;
@@ -69,12 +71,46 @@ export class EducationPageViewModel {
         courseId: id,
         taskId,
         markdown,
-        taskTitle: quiz.title
+        taskTitle: quiz.title,
+        quiz: quiz,
+        answers: new Map()
       };
     } catch {
       window.location.href = "/education";
     }
   }
 
-  dispose() {}
+  public setAnswer(id: number, value: string | null) {
+    if (this.pageState.view !== "courseTask") return;
+
+    if (!this.pageState.answers) {
+      this.pageState.answers = new Map();
+    }
+
+    this.pageState.answers.set(id, value);
+  }
+
+  public async checkAnswers(): Promise<number> {
+    if (this.pageState.view !== "courseTask" || !this.pageState.quiz.questions) return 0;
+
+    const quiz = this.pageState.quiz;
+    const questions = quiz.questions;
+    if (!questions) return 0;
+
+    const answers = [...this.pageState.answers.entries()];
+
+    const correct = await Promise.all(
+      answers.map(async ([id, value]) => {
+        if (!value) return false;
+
+        const question = questions.find((f) => f.id === id);
+        if (!question) return false;
+
+        const res = await CourseEndpoint.checkAnswer(question.id, value);
+        return res.is_correct;
+      })
+    );
+
+    return correct.length;
+  }
 }

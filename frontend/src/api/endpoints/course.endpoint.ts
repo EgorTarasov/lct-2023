@@ -80,4 +80,8 @@ export namespace CourseEndpoint {
   export const getQuiz = async (id: number) => {
     return await api.get<CourseDto.QuizFull>(`/api/quiz/quiz/${id}`);
   };
+
+  export const checkAnswer = async (id: number, answer: string) => {
+    return await api.post(`/api/quiz/question/${id}`, answer);
+  };
 }
