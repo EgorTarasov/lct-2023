@@ -140,7 +140,7 @@ def check_response(data):
     return False
 
 
-@app.get("api/login/telegram")  # get для тестов
+@app.get("/api/login/telegram")  # get для тестов
 def login_telegram(
     id: str,
     hash: str,
