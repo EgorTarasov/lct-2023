@@ -1,4 +1,4 @@
-from fastapi.background import P
+from fastapi import UploadFile
 from sqlalchemy.orm import Session
 
 from app.models.action import ActionCreate, ActionType
@@ -12,15 +12,20 @@ from app.models.quiz import (
     QuizWithAnswersDto,
     QuizDescription,
 )
-from app import crud
+from app import crud, utils
 from app.auth.jwt import UserTokenData
+from app.controllers.file_controller import FileController
 
 
 class QuizController:
     def __init__(self, db: Session) -> None:
         self.db = db
 
-    async def create_quiz(self, quiz: QuizCreate):
+    async def create_quiz(self, file: UploadFile, name: str):
+        f = FileController(self.db)
+        db_file = await f.save_file(await file.read(), file.filename)
+        quiz = utils.load_questions(file.filename, db_file.id)
+        quiz.title = name
         db_quiz = await crud.quiz.create_quiz(self.db, quiz)
         return QuizDto.model_validate(db_quiz)
 

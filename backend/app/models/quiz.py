@@ -13,12 +13,15 @@ from pydantic import BaseModel, ConfigDict, Field
 from pydantic.functional_validators import BeforeValidator
 from collections import namedtuple
 
+from app.models.file import FileDto
+
 from .base import Base
 from .user import SqlUser
 
 
 if tp.TYPE_CHECKING:
     from .course import SqlCourse
+    from .file import SqlFile
 
 AnswerOptionTuple = namedtuple("AnswerOptionTuple", ["id", "text"])
 
@@ -115,6 +118,7 @@ class QuizDto(BaseModel):
     title: str
     description_text: str
     questions: list[QuestionInfo]
+    file: FileDto
 
 
 class QuizWithAnswersDto(BaseModel):
@@ -145,6 +149,7 @@ class QuizWithAnswersDto(BaseModel):
 
 class QuizCreate(QuizBase):
     questions: list[QuestionBase]
+    file_id: int
 
 
 class AnswerBase(BaseModel):
@@ -182,7 +187,9 @@ class SqlQuiz(Base):
     # quiz_results: Mapped[list["SqlUserQuiz"]] = relationship(
     #     "SqlUserQuiz", backref="quiz"
     # )
+    file_id: Mapped[int] = mapped_column(Integer, ForeignKey("file.id"))
 
+    file: Mapped["SqlFile"] = relationship("SqlFile")
     course: Mapped[list["SqlCourse"]] = relationship(
         "SqlCourse", secondary="quiz_course"
     )

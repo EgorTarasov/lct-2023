@@ -10,5 +10,8 @@ build_local:
 build:
 	docker compose -f ../deployment/prod.docker-compose.yaml up --build -d
 
+down:
+	docker compose -f ../deployment/prod.docker-compose.yaml down
+
 db:
 	docker compose -f deployment/local.docker-compose.yaml up db --build -d
