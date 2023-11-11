@@ -53,7 +53,7 @@ async def get_quiz_with_answers(
         .filter(SqlAnswer.user_id == user_id)
         .all()
     )
-    print(answers)
+
     if not db_quiz:
         raise Exception("Quiz not found")
     return db_quiz, answers

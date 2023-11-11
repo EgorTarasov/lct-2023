@@ -8,3 +8,5 @@ from . import quiz
 from . import position
 from . import file
 from . import action
+from . import telegram
+

@@ -27,22 +27,17 @@ def _custom_json_serializer(*args, **kwargs) -> str:
     return json.dumps(*args, default=pydantic.json.pydantic_encoder, **kwargs)
 
 
-def validate(data: TelegramLoginData, secret_key: str) -> bool:
-    telegram_data = data.model_dump(
-        exclude_unset=True, exclude_none=True, exclude_defaults=True
-    )
-    data_check_string = "\n".join(
-        sorted(
-            [
-                f"{key}={value or 'null'}"
-                for key, value in telegram_data.items()
-                if key != "hash" and value is not None
-            ]
-        )
-    )
-    secret_key = hashlib.sha256(secret_key.encode()).digest()
-    calculated_hash = hmac.new(
-        secret_key, msg=data_check_string.encode(), digestmod=hashlib.sha256
-    ).hexdigest()
+def check_telegram_response(data, bot_token: str):
+    d = data.copy()
+    del d["hash"]
+    d_list = []
+    for key in sorted(d.keys()):
+        if d[key] is not None:
+            d_list.append(key + "=" + d[key])
+    data_string = bytes("\n".join(d_list), "utf-8")
 
-    return data.hash == calculated_hash
+    secret_key = hashlib.sha256(bot_token.encode("utf-8")).digest()
+    hmac_string = hmac.new(secret_key, data_string, hashlib.sha256).hexdigest()
+    if hmac_string == data["hash"]:
+        return True
+    return False
