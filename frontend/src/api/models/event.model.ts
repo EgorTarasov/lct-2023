@@ -58,6 +58,17 @@ export namespace EventDto {
     };
   }
 
+  export const getRussianCategory = (category: EventType): string => {
+    return (
+      {
+        sport: "Спорт",
+        education: "Образование",
+        charity: "Благотворительность",
+        art: "Искусство"
+      } as Record<EventType, string>
+    )[category];
+  };
+
   export const convertDtoToItem = (dto: Result): Item => {
     return {
       id: dto.id,
