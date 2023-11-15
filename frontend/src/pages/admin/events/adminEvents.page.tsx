@@ -20,6 +20,13 @@ interface IAdminEventCardProps {
   vm: AdminEventsViewModel;
 }
 
+const typeMap = {
+  sport: 1,
+  education: 2,
+  charity: 3,
+  art: 4
+} as Record<EventDto.EventType, number>;
+
 type CourseFormFields = "title" | "place" | "type_id" | "date" | "time" | "duration" | "points";
 const AdminEventCard = (x: IAdminEventCardProps) => {
   const [selectedType, setSelectedType] = useState<EventDto.BackendEventType | null>(null);
@@ -43,7 +50,7 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
     const template: EventDto.Template = {
       title: data.title.value,
       place: data.place.value,
-      type_id: 1,
+      type_id: selectedType?.id ?? 1,
       starts_at: date.toISOString()
     };
     await x.vm.updateEvent(x.item.id, template);
@@ -153,11 +160,11 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
             label={"Место проведения"}
             defaultValue={x.item.place}
           />
-          <DropdownMultiple<EventDto.BackendEventType>
-            value={selectedType ? [selectedType] : []}
-            onChange={(value) => setSelectedType(value[0])}
+          <DropdownMultiple<EventDto.BackendEventType | null>
+            value={[selectedType]}
+            onChange={(value) => setSelectedType(value.at(-1) ?? null)}
             options={x.vm.eventTypes}
-            render={(option) => option.name}
+            render={(option) => option?.name ?? ""}
             label={"Категория"}
           />
           <button
@@ -172,6 +179,7 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
     </>
   );
 };
+
 export const AdminEventsPage = observer(() => {
   const [vm] = useState(() => new AdminEventsViewModel());
   const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
@@ -187,7 +195,7 @@ export const AdminEventsPage = observer(() => {
     const template: EventDto.Template = {
       title: data.title.value,
       place: data.place.value,
-      type_id: 1,
+      type_id: selectedType?.id ?? 1,
       starts_at: date.toISOString()
     };
     await vm.createEvent(template);
@@ -197,7 +205,7 @@ export const AdminEventsPage = observer(() => {
   if (vm.isLoading) return <Loading />;
   return (
     <>
-      <div className="flex flex-col gap-4 px-4 mx-auto mt-6 max-w-screen-desktop fade-enter-done sm:mt-10">
+      <div className="appear flex flex-col gap-4 px-4 mx-auto mt-6 max-w-screen-desktop fade-enter-done sm:mt-10">
         <div className="flex-col item-center gap-4 sm:flex sm:flex-row sm:justify-between">
           <h1 className={"text-2xl font-medium sm:text-2xl"}>Все мероприятия</h1>
           <Button
@@ -259,7 +267,7 @@ export const AdminEventsPage = observer(() => {
           />
           <DropdownMultiple<EventDto.BackendEventType>
             value={selectedType ? [selectedType] : []}
-            onChange={(value) => setSelectedType(value[0])}
+            onChange={(value) => setSelectedType(value.at(-1) ?? null)}
             options={vm.eventTypes}
             render={(option) => option.name}
             label={"Категория"}

@@ -34,7 +34,7 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) =
   return (
     <li
       className={twMerge(
-        "flex flex-col bg-white w-52 rounded-2xl border border-text-primary/20 relative hover:shadow-sm transition-shadow",
+        "flex flex-col bg-white h-full w-52 rounded-2xl border border-text-primary/20 relative hover:shadow-sm transition-shadow",
         wide ? "w-full" : "w-52"
       )}>
       <Icon className="text-primary rounded-2xl" />
@@ -58,12 +58,13 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) =
         </ul>
         <Button
           className="relative z-10 mt-auto"
+          disabled={item.isEnrolled}
           appearance="secondary"
           onClick={(e) => {
             e.stopPropagation();
             onRegisterClick();
           }}>
-          Записаться
+          {item.isEnrolled ? "Записан" : "Записаться"}
         </Button>
       </div>
     </li>

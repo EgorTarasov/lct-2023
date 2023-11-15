@@ -1,5 +1,5 @@
 import { getTaskMap } from "@/constants/task.map";
-import { Checkbox, IconText } from "@/ui";
+import { Button, Checkbox, IconText } from "@/ui";
 import { TaskDto } from "api/models/task.model";
 import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
@@ -13,7 +13,7 @@ import { useMemo } from "react";
 import { differenceInDays } from "date-fns";
 import { convertDate, convertMinutes } from "@/utils/dateConverters";
 
-export const TaskCard = ({ item }: { item: TaskDto.Item }) => {
+export const TaskCard = ({ item, onFinish }: { item: TaskDto.Item; onFinish?: () => void }) => {
   const { locale, textColor } = getTaskMap(item.type);
   const isDeadlineClose = useMemo(() => differenceInDays(new Date(), item.deadline) < 3, [item]);
 
@@ -46,7 +46,17 @@ export const TaskCard = ({ item }: { item: TaskDto.Item }) => {
             <IconText icon={PointIcon} text={item.location} alt="" />
           </ul>
         </div>
-        <Chevron className="ml-auto my-auto" />
+        {onFinish ? (
+          <Button
+            disabled={item.status === "Завершена"}
+            className="ml-auto my-auto w-fit px-3"
+            appearance="secondary"
+            onClick={() => onFinish?.()}>
+            {item.status}
+          </Button>
+        ) : (
+          <Chevron className="ml-auto my-auto" />
+        )}
       </Link>
     </li>
   );

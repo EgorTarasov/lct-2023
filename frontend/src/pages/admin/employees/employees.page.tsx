@@ -197,10 +197,10 @@ const MyHomues = observer(({ x, vm }: { x: UserDto.Item; vm: EmployeesPageViewMo
           <UserIcon className="w-11 h-11 text-primary" aria-hidden="true" />
           <div className="flex-col gap-1">
             <div className="flex gap-2 items-center" aria-label="Роли сотрудника">
-              <span className="text-sm text-primary">{x.user_role.name}</span>
+              <span className="text-sm text-primary">{x.position.name}</span>
             </div>
             <p id="staffName" aria-label={"ФИО сотрудника"}>
-              {x.last_name} {x.first_name} {x.middle_name}
+              {x.last_name} {x.first_name}
             </p>
           </div>
         </div>
@@ -324,10 +324,10 @@ export const EmployeesPage = observer(() => {
 
   return (
     <>
-      <div className="flex flex-col gap-4 px-4 mx-auto mt-6 max-w-screen-desktop fade-enter-done sm:mt-10">
+      <div className="appear flex flex-col gap-4 px-4 mx-auto mt-6 max-w-screen-desktop fade-enter-done sm:mt-10">
         <h1 className={"text-2xl font-medium sm:text-2xl"}>Добавление сотрудников</h1>
         <section className="flex flex-col gap-4 mt-4">
-          <DragDropFile
+          {/* <DragDropFile
             onUpload={() => {}}
             acceptableFormats={[".csv"]}
             dropZone={
@@ -335,7 +335,7 @@ export const EmployeesPage = observer(() => {
                 Перетащите сюда или выберите <b>.csv</b> файл
               </p>
             }
-          />
+          /> */}
           <Button className={"max-w-[256px]"} onClick={() => setShowNewUserDialog(true)}>
             Добавить сотрудника вручную
           </Button>
@@ -357,7 +357,7 @@ export const EmployeesPage = observer(() => {
           <div className="flex gap-5">
             <Input id="first_name" label="Имя" placeholder="Иван" required />
             <Input id="last_name" label="Фамилия" placeholder="Иванович" required />
-            <Input id="middle_name" label="Отчество" placeholder="Иванов" />
+            <Input id="middle_name" label="Telegram" placeholder="@biskwiq" />
           </div>
           <div className="flex gap-5 items-end">
             <Input

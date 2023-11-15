@@ -9,6 +9,8 @@ import CloseIcon from "@/assets/clear.svg";
 import { RoutesStore } from "../../../../app/routes";
 import { Logo } from "@/ui";
 import { observer } from "mobx-react-lite";
+import { AuthService } from "@/stores/auth.service";
+import LogoutIcon from "../assets/logout.svg";
 
 export const MobileNav = observer(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -92,6 +94,12 @@ export const MobileNav = observer(() => {
                     </NavLink>
                   </li>
                 ))}
+              <button
+                className="px-4 py-3 flex items-center gap-3 hover:text-text-primary hover:bg-text-primary/5 rounded-xl text-text-primary/60"
+                onClick={() => AuthService.logout()}>
+                <LogoutIcon aria-hidden="true" width={24} />
+                <span className="mb-px">Выход</span>
+              </button>
             </ul>
           </div>
         </Dialog.Panel>

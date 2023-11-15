@@ -22,4 +22,8 @@ export namespace TasksEndpoint {
   export const update = async (id: number, data: TaskDto.Create) => {
     return await api.put<TaskDto.Result>(`/api/task/${id}`, data);
   };
+
+  export const finishTask = async (id: number) => {
+    return await api.put<TaskDto.Result>(`/api/task/update_status/${id}?task_status=Завершена`);
+  };
 }

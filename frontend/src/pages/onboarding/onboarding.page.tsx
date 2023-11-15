@@ -10,40 +10,7 @@ import { Checkbox, IconText } from "@/ui";
 import ClockIcon from "@/assets/clock.svg";
 import { convertMinutes } from "@/utils/dateConverters";
 import ChevronIcon from "@/assets/chevron2.svg";
-
-const TaskLink = ({ item, courseId }: { item: CourseDto.CourseFile; courseId: number }) => {
-  const randomTimeMin = useMemo(() => {
-    const hash = item.name
-      .split("")
-      .reduce((acc, char) => char.charCodeAt(0) + ((acc << 5) - acc), 0);
-
-    const times = [10, 30, 60, 90];
-    return times[Math.abs(hash) % times.length];
-  }, []);
-  return (
-    <li className="border-b border-text-primary/20 py-2 mb-2">
-      <Link
-        to={`/education/${courseId}/task/${item.id}`}
-        className={twMerge(
-          "relative flex gap-3 items-start"
-          // , item.isCompleted && "opacity-60"
-        )}>
-        <Checkbox checked={false} className={"mt-1 text-primary"} disabled ariaHidden />
-        <div className="flex flex-col">
-          <p className="text-lg leading-none">{item.name}</p>
-          <ul className="flex flex-wrap gap-2 mt-3">
-            <IconText
-              icon={ClockIcon}
-              text={convertMinutes(randomTimeMin)}
-              alt={"Время на решение"}
-            />
-          </ul>
-        </div>
-        <ChevronIcon className="ml-auto my-auto" />
-      </Link>
-    </li>
-  );
-};
+import { TaskLink } from "../education/views/course.section";
 
 export const OnboardingPage = observer(() => {
   const [vm] = useState(() => new OnboardingPageViewModel());
@@ -63,7 +30,7 @@ export const OnboardingPage = observer(() => {
       ) : (
         <ul className="p-5 bg-white flex flex-col rounded-2xl">
           <Collapsible title={vm.course.title}>
-            {vm.course.files.map((file, index) => (
+            {vm.course.quizes.map((file, index) => (
               <TaskLink key={index} courseId={vm.course!.id} item={file} />
             ))}
           </Collapsible>
