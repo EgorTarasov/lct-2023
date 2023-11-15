@@ -20,11 +20,14 @@ class FileController:
         static_name = str(uuid.uuid4())
         file_path += static_name
         markdown = await docx_to_markdown_async(file)
-
+        # count words in markdown
+        duration = round(len(markdown.split(" ")) / 80, 0)
         async with aiofiles.open(file_path, "w") as static:
             await static.write(markdown)
 
-        db_file = crud.file.save(self.db, filename=filename, path=file_path)
+        db_file = crud.file.save(
+            self.db, filename=filename, path=file_path, duration=duration
+        )
         return db_file
 
     async def save_files(self, _zip: bytes, zip_name: str) -> list[SqlFile]:

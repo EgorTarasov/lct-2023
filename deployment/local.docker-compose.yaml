@@ -65,7 +65,7 @@ services:
       context: ../frontend/
       dockerfile: Dockerfile
     environment:
-      - VITE_API_URL=https://larek.itatmisis.ru
+      - VITE_API_URL=http://localhost:8000
 
     ports:
       - "8080:5173"

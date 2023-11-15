@@ -21,12 +21,6 @@ interest_router = APIRouter(prefix="/interest")
 position_router = APIRouter(prefix="/position")
 role_router = APIRouter(prefix="/role")
 
-"""
-@ добавление файла
-@ назначение курсов
-@ get_course for position
-"""
-
 
 @router.get("/me", response_model=UserDto)
 async def get_me(

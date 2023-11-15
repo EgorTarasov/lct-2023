@@ -91,6 +91,7 @@ class UserController:
         self, files: list[UploadFile], position_id: int
     ) -> list[FileDto]:
         f = FileController(self.db)
+        
         files = [await f.save_file(await file.read(), file.filename) for file in files]
 
         position = await crud.position.add_files(self.db, position_id, files)

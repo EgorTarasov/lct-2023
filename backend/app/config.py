@@ -53,6 +53,8 @@ class Config(BaseSettings):
     telegram_bot_token: str = "6593582253:AAHXwtqVM4tI44NzOaq6k2T3dIJB4RzJZs4"
     telegram_bot_name: str = "discrete_third_bot"
 
+    api_key: str
+
     @property
     def rabbitmq_url(self) -> str:
         return f"amqp://{config.rabbitmq_default_user}:{config.rabbitmq_default_pass}@{config.rabbitmq_host}:{config.rabbitmq_port}"
