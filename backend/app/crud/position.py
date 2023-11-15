@@ -44,7 +44,7 @@ async def add_course(
     return position
 
 
-async def delete_course(db: Session, course_id: int, position_id: int):
+async def delete_course(db: Session, position_id: int, course_id: int):
     position_course = (
         db.query(PositionCourse)
         .filter(PositionCourse.position_id == position_id)

@@ -168,11 +168,20 @@ async def get_progress(
 
 @router.put("/{course_id}")
 async def edit_course(
-    course_id: int,
+    payload: CourseDto,
     _: UserTokenData = Depends(get_current_user),
     db: Session = Depends(Sql.get_session),
 ):
-    return await CourseController(db).ed
+    for f in payload.files:
+        print(f.filename)
+        if not f.filename.split(".")[-1] in ["docx"]:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="Поддерживаемые форматы '.zip' '.docx'",
+            )
+    course = await CourseController(db).get_course(payload.id)
+
+    return await CourseController(db).create_course()
 
 
 @router.delete("/{course_id}")
