@@ -5,7 +5,7 @@ from sqlalchemy import ForeignKey, Integer, Text, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from .base import Base
-from .fact import FactDto
+from .fact import UserUserFactDto
 from .interest import interest_user, InterestDto
 from .mentee import mentor_mentee
 from .position import PositionDto
@@ -47,7 +47,7 @@ class UserProfileDto(UserDto):
     model_config = ConfigDict(from_attributes=True)
     mentors: list[UserDto]
     interests: list[InterestDto]
-    fact: FactDto | None
+    fact: UserUserFactDto | None
     telegram: TelegramLoginData | None
 
 

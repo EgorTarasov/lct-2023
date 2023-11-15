@@ -6,6 +6,7 @@ from app import crud
 from app.auth.dependency import get_current_user
 
 from app.auth.jwt import UserTokenData
+from app.models.fact import UserFactCreate, UserUserFactDto, SqlUserFact
 from app.models.interest import InterestUpdate, InterestDto
 from app.models.position import PositionCreate, PositionDto
 from app.models.role import RoleCreate, RoleDto
@@ -46,6 +47,35 @@ async def get_my_profile(
     return user
 
 
+@router.post("/fact/create", response_model=UserUserFactDto)
+async def create_fact(
+    payload: UserFactCreate,
+    db: Session = Depends(Sql.get_session),
+    user: UserTokenData = Depends(get_current_user)
+):
+    user = await crud.user.get_user_by_id(db, user.user_id)
+    user.fact = SqlUserFact(**payload.model_dump())
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user.fact
+
+
+@router.put("/fact/update", response_model=UserUserFactDto)
+async def update_fact(
+    payload: UserUserFactDto,
+    db: Session = Depends(Sql.get_session),
+    user: UserTokenData = Depends(get_current_user)
+):
+    fact = await crud.user.get_fact_by_id(db, payload.id)
+    fact.question = payload.question
+    fact.answer = payload.answer
+    db.add(fact)
+    db.commit()
+    db.refresh(fact)
+    return fact
+
+
 @router.get("/role", response_model=RoleDto)
 async def get_my_role(
     db: Session = Depends(Sql.get_session),
@@ -82,7 +112,7 @@ async def get_available_interests(
         raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@interest_router.post("/", response_model=list[InterestDto])
+@interest_router.put("/", response_model=list[InterestDto])
 async def update_interests(
     payload: InterestUpdate,
     db: Session = Depends(Sql.get_session),
