@@ -12,7 +12,7 @@ from app.models.role import RoleCreate, RoleDto
 from app.controllers.user_controller import UserController
 
 from app.core.sql import Sql
-from app.models.user import UserDto, UserTeam
+from app.models.user import UserDto, UserTeam, UserProfileDto
 from app.models.file import FileDto
 
 router = APIRouter(prefix="/user", tags=["user"])
@@ -32,6 +32,15 @@ role_router = APIRouter(prefix="/role")
 async def get_me(
     db: Session = Depends(Sql.get_session),
     user: UserTokenData = Depends(get_current_user),
+):
+    user = await crud.user.get_user_by_id(db, user.user_id)
+    return user
+
+
+@router.get("/profile", response_model=UserProfileDto)
+async def get_my_profile(
+    db: Session = Depends(Sql.get_session),
+    user: UserTokenData = Depends(get_current_user)
 ):
     user = await crud.user.get_user_by_id(db, user.user_id)
     return user
