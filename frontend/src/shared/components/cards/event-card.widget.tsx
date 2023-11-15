@@ -58,12 +58,13 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) =
         </ul>
         <Button
           className="relative z-10 mt-auto"
+          disabled={item.isEnrolled}
           appearance="secondary"
           onClick={(e) => {
             e.stopPropagation();
             onRegisterClick();
           }}>
-          Записаться
+          {item.isEnrolled ? "Записан" : "Записаться"}
         </Button>
       </div>
     </li>

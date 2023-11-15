@@ -44,6 +44,20 @@ export namespace CourseEndpoint {
     return await api.get<CourseDto.CourseFile[]>(`/api/user/position/${positionId}/file`);
   };
 
+  export const uploadFilesByPositionId = async (positionId: number, files: File[]) => {
+    const formData = new FormData();
+    files.forEach((file) => formData.append("files", file));
+    return await api.post<CourseDto.CourseFile[]>(
+      `/api/user/position/${positionId}/file`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }
+    );
+  };
+
   export const deleteCourseFromPosition = async (positionId: number, courseId: number) => {
     return await api.delete(`/api/user/position/${positionId}/course?course_id=${courseId}`);
   };
@@ -54,7 +68,7 @@ export namespace CourseEndpoint {
 
   export const create = async (x: CourseDto.Template) => {
     const formData = new FormData();
-    x.data.forEach((file) => formData.append("files", file));
+    x.data.forEach((file) => formData.append("data", file));
     const query = new URLSearchParams();
     query.set("name", x.name);
     query.set("duration", x.duration.toString());

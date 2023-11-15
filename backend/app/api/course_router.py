@@ -10,38 +10,31 @@ from app.auth.dependency import get_current_user
 from app.auth.jwt import UserTokenData
 from app.controllers.course_controller import CourseController
 from app.core.sql import Sql
-from app.models.course import CourseDto, CourseCreate
+from app.models.course import CourseDto, BaseCourse
+from app import utils
 
 router = APIRouter(prefix="/course", tags=["course"])
 
 
 @router.post("/")
 async def create_course(
-    payload: CourseCreate = Depends(),
+    data: list[UploadFile],
+    payload: BaseCourse = Depends(),
     user: UserTokenData = Depends(get_current_user),
-    data: UploadFile = File(None),
     db: Session = Depends(Sql.get_session),
 ):
     if user.role_id == 1:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Доступ запрещён"
         )
-
-    if data and data.content_type not in [
-        "application/zip",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ]:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Поддерживаемые форматы '.zip' '.docx'",
-        )
-
-    return await CourseController(db).create_course(
-        payload,
-        data.file.read() if data else None,
-        data.filename if data else None,
-        data.content_type if data else None,
-    )
+    for f in data:
+        print(f.filename)
+        if not f.filename.split(".")[-1] in ["docx"]:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="Поддерживаемые форматы '.zip' '.docx'",
+            )
+    return await CourseController(db).create_course(payload, data)
     # try:
 
     # except Exception as e:
@@ -79,28 +72,48 @@ async def get_onboarding(
 
 @router.post("/onboarding")
 async def create_onboarding(
+    files: list[UploadFile],
     user: UserTokenData = Depends(get_current_user),
-    data: UploadFile = File(None),
     db: Session = Depends(Sql.get_session),
 ):
     if user.role_id == 1:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Доступ запрещён"
         )
-    if data and data.content_type not in [
-        "application/x-zip-compressed",
-        "application/zip",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ]:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Поддерживаемые форматы '.zip' '.docx'",
-        )
-    return await CourseController(db).update_onboarding(
-        data.file.read() if data else None,
-        data.filename if data else None,
-        data.content_type if data else None,
-    )
+    for f in files:
+        if not f.filename.split(".")[-1] in ["docx"]:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="Поддерживаемые форматы '.zip' '.docx'",
+            )
+    return await CourseController(db).update_onboarding(files)
+    # try:
+
+
+# @router.post("/onboarding")
+# async def create_onboarding(
+#     user: UserTokenData = Depends(get_current_user),
+#     data: UploadFile = File(None),
+#     db: Session = Depends(Sql.get_session),
+# ):
+#     if user.role_id == 1:
+#         raise HTTPException(
+#             status_code=status.HTTP_403_FORBIDDEN, detail="Доступ запрещён"
+#         )
+#     if data and data.content_type not in [
+#         "application/x-zip-compressed",
+#         "application/zip",
+#         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+#     ]:
+#         raise HTTPException(
+#             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+#             detail="Поддерживаемые форматы '.zip' '.docx'",
+#         )
+#     return await CourseController(db).update_onboarding(
+#         data.file.read() if data else None,
+#         data.filename if data else None,
+#         data.content_type if data else None,
+#     )
 
 
 @router.get("/my")

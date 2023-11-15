@@ -1,6 +1,5 @@
 # Hidden files such as .env .DS_STORE .vs code and so on
 .*
-static/
 
 
 docker/

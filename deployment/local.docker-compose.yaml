@@ -1,5 +1,10 @@
 version: "3"
 
+volumes:
+  postgres-data:
+  static-data:
+    
+
 services:
   db:
     image: postgres:15
@@ -7,7 +12,9 @@ services:
     env_file:
       - ../backend/.env
     volumes:
-      - ../docker/data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
   backend:
     build:
       context: ../backend/
@@ -20,7 +27,7 @@ services:
       - POSTGRES_HOST=db
       - RABBITMQ_HOST=rabbitmq
     volumes:
-      - ../static:/static
+      - static-data:/code/static
     depends_on:
       - db
     ports:
@@ -33,23 +40,10 @@ services:
       - ../backend/.env
     environment:
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
-    volumes:
-      - ../docker/rabbitmq:/var/lib/rabbitmq
     ports:
       - "15672:15672"
       - "5672:5672"
-  minio:
-    image: quay.io/minio/minio
-    ports:
-      - "9000:9000"
-      - "9090:9090"
-    container_name: minio
-    env_file:
-      - ../backend/.env
-    volumes:
-      - ../docker/minio/data:/data
-
-    command: server /data --console-address ":9090"
+    # command: server /data --console-address ":9090"
   worker:
     build:
       context: ../backend/
@@ -70,7 +64,8 @@ services:
     build:
       context: ../frontend/
       dockerfile: Dockerfile
-    env_file:
-      - ../frontend/.env
+    environment:
+      - VITE_API_URL=https://larek.itatmisis.ru
+
     ports:
       - "8080:5173"

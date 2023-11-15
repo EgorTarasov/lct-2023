@@ -58,6 +58,16 @@ export class AdminOnboardingPageViewModel {
       ...position.item,
       ...this.courses.filter((course) => toAdd.includes(course.id))
     ];
+
+    const files = position.uploadedFiles;
+    if (files.length > 0) {
+      try {
+        const res = await CourseEndpoint.uploadFilesByPositionId(position.id, files);
+        position.files = [...position.files, ...res];
+      } finally {
+        position.uploadedFiles = [];
+      }
+    }
   }
 
   public addFiles(file: File[]) {

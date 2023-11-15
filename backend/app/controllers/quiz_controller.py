@@ -62,15 +62,15 @@ class QuizController:
                 )
                 for answer in answers
             ]
-
-            return QuizWithAnswersDto.model_validate(
-                {
-                    "id": db_quiz.id,
-                    "title": db_quiz.title,
-                    "description_text": db_quiz.description_text,
-                    "questions": questions,
-                }
-            )
+            return QuizDto.model_validate(db_quiz)
+            # return QuizWithAnswersDto.model_validate(
+            #     {
+            #         "id": db_quiz.id,
+            #         "title": db_quiz.title,
+            #         "description_text": db_quiz.description_text,
+            #         "questions": questions,
+            #     }
+            # )
         else:
             return QuizDto.model_validate(db_quiz)
 

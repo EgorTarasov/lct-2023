@@ -29,6 +29,11 @@ export class AdminEducationViewModel {
     await this._init();
   };
 
+  updateCourse = async (id: number, course: CourseDto.Template) => {
+    // const res = await CourseEndpoint.update(id, course);
+    await this._init();
+  };
+
   private async _init() {
     await runInAction(async () => {
       const res = await CourseEndpoint.getAll();

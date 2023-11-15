@@ -123,11 +123,11 @@ async def create_position(
 @position_router.post("/{position_id}/file")
 async def upload_file_for_position(
     position_id: int,
-    data: UploadFile = File(None),
+    data: list[UploadFile] = File(None),
     user: UserTokenData = Depends(get_current_user),
     db: Session = Depends(Sql.get_session),
 ) -> list[FileDto]:  #
-    print(type(data))
+
     try:
         files = await UserController(db).add_position_file(data, position_id)
         return files

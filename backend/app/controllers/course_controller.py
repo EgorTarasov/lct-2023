@@ -1,7 +1,9 @@
 import typing as tp
+from fastapi import UploadFile
 from sqlalchemy.orm import Session
 
-from app.models.course import CourseCreate, CourseDto
+from app.models.course import BaseCourse, CourseDto, CourseCreate
+from .quiz_controller import QuizController
 from .file_controller import FileController
 
 from app import crud
@@ -14,37 +16,26 @@ class CourseController:
 
     async def update_onboarding(
         self,
-        file: bytes | None,
-        filename: str | None = "test.docx",
-        filetype: str | None = None,
+        files: list[UploadFile],
     ) -> CourseDto:
 
         db_course = await crud.course.update_endpoints(self.db, None, course_id=1)
-        quizes = await crud.quiz.get_quizes(self.db, None)
-        db_course = await crud.course.assign_quizes(self.db, db_course, quizes)
-        if file:
-            f_controller = FileController(self.db)
-            db_files = []
-            if (
-                filetype == "application/zip"
-                or filetype == "application/x-zip-compressed"
-            ):
-                db_files = await f_controller.save_files(file, filename)
-            else:
-                db_files = [await f_controller.save_file(file, filename)]
-            db_course = await crud.course.assign_files(self.db, db_course, db_files)
+        quizes = []
+        q = QuizController(self.db)
+        quizes = [await q.create_quiz(file, file.filename) for file in files]
+        db_quizes = await crud.quiz.get_quizes(self.db, [quiz.id for quiz in quizes])
 
+        db_course = await crud.course.assign_quizes(self.db, db_course, db_quizes)
+        if files:
+            f_controller = FileController(self.db)
+            db_files = [crud.file.get(self.db, q.file.id) for q in quizes]
+            db_course = await crud.course.assign_files(self.db, db_course, db_files)
         return CourseDto.model_validate(db_course)
 
     async def create_course(
         self,
-        payload: CourseCreate,
-        file: bytes | None,
-        filename: str = "test.docx",
-        filetype: tp.Literal[
-            "application/zip",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        ] = "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        payload: BaseCourse,
+        files: list[UploadFile] | None,
     ) -> CourseDto:
         """
         Создать курс
@@ -52,15 +43,23 @@ class CourseController:
         # TODO: если zip, то распаковать и вернуть вместе с курсом
 
         db_course = await crud.course.create(self.db, payload)
-        quizes = await crud.quiz.get_quizes(self.db, payload.quzes)
-        db_course = await crud.course.assign_quizes(self.db, db_course, quizes)
-        if file:
+        q = QuizController(self.db)
+        quizes = [await q.create_quiz(file, file.filename) for file in files]
+        db_quizes = await crud.quiz.get_quizes(self.db, [quiz.id for quiz in quizes])
+
+        db_course = await crud.course.assign_quizes(self.db, db_course, db_quizes)
+        if files:
             f_controller = FileController(self.db)
-            db_files = []
-            if utils.check_content_type(filetype):
-                db_files = await f_controller.save_files(file, filename)
-            else:
-                db_files = [await f_controller.save_file(file, filename)]
+            db_files = [crud.file.get(self.db, q.file.id) for q in quizes]
+            # db_files = [
+            #     await f_controller.save_file(await file.read(), file.filename)
+            #     for file in files
+            # ]
+
+            # if utils.check_content_type(filetype):
+            #     db_files = await f_controller.save_files(file, filename)
+            # else:
+            #     db_files = [await f_controller.save_file(file, filename)]
             db_course = await crud.course.assign_files(self.db, db_course, db_files)
 
         return CourseDto.model_validate(db_course)
@@ -101,6 +100,9 @@ class CourseController:
         """
         Удалить курс по id
         """
+        if course_id == 1:
+            return None
+
         await crud.course.delete(self.db, course_id)
 
     async def get_courses_by_position(self, position_id: int) -> list[CourseDto]:

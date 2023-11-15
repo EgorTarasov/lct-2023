@@ -8,7 +8,7 @@ import api from "api/utils/api";
 import { makeAutoObservable } from "mobx";
 
 export class MainPageViewModel {
-  public events: EventDto.Item[] | null = MockEvents;
+  public events: EventDto.Item[] | null = null;
   public courses: CourseDto.Item[] | null = null;
   public tasks: TaskDto.Item[] | null = null;
   public isLoading = true;
@@ -26,11 +26,18 @@ export class MainPageViewModel {
     ]);
     this.courses = coursesRes.map(CourseDto.convertDtoToItem);
     this.tasks = tasksRes.map(TaskDto.convertDtoToItem);
-    // this.events = eventsRes.map(EventDto.convertDtoToItem);
+    this.events = eventsRes.map(EventDto.convertDtoToItem);
     this.isLoading = false;
   }
 
   public async sendAssistantMessage(message: string) {
     const res = await api.post("/api/assistant", { message });
+  }
+
+  public async registerEvent(id: number) {
+    await EventsEndpoint.enroll(id);
+
+    const res = await EventsEndpoint.current();
+    this.events = res.map(EventDto.convertDtoToItem);
   }
 }

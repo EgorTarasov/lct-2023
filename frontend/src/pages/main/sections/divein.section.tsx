@@ -29,9 +29,11 @@ export const DiveinSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
         <Separator className="my-3" />
       </div>
       <ul className="grid">
-        <div className="flex justify-center items-center w-full h-48">
-          <p className="text-gray-500">Нет незаконченных задач 🤯</p>
-        </div>
+        {vm.tasks.length === 0 && (
+          <div className="flex justify-center items-center w-full h-48">
+            <p className="text-gray-500">Нет незаконченных задач 🤯</p>
+          </div>
+        )}
         <HorizontalCarousel
           spaceBetween={16}
           a11y={{

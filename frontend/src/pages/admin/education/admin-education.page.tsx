@@ -24,8 +24,14 @@ const CourseCard = (x: ICourseCardProps) => {
   const [isEditMode, setEditMode] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
 
-  const handleUpdateCourse = (e: FormEvent<HTMLFormElement>) => {
+  const handleUpdateCourse = async (e: FormEvent<HTMLFormElement>) => {
     const data = e.currentTarget.elements as unknown as Record<CourseFormFields, HTMLInputElement>;
+    const template: CourseDto.Template = {
+      name: data.title.value,
+      duration: parseInt(data.time_estimate.value),
+      data: files
+    };
+    // await x.vm.(template);
     setEditMode(false);
   };
   const handleDeleteCourse = async () => {
@@ -123,10 +129,11 @@ const CourseCard = (x: ICourseCardProps) => {
             </div>
           </div>
           <button
+            disabled
             className={
               "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
             }>
-            Добавить образовательный материал
+            В разработке
           </button>
         </form>
       </DialogBase>
@@ -150,7 +157,7 @@ export const AdminEducationPage = observer(() => {
   if (vm.isLoading) return <Loading />;
   return (
     <>
-      <div className="flex flex-col gap-4 px-4 mx-auto mt-6 max-w-screen-desktop fade-enter-done sm:mt-10">
+      <div className="appear flex flex-col gap-4 px-4 mx-auto mt-6 max-w-screen-desktop fade-enter-done sm:mt-10">
         <div className="flex-col item-center gap-4 sm:flex sm:flex-row sm:justify-between">
           <h1 className={"text-2xl font-medium sm:text-2xl"}>Все образовательные материалы</h1>
           <Button className="max-w-[156px]" onClick={() => setShowCreateDialog(true)}>

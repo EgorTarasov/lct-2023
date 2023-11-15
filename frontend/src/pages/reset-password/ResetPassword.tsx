@@ -2,11 +2,13 @@ import { PasswordField } from "@/components/fields/PasswordField";
 import { useQuery } from "@/hooks/useQuery";
 import { Button, Logo } from "@/ui";
 import { Input } from "@/ui/Input";
+import api from "api/utils/api";
 import { FormEvent, useCallback, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const ResetPassword = () => {
   const query = useQuery();
+  const navigate = useNavigate();
   const token = useMemo(() => query.get("token"), [query]);
 
   const handleFormSubmit = useCallback(
@@ -16,7 +18,18 @@ export const ResetPassword = () => {
         "new-password"?: { value: string };
         email?: { value: string };
       };
-      console.log(newPassword?.value, email?.value);
+      if (email?.value) {
+        api
+          .post(`/api/auth/send-recover-password?email=${email.value}`)
+          .then(() => alert("Письмо отправлено!"));
+      } else {
+        api
+          .post(`/api/auth/recover-password?token=${token}&$new_password{newPassword?.value}`)
+          .then(() => {
+            alert("Пароль успешно изменен!");
+            navigate("/login");
+          });
+      }
     },
     [token]
   );

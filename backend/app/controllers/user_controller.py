@@ -27,7 +27,7 @@ class UserController:
     def __init__(self, db: Session) -> None:
         self.db = db
 
-    async def create_user(self, payload: UserCreate) -> UserDto | None:
+    def create_user(self, payload: UserCreate) -> UserDto | None:
         password = PasswordManager.generate_password()
         try:
             user = crud.user.create_user(self.db, payload, password=password)
@@ -59,8 +59,7 @@ class UserController:
 
     def get_users(self) -> list[UserDto]:
         users = crud.user.get_users(self.db)
-        return [UserDto.model_validate(user)for user in users]
-
+        return [UserDto.model_validate(user) for user in users]
 
     async def update_interest(
         self, user: UserTokenData, payload: InterestUpdate
@@ -89,14 +88,11 @@ class UserController:
         return PositionDto.model_validate(db_position)
 
     async def add_position_file(
-        self, file: UploadFile, position_id: int
+        self, files: list[UploadFile], position_id: int
     ) -> list[FileDto]:
         f = FileController(self.db)
-        files = []
-        if utils.check_content_type(file.content_type):
-            files = await f.save_files(await file.read(), file.filename)
-        else:
-            files = [await f.save_file(await file.read(), file.filename)]
+        files = [await f.save_file(await file.read(), file.filename) for file in files]
+
         position = await crud.position.add_files(self.db, position_id, files)
         return [FileDto.model_validate(obj) for obj in position.files]
 

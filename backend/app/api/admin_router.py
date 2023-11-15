@@ -36,7 +36,7 @@ async def register_user(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Доступ запрещён"
         )
-    mentee = await UserController(db).create_user(payload)
+    mentee = UserController(db).create_user(payload)
     await crud.user.assign_mentee(db, user.user_id, mentee.id)
     if not mentee:
         raise HTTPException(status_code=400, detail="Пользователь уже существует")
