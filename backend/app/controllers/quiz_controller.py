@@ -26,12 +26,14 @@ class QuizController:
         # создаем пустой quiz и передаем его id в worker
         f = FileController(self.db)
         db_file = await f.save_file(await file.read(), file.filename)
+
         quiz = utils.load_questions(file.filename, db_file.id)
 
         # quiz = QuizCreate.model_validate(data)
 
         quiz.title = name
         db_quiz = crud.quiz.create_quiz(self.db, quiz)
+
         if db_quiz.description_text == "":
             generate_quiz.delay(db_quiz.id, db_file.id)
         return QuizDto.model_validate(db_quiz)

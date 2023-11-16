@@ -20,7 +20,7 @@ async def docx_to_markdown_async(docx_content: bytes) -> str:
         result = mammoth.convert_to_markdown(file)
         markdown = result.value
         messages = result.messages
-        print("markdown", markdown)
+        # print("markdown", markdown)
         return markdown
 
 
@@ -89,7 +89,7 @@ def load_questions(_filename: str, file_id: int, folder_path: str = "/proscom"):
         filename, ext = os.path.splitext(os.path.basename(file))
 
         if ext:
-            print(filename, ext)
+            # print(filename, ext)
             if (
                 filename.startswith("~$")
                 or ext != ".docx"
