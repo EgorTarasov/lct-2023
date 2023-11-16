@@ -51,6 +51,7 @@ services:
     command: celery -A app.worker.celery worker --loglevel=info
     volumes:
       - ./project:/usr/src/app
+      - static-data:/code/static
     env_file:
       - ../backend/.env
     environment:

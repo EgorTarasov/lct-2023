@@ -11,6 +11,6 @@ down:
 	docker compose -f ../deployment/local.docker-compose.yaml down
 
 db:
-	docker compose -f ../deployment/local.docker-compose.yaml up db --build -d
+	docker compose -f ../deployment/local.docker-compose.yaml up db worker rabbitmq --build -d
 web: 
-	docker compose -f ../deployment/local.docker-compose.yaml up db web --build -d
+	docker compose -f ../deployment/local.docker-compose.yaml up db web  --build -d
