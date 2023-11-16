@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.auth import PasswordManager
+from app.models.fact import SqlUserFact
 from app.models.user import *
 from app.models.mentee import mentor_mentee
 
@@ -123,3 +124,12 @@ async def assign_mentee(db: Session, mentor_id: int, mentee_id: int) -> list[Sql
     )
 
     return mentees
+
+
+async def get_fact_by_id(db: Session, fact_id: int) -> SqlUserFact:
+    """Получение пользователя по id"""
+    fact = db.query(SqlUserFact).where(SqlUserFact.id == fact_id).one_or_none()
+    if fact:
+        return fact
+    else:
+        raise Exception("Fact not found")

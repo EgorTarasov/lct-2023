@@ -5,17 +5,17 @@ from sqlalchemy import ForeignKey, Integer, Text, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from .base import Base
-from .interest import interest_user
+from .fact import UserUserFactDto
+from .interest import interest_user, InterestDto
 from .mentee import mentor_mentee
 from .position import PositionDto
 from .role import RoleDto
-
+from .event import SqlEvent, EventDto
+from .telegram import SqlTelegram, TelegramLoginData
 
 if tp.TYPE_CHECKING:
     from .quiz import SqlUserQuiz
     from .interest import SqlInterest
-    from .event import SqlEvent
-    from .telegram import SqlTelegram
 
 
 class UserCreate(BaseModel):
@@ -40,6 +40,15 @@ class UserDto(UserCreate):
     id: int = Field(..., alias="id")
     user_role: RoleDto
     position: PositionDto
+    events: list[EventDto]
+
+
+class UserProfileDto(UserDto):
+    model_config = ConfigDict(from_attributes=True)
+    mentors: list[UserDto]
+    interests: list[InterestDto]
+    fact: UserUserFactDto | None
+    telegram: TelegramLoginData | None
 
 
 class UserTeam(BaseModel):
@@ -71,9 +80,15 @@ class SqlUser(Base):
         nullable=True,
         default=None,
     )
+    fact_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("user_facts.id", ondelete="NO ACTION"),
+        nullable=False,
+    )
 
     user_role = relationship("SqlRole")
     position = relationship("SqlPosition", back_populates="users")
+    fact = relationship("SqlUserFact")
     interests: Mapped[list["SqlInterest"]] = relationship(
         secondary=interest_user, back_populates="users"
     )
