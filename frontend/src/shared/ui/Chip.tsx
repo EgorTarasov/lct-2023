@@ -2,7 +2,7 @@ import { twMerge } from "tailwind-merge";
 
 interface IChip {
   title: string;
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
   isActive?: boolean;
   icon?: JSX.Element;

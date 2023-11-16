@@ -34,7 +34,7 @@ export const EventCard: FC<EventCardProps> = ({ item, onRegisterClick, wide }) =
   return (
     <li
       className={twMerge(
-        "flex-col w-52 rounded-2xl border border-text-primary/20 relative bg-white",
+        "flex-col flex w-52 h-full rounded-2xl border border-text-primary/20 relative bg-white",
         wide ? "w-full" : "w-52"
       )}>
       <Icon className="text-primary rounded-2xl" />

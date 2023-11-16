@@ -14,8 +14,9 @@ export const Button: React.FC<ButtonProps> = ({ className, appearance = "primary
           ? "bg-primary hover:brightness-110 text-onPrimary"
           : "border border-text-primary/20 hover:bg-text-primary/5",
         rest.disabled &&
-          appearance === "primary" &&
-          "bg-text-primary/20 hover:bg-button-disabled text-text-primary",
+          (appearance === "primary"
+            ? "bg-text-primary/20 hover:bg-button-disabled text-text-primary"
+            : "!text-text-primary/20 !border-text-primary/5"),
         className
       )}
       {...rest}
