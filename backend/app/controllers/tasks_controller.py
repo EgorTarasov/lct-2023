@@ -10,7 +10,7 @@ from app.worker import (
     notify_admin_about_task_done,
     check_for_deadline,
 )
-from telegram.bot import notify
+from telegram.bot import notify, NotificationType
 
 
 class TaskController:
@@ -33,14 +33,16 @@ class TaskController:
         task = await crud.task.create_task(self.db, payload, mentor_id)
 
         fullname = f"{task.mentee.last_name} {task.mentee.first_name} {task.mentee.middle_name}"
-        await notify(
-            task.mentee.telegram.id,
-            {
-                "template": "task_new.jinja",
-                "fullname": fullname,
-                "task_name": task.name,
-            },
-        )
+        if task.mentee.telegram:
+            await notify(
+                task.mentee.telegram.id,
+                NotificationType.task_new,
+                {
+                    "fullname": f"{task.mentee.first_name} {task.mentee.last_name}",
+                    "task_name": task.name,
+                },
+            )
+
         notify_user_about_new_task.delay(fullname, task.mentee.email, task.name)
         check_for_deadline.apply_async(
             (task.id,), eta=task.deadline - timedelta(days=1)
@@ -60,6 +62,17 @@ class TaskController:
         if status == TaskStatus.finished:
             mentor_fullname = f"{task.mentor.last_name} {task.mentor.first_name} {task.mentor.middle_name}"
             mentee_fullname = f"{task.mentee.last_name} {task.mentee.first_name} {task.mentee.middle_name}"
+            if task.mentor.telegram:
+                await notify(
+                    task.mentor.telegram.id,
+                    NotificationType.task_done,
+                    {
+                        "mentor_fullname": mentor_fullname,
+                        "mentee_fullname": mentee_fullname,
+                        "task_name": task.name,
+                    },
+                )
+
             notify_admin_about_task_done.delay(
                 task.mentor.email, mentor_fullname, mentee_fullname, task.name
             )
