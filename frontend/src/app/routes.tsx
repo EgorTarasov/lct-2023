@@ -12,7 +12,6 @@ import { BrandingPage } from "../pages/admin/branding/branding.page.tsx";
 import { AdminEducationPage } from "../pages/admin/education/admin-education.page.tsx";
 import { AdminEventsPage } from "../pages/admin/events/adminEvents.page.tsx";
 import { AnalyticsPage } from "../pages/admin/analytics/analytics.page.tsx";
-import { observer } from "mobx-react-lite";
 import { AuthService } from "@/stores/auth.service.ts";
 import { autorun, makeAutoObservable } from "mobx";
 import { OnboardingPage } from "../pages/onboarding/onboarding.page.tsx";
@@ -117,6 +116,16 @@ const userRoutes: RouteType[] = [
     ),
     title: "Сотрудники",
     showInNav: true
+  },
+  {
+    path: "/contacts/:uid",
+    component: () => (
+      <PrivateRoute>
+        <StaffPage />
+      </PrivateRoute>
+    ),
+    title: "Сотрудники",
+    showInNav: false
   },
   {
     path: "/events",

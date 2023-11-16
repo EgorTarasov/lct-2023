@@ -11,7 +11,7 @@ export namespace SurveyEndpoint {
   };
 
   export const generateToken = async () => {
-    return await api.get<string>("/api/user/fact/generate-token");
+    return await api.post<string>("/api/user/fact/generate-token");
   };
 
   const getSurveyByToken = async (x: SurverDto.SurveyToken) => {
