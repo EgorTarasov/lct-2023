@@ -24,7 +24,7 @@ export const ResetPassword = () => {
           .then(() => alert("Письмо отправлено!"));
       } else {
         api
-          .post(`/api/auth/recover-password?token=${token}&$new_password{newPassword?.value}`)
+          .post(`/api/auth/recover-password?token=${token}&new_password=${newPassword?.value}`)
           .then(() => {
             alert("Пароль успешно изменен!");
             navigate("/login");

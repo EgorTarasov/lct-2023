@@ -21,8 +21,8 @@ interface IAdminEventCardProps {
 }
 
 const typeMap = {
-  education: 1,
-  sport: 2,
+  sport: 1,
+  education: 2,
   charity: 3,
   art: 4
 } as Record<EventDto.EventType, number>;
@@ -162,12 +162,8 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
           />
           <DropdownMultiple<EventDto.BackendEventType | null>
             value={[selectedType]}
-            onChange={(value) => setSelectedType(value.at(-1)!)}
-            options={x.vm.eventTypes}
-            render={(option) => option?.name ?? ""}
-            label={"Категория"}
+            onChange={(value) => setSelectedType(value.at(-1) ?? null)}
           />
-          <button
             className={
               "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
             }
@@ -267,7 +263,7 @@ export const AdminEventsPage = observer(() => {
           />
           <DropdownMultiple<EventDto.BackendEventType>
             value={selectedType ? [selectedType] : []}
-            onChange={(value) => setSelectedType(value[0])}
+            onChange={(value) => setSelectedType(value.at(-1) ?? null)}
             options={vm.eventTypes}
             render={(option) => option.name}
             label={"Категория"}
