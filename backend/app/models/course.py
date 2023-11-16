@@ -15,7 +15,7 @@ if tp.TYPE_CHECKING:
 class BaseCourse(BaseModel):
     name: str = Field(...)
     points: int = Field(100)
-    deadline_at: dt.datetime = Field(...)
+    deadline_at: dt.datetime = Field(dt.datetime.now() + dt.timedelta(days=7))
 
 
 class CourseCreate(BaseCourse):
