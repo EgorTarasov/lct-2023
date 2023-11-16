@@ -31,10 +31,10 @@ class QuizController:
                 prompt = file.read()
             with open(db_file.path, "r") as file:
                 document_text = file.read()
-            quiz_data = create_test_openai(prompt, document_text)
-            quiz.title = quiz_data["title"]
-            quiz.description_text = quiz_data["description_text"]
-            quiz.questions = quiz_data["questions"]
+            data = create_test_openai(prompt, document_text)
+            data["file_id"] = db_file.id
+            quiz = QuizCreate.model_validate(data)
+
         quiz.title = name
         db_quiz = await crud.quiz.create_quiz(self.db, quiz)
         return QuizDto.model_validate(db_quiz)
