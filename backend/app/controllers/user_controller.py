@@ -159,7 +159,7 @@ class UserController:
                     adaptation_target="",
                     starts_work_at=datetime.date.today(),
                     role_id=1,
-                    position_id=1,
+                    position_id=2,
                     number="+7 (999) 765-43-22",
                     password="UserExample",
                 ),
