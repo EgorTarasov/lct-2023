@@ -15,6 +15,7 @@ from app.models.quiz import (
 from app import crud, utils
 from app.auth.jwt import UserTokenData
 from app.controllers.file_controller import FileController
+from app.worker import create_test_openai
 
 
 class QuizController:
@@ -25,6 +26,15 @@ class QuizController:
         f = FileController(self.db)
         db_file = await f.save_file(await file.read(), file.filename)
         quiz = utils.load_questions(file.filename, db_file.id)
+        if quiz.description_text == "":
+            with open("./proscom/prompt.txt", "r") as file:
+                prompt = file.read()
+            with open(db_file.path, "r") as file:
+                document_text = file.read()
+            quiz_data = create_test_openai(prompt, document_text)
+            quiz.title = quiz_data["title"]
+            quiz.description_text = quiz_data["description_text"]
+            quiz.questions = quiz_data["questions"]
         quiz.title = name
         db_quiz = await crud.quiz.create_quiz(self.db, quiz)
         return QuizDto.model_validate(db_quiz)
@@ -85,9 +95,7 @@ class QuizController:
         else:
             return QuestionInfo.model_validate(db_question)
 
-    async def submit_answer(
-        self, question_id: int, user: UserTokenData, answer: str
-    ):
+    async def submit_answer(self, question_id: int, user: UserTokenData, answer: str):
         db_question = await crud.quiz.get_question(self.db, question_id)
 
         db_answer = await crud.quiz.create_answer(

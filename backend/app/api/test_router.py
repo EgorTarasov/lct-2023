@@ -6,7 +6,7 @@ from app.auth.jwt import UserTokenData
 from app.controllers.file_controller import FileController
 from app.models.file import FileDto
 from app.core.sql import Sql
-from app.core.gpt import create_test
+
 
 router = APIRouter(prefix="/test")
 
@@ -29,8 +29,5 @@ async def upload_file(
 
 @router.get("/test")
 async def test():
-    data = create_test(
-        prompt_path="./proscom/prompt.txt",
-        docx_path="./proscom/Welcome to the Proscom.docx",
-    )
+    data = {}
     return data

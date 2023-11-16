@@ -27,14 +27,16 @@ async def docx_to_markdown_async(docx_content: bytes) -> str:
 def read_docx(file_path: str) -> str:
     # Загрузка документа
     doc = docx.Document(file_path)
-    full_text = []
+    words = []
 
     # Проход по всем параграфам и добавление их в список
     for para in doc.paragraphs:
-        full_text.append(para.text)
+        words.extend(para.text.split(" "))
 
     # Соединение списка в одну строку с разделителями
-    return "\n".join(full_text)[:1500]
+    # limit amount of words to 1100
+
+    return " ".join(words[:500])
 
 
 def _custom_json_serializer(*args, **kwargs) -> str:
