@@ -14,7 +14,7 @@ if tp.TYPE_CHECKING:
 
 class BaseCourse(BaseModel):
     name: str = Field(...)
-    points: int = Field(...)
+    points: int = Field(100)
     deadline_at: dt.datetime = Field(...)
 
 
