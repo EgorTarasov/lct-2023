@@ -4,7 +4,7 @@ from app.models.quiz import QuizCreate, SqlAnswer, SqlQuiz, SqlQuestion
 from app.auth.jwt import UserTokenData
 
 
-async def create_quiz(db: Session, quiz: QuizCreate) -> SqlQuiz:
+def create_quiz(db: Session, quiz: QuizCreate) -> SqlQuiz:
     db_quiz = SqlQuiz(
         title=quiz.title, description_text=quiz.description_text, file_id=quiz.file_id
     )
@@ -68,7 +68,9 @@ async def get_quiz(db: Session, quiz_id: int) -> SqlQuiz:
     return db_quiz
 
 
-async def get_quizes(db: Session, quizes: list[int]) -> list[SqlQuiz]:
+
+
+def get_quizes(db: Session, quizes: list[int]) -> list[SqlQuiz]:
     db_quizes = db.query(SqlQuiz).filter(SqlQuiz.id.in_(quizes)).all()
     return db_quizes
 

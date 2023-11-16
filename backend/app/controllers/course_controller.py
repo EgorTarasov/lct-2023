@@ -23,7 +23,7 @@ class CourseController:
         quizes = []
         q = QuizController(self.db)
         quizes = [await q.create_quiz(file, file.filename) for file in files]
-        db_quizes = await crud.quiz.get_quizes(self.db, [quiz.id for quiz in quizes])
+        db_quizes = crud.quiz.get_quizes(self.db, [quiz.id for quiz in quizes])
 
         db_course = await crud.course.assign_quizes(self.db, db_course, db_quizes)
         if files:
@@ -42,39 +42,29 @@ class CourseController:
         """
 
         db_course = await crud.course.create(self.db, payload)
+        # course_id,
+
         q = QuizController(self.db)
-        # test files -> create quiz for each file
-        # else -> create empty quiz
 
         quizes = [await q.create_quiz(file, file.filename) for file in files]
-        db_quizes = await crud.quiz.get_quizes(self.db, [quiz.id for quiz in quizes])
+        db_quizes = crud.quiz.get_quizes(self.db, [quiz.id for quiz in quizes])
         db_course = await crud.course.assign_quizes(self.db, db_course, db_quizes)
         if files:
             f_controller = FileController(self.db)
             db_files = [crud.file.get(self.db, q.file.id) for q in quizes]
-            # db_files = [
-            #     await f_controller.save_file(await file.read(), file.filename)
-            #     for file in files
-            # ]
-
-            # if utils.check_content_type(filetype):
-            #     db_files = await f_controller.save_files(file, filename)
-            # else:
-            #     db_files = [await f_controller.save_file(file, filename)]
             db_course = await crud.course.assign_files(self.db, db_course, db_files)
 
         return CourseDto.model_validate(db_course)
 
-
     async def update_course(
-            self,
-            payload: CourseDto,
-            files: list[UploadFile] | None,
+        self,
+        payload: CourseDto,
+        files: list[UploadFile] | None,
     ) -> CourseDto:
         db_course = await crud.course.get(self.db, payload.id)
         q = QuizController(self.db)
         quizes = [await q.create_quiz(file, file.filename) for file in files]
-        db_quizes = await crud.quiz.get_quizes(self.db, [quiz.id for quiz in quizes])
+        db_quizes = crud.quiz.get_quizes(self.db, [quiz.id for quiz in quizes])
 
         db_course = await crud.course.assign_quizes(self.db, db_course, db_quizes)
         if files:

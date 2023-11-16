@@ -1,5 +1,6 @@
 import logging
 import json
+import os
 
 from celery import Celery
 from openai import OpenAI
@@ -10,6 +11,9 @@ from app.config import config
 from app.core.sql import Sql
 from app.mailing import EmailClient
 from app.models.task import TaskStatus
+from app.models.quiz import QuizCreate, SqlQuiz
+from app.models.course import BaseCourse
+from app.models.file import SqlFile
 
 celery = Celery(__name__, broker=config.rabbitmq_url)
 
@@ -19,8 +23,15 @@ email_client = EmailClient(
 
 openai_client = OpenAI(api_key=config.api_key)
 
+sql = Sql(
+    pg_user=config.postgres_user,
+    pg_password=config.postgres_password,
+    pg_host=config.postgres_host,
+    pg_db=config.postgres_db,
+    pg_port=config.postgres_port,
+)
 
-@celery.task
+
 def create_test_openai(
     prompt: str,
     document_text: str,
@@ -32,15 +43,43 @@ def create_test_openai(
     messages = [
         {"role": "user", "content": prompt},
     ]
+    logging.info("making request")
 
     result = openai_client.chat.completions.create(
         model="gpt-3.5-turbo", messages=messages
     )
-    result = json.loads(result.choices[0].message.content)
+    quiz_data = json.loads(result.choices[0].message.content)
+    logging.info("get data")
     with open("test.json", "w") as file:
-        json.dump(result, file, indent=4, ensure_ascii=False)
+        json.dump(quiz_data, file, indent=4, ensure_ascii=False)
+    return QuizCreate.model_validate(quiz_data)
 
-    return result
+
+@celery.task
+def generate_quiz(quiz_id: int, file_id: int):
+    session_generator = sql.get_session()
+    with next(session_generator) as db:
+        db_quiz = db.query(SqlQuiz).filter(SqlQuiz.id == quiz_id).first()
+        db_file = db.query(SqlFile).filter(SqlFile.id == file_id).first()
+        if not db_quiz or not db_file:
+            return
+        print(os.getcwd())
+        with open(db_file.path, "r") as file:
+            document_text = file.read()
+        with open("./proscom/prompt.txt", "r") as file:
+            prompt = file.read()
+
+        quiz = create_test_openai(prompt, document_text)
+
+        db_quiz.questions = quiz.questions
+        db.commit()
+
+    # with open("./proscom/prompt.txt", "r") as file:
+    #     prompt = file.read()
+    # with open(db_file.path, "r") as file:
+    #     document_text = file.read()
+    # data = create_test_openai(prompt, document_text)
+    # data["file_id"] = db_file.id
 
 
 if __name__ == "__main__":
@@ -88,13 +127,6 @@ def check_for_deadline(task_id: int):
     logging.debug("sending email about deadline soon")
     subject = "Совсем скоро сгорит дедлайн по вашей задаче"
     template = "task_deadline.jinja"
-    sql = Sql(
-        pg_user=config.postgres_user,
-        pg_password=config.postgres_password,
-        pg_host=config.postgres_host,
-        pg_db=config.postgres_db,
-        pg_port=config.postgres_port,
-    )
     session_generator = sql.get_session()
     with next(session_generator) as session:
         task = crud.task.get_task_by_id(session, task_id)
