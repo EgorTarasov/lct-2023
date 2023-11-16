@@ -28,7 +28,7 @@ async def update_endpoints(
 
 
 async def create(db: Session, payload: CourseCreate) -> SqlCourse:
-    db_course = SqlCourse(name=payload.name, duration=payload.duration)
+    db_course = SqlCourse(**payload.model_dump())
 
     db.add(db_course)
     db.commit()
