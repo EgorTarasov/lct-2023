@@ -5,7 +5,7 @@ from sqlalchemy import ForeignKey, Integer, Text, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from .base import Base
-from .fact import UserUserFactDto
+from .fact import UserFactDto
 from .interest import interest_user, InterestDto
 from .mentee import mentor_mentee
 from .position import PositionDto
@@ -47,7 +47,7 @@ class UserProfileDto(UserDto):
     model_config = ConfigDict(from_attributes=True)
     mentors: list[UserDto]
     interests: list[InterestDto]
-    fact: UserUserFactDto | None
+    fact: UserFactDto | None
     telegram: TelegramLoginData | None
 
 
@@ -80,16 +80,16 @@ class SqlUser(Base):
         nullable=True,
         default=None,
     )
-    fact_id: Mapped[int] = mapped_column(
-        Integer,
-        ForeignKey("user_facts.id", ondelete="NO ACTION"),
-        nullable=True,
-        default=None
-    )
+    # fact_id: Mapped[int] = mapped_column(
+    #     Integer,
+    #     ForeignKey("user_facts.id", ondelete="NO ACTION"),
+    #     nullable=True,
+    #     default=None
+    # )
 
     user_role = relationship("SqlRole")
     position = relationship("SqlPosition", back_populates="users")
-    fact = relationship("SqlUserFact")
+    fact: Mapped["SqlUserFact"] = relationship("SqlUserFact")
     interests: Mapped[list["SqlInterest"]] = relationship(
         secondary=interest_user, back_populates="users"
     )

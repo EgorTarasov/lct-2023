@@ -6,7 +6,7 @@ from app import crud
 from app.auth.dependency import get_current_user
 
 from app.auth.jwt import UserTokenData
-from app.models.fact import UserFactCreate, UserUserFactDto, SqlUserFact
+from app.models.fact import UserFactCreate, UserFactDto, SqlUserFact
 from app.models.interest import InterestUpdate, InterestDto
 from app.models.position import PositionCreate, PositionDto
 from app.models.role import RoleCreate, RoleDto
@@ -47,7 +47,7 @@ async def get_my_profile(
     return user
 
 
-@router.post("/fact/create", response_model=UserUserFactDto)
+@router.post("/fact/create", response_model=UserFactDto)
 async def create_fact(
     payload: UserFactCreate,
     db: Session = Depends(Sql.get_session),
@@ -61,19 +61,23 @@ async def create_fact(
     return user.fact
 
 
-@router.put("/fact/update", response_model=UserUserFactDto)
+@router.put("/fact/update", response_model=UserFactDto)
 async def update_fact(
-    payload: UserUserFactDto,
+    payload: UserFactDto,
     db: Session = Depends(Sql.get_session),
     user: UserTokenData = Depends(get_current_user)
 ):
-    fact = await crud.user.get_fact_by_id(db, payload.id)
-    fact.question = payload.question
-    fact.answer = payload.answer
-    db.add(fact)
-    db.commit()
-    db.refresh(fact)
-    return fact
+    try:
+        fact = await crud.user.get_fact_by_id(db, payload.id)
+        fact.question = payload.question
+        fact.answer = payload.answer
+        db.add(fact)
+        db.commit()
+        db.refresh(fact)
+        return fact
+    except Exception as e:
+        logging.error(e)
+        raise HTTPException(status_code=404, detail="Факт не найден")
 
 
 @router.get("/role", response_model=RoleDto)
