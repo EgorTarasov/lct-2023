@@ -213,59 +213,72 @@ class Survey(StatesGroup):
 
 class SurveyResult(CallbackData, prefix="survey_"):
     rating: int = 0
-    feeling: str = ""
+    feeling: int = 0
     info: str = ""
+
+
+rating_options_sentence = {
+    "Процесс был запутанным и неэффективным.": 1,
+    "Были некоторые полезные моменты, но в целом процесс требует улучшений.": 2,
+    "Процесс был организован неплохо, но есть пространство для улучшений.": 3,
+    "Процесс был организован неплохо, но есть пространство для улучшений.": 4,
+    "Процесс был понятным и полезным, но имеются небольшие недочёты.": 5,
+}
+
+rating_options = {
+    "Неудовлетворительно": 1,
+    "Удовлетворительно": 2,
+    "Хорошо": 3,
+    "Очень хорошо": 4,
+    "Отлично": 5,
+}
+
+feeling_options = {
+    "Воодушевленный": 5,
+    "Удовлетворенный": 4,
+    "Нейтральный": 3,
+    "Смущенный": 2,
+    "Перегруженный информацией": 1,
+}
 
 
 @dp.callback_query(FeedbackCallbackData.filter(F.type == FeedbackRequest.first))
 async def process_first_day(
     query: CallbackQuery, callback_data: FeedbackCallbackData, state: FSMContext
 ):
+    _keyboard = [[KeyboardButton(text=k)] for k, _ in rating_options.items()]
     await state.set_state(Survey.rating)
     await bot.send_message(
         query.from_user.id,
         "Как бы вы оценили процесс онбординга в нашей компании?",
-        reply_markup=ReplyKeyboardMarkup(
-            keyboard=[
-                [KeyboardButton(text="1"), KeyboardButton(text="2")],
-                [KeyboardButton(text="4"), KeyboardButton(text="4")],
-                [KeyboardButton(text="5")],
-            ]
-        ),
+        reply_markup=ReplyKeyboardMarkup(keyboard=_keyboard),
     )
 
 
 @dp.message(Survey.rating)
 async def process_rating(message: Message, state: FSMContext) -> None:
-    await state.set_data(data={"rating": int(message.text)})
-    await state.set_state(Survey.feeling)
-    await bot.send_message(
-        message.from_user.id,
-        text="Каково ваше эмоциональное состояние после прохождения процесса онбординга?",
-        reply_markup=ReplyKeyboardMarkup(
-            keyboard=[
-                [KeyboardButton(text="воодушевленный")],
-                [KeyboardButton(text="удовлетворенный")],
-                [KeyboardButton(text="нейтральный")],
-                [KeyboardButton(text="смущенный")],
-                [KeyboardButton(text="перегруженный информацией")],
-            ]
-        ),
-    )
+    if message.text not in rating_options.keys():
+        await message.reply("Пожалуйста выбери один из предложенных вариантов")
+    else:
+        _keyboard = [[KeyboardButton(text=k)] for k, _ in feeling_options.items()]
+        await state.set_data(data={"rating": rating_options[message.text]})
+        await state.set_state(Survey.feeling)
+        await message.reply(
+            text="Каково ваше эмоциональное состояние после прохождения процесса онбординга?",
+            reply_markup=ReplyKeyboardMarkup(
+                keyboard=_keyboard,
+            ),
+        )
 
 
 @dp.message(Survey.feeling)
 async def process_feeling(message: Message, state: FSMContext) -> None:
-    if message.text not in [
-        "воодушевленный",
-        "удовлетворенный",
-        "нейтральный",
-        "смущенный",
-        "перегруженный информацией",
-    ]:
+    if message.text not in feeling_options.keys():
         await message.reply("Пожалуйста выбери один из предложенных вариантов")
     else:
-        await state.set_data(data={"feeling": message.text})
+        data = await state.get_data()
+        data["feeling"] = feeling_options[message.text]
+        await state.set_data(data)
         await state.set_state(Survey.info)
         await bot.send_message(
             message.from_user.id,
@@ -276,8 +289,8 @@ async def process_feeling(message: Message, state: FSMContext) -> None:
 
 @dp.message(Survey.info)
 async def process_feeling(message: Message, state: FSMContext) -> None:
-    await state.set_data(data={"feeling": message.text})
     data = await state.get_data()
+    data["info"] = message.text
     print(data)
     await message.reply(
         text="""
@@ -305,5 +318,5 @@ async def echo_handler(message: types.Message) -> None:
 
 
 async def main() -> None:
-    # await request_feedback(499114263, "Максим Ледаков", FeedbackRequest.first)
+    await request_feedback(499114263, "Максим Ледаков", FeedbackRequest.first)
     await dp.start_polling(bot)
