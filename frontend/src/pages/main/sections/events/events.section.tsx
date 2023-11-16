@@ -32,7 +32,7 @@ export const EventsSection: FCVM<MainPageViewModel> = observer(({ vm }) => {
               forceToAxis: true
             }}>
             {vm.events.map((v, i) => (
-              <EventCard key={i} item={v} onRegisterClick={() => console.log(v.id)} />
+              <EventCard key={i} item={v} onRegisterClick={() => vm.registerEvent(v.id)} />
             ))}
           </HorizontalCarousel>
         )}

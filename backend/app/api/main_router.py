@@ -12,10 +12,12 @@ from app.api import (
     file_router,
     analytics_router,
     theme_router,
+    test_router,
 )
 
 
 router = APIRouter()
+router.include_router(test_router.router)
 router.include_router(auth_router.router)
 router.include_router(user_router.router)
 router.include_router(admin_router.router)

@@ -6,11 +6,12 @@ import json
 import pydantic.json
 import os
 import glob
+import docx
 
 from app.models.quiz import QuestionCreate, QuizCreate
 
 
-async def docx_to_markdown_async(docx_content: bytes):
+async def docx_to_markdown_async(docx_content: bytes) -> str:
     """ """
     async with aiofiles.open("tmp.docx", "wb") as file:
         await file.write(docx_content)
@@ -21,6 +22,21 @@ async def docx_to_markdown_async(docx_content: bytes):
         messages = result.messages
         print("markdown", markdown)
         return markdown
+
+
+def read_docx(file_path: str) -> str:
+    # Загрузка документа
+    doc = docx.Document(file_path)
+    words = []
+
+    # Проход по всем параграфам и добавление их в список
+    for para in doc.paragraphs:
+        words.extend(para.text.split(" "))
+
+    # Соединение списка в одну строку с разделителями
+    # limit amount of words to 1100
+
+    return " ".join(words[:500])
 
 
 def _custom_json_serializer(*args, **kwargs) -> str:
@@ -81,7 +97,10 @@ def load_questions(_filename: str, file_id: int, folder_path: str = "/proscom"):
             ):
                 continue
             file_dict[filename + ".docx"] = filename + ".json"
-
+    if _filename not in file_dict.keys():
+        return QuizCreate(
+            title=_filename, description_text="", file_id=file_id, questions=[]
+        )
     quiz = file_dict[_filename]
     with open(f"{folder_path}/{quiz}", "r", encoding="utf-8") as f:
         json_data = json.load(f)

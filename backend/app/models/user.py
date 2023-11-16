@@ -80,12 +80,12 @@ class SqlUser(Base):
         nullable=True,
         default=None,
     )
-    # fact_id: Mapped[int] = mapped_column(
-    #     Integer,
-    #     ForeignKey("user_facts.id", ondelete="NO ACTION"),
-    #     nullable=True,
-    #     default=None
-    # )
+    fact_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("user_facts.id", ondelete="NO ACTION"),
+        nullable=True,
+        default=None,
+    )
 
     user_role = relationship("SqlRole")
     position = relationship("SqlPosition", back_populates="users")

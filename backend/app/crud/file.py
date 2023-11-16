@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from app.models.file import SqlFile
 
 
-def save(db: Session, filename: str, path: str) -> SqlFile:
-    db_file = SqlFile(name=filename, path=path)
+def save(db: Session, filename: str, path: str, duration: int = 0) -> SqlFile:
+    db_file = SqlFile(name=filename, path=path, duration=duration)
     db.add(db_file)
     db.commit()
     db.refresh(db_file)

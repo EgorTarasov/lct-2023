@@ -9,6 +9,7 @@ class FileBase(BaseModel):
 
     name: str
     path: str
+    duration: int = 0
 
 
 class FileDto(FileBase):
@@ -18,6 +19,7 @@ class FileDto(FileBase):
 class SqlFile(Base):
     __tablename__ = "file"
 
-    id: Mapped[int] = mapped_column(Integer,primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(Text)
     path: Mapped[str] = mapped_column(Text)
+    duration: Mapped[int] = mapped_column(Integer, default=0)
