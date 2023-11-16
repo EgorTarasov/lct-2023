@@ -30,8 +30,14 @@ services:
       - static-data:/code/static
     depends_on:
       - db
+      - worker
     ports:
       - "8000:8000"
+  telegram:
+    build:
+      context: ../backend/
+      dockerfile: Dockerfile
+    command: ["python3", "main.py"]
   rabbitmq:
     image: rabbitmq:3.10.7-management
     hostname: rabbitmq
@@ -58,7 +64,6 @@ services:
       - POSTGRES_HOST=db
       - RABBITMQ_HOST=rabbitmq
     depends_on:
-      - backend
       - rabbitmq
       - db
   web:
