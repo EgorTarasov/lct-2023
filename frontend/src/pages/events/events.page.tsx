@@ -113,6 +113,14 @@ export const EventsPage = () => {
         {events.map((v, i) => (
           <EventCard item={v} onRegisterClick={() => registerEvent(v.id)} key={v.id} wide />
         ))}
+        {events.length === 0 && (
+          <div className="flex flex-col items-center justify-center gap-4 mt-6">
+            <p className="text-2xl font-bold text-center">Ничего не найдено</p>
+            <p className="text-gray-500 text-center">
+              Попробуйте изменить фильтры <br /> или подождать подходящих мероприятий
+            </p>
+          </div>
+        )}
       </ul>
     </div>
   );

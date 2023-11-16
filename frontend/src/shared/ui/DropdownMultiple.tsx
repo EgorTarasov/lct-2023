@@ -1,7 +1,7 @@
 import { Combobox, Transition } from "@headlessui/react";
 import ChevronSvg from "@/assets/chevron.svg";
 import CheckSvg from "@/assets/check.svg";
-import { FC, Fragment, useMemo, useState } from "react";
+import { FC, Fragment, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { twMerge } from "tailwind-merge";
 import { toJS } from "mobx";
@@ -35,6 +35,21 @@ const DropdownMultiple = observer(<T,>(p: ComboboxMultipleProps<T>) => {
     [p.value, p.options]
   );
 
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.stopPropagation();
+        setInputFocused(false);
+      }
+    };
+
+    document.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, []);
+
   return (
     <Combobox value={selectedOptions} multiple onChange={p.onChange}>
       <div className="relative text-sm">
@@ -46,7 +61,13 @@ const DropdownMultiple = observer(<T,>(p: ComboboxMultipleProps<T>) => {
             className="whitespace-nowrap w-full cursor-pointer pr-8 text-ellipsis border border-text-primary/20 rounded-lg p-3"
             placeholder={placeholder}
             onClick={() => setInputFocused((v) => !v)}
-            onFocus={() => setQuery("")}
+            onFocus={(e) => {
+              if (e.relatedTarget === null) return;
+
+              e.preventDefault();
+              setQuery("");
+              setInputFocused(true);
+            }}
             onBlur={() => setInputFocused(false)}
             displayValue={(value: T[]) => (inputFocused ? "" : placeholder)}
             onChange={(event) => setQuery(event.target.value)}

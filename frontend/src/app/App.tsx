@@ -14,19 +14,34 @@ import { AuthService } from "@/stores/auth.service";
 import { toJS } from "mobx";
 import "react-datepicker/dist/react-datepicker.css";
 
+const NotFound = () => {
+  return (
+    <div className="appear flex delay-1000 flex-col items-center justify-center h-full">
+      <h1 className="text-4xl">404</h1>
+      <h2 className="text-2xl">Страница не найдена</h2>
+    </div>
+  );
+};
+
 const App = observer(() => {
   const location = useLocation();
   const routeFallback = useMemo(() => {
     if (AuthService.auth.state === "anonymous") {
-      return "/login";
+      return <Navigate to={"/login"} />;
+    }
+    return <NotFound />;
+  }, [AuthService.auth.state]);
+
+  const defaultPage = useMemo(() => {
+    if (AuthService.auth.state === "anonymous") {
+      return <Navigate to={"/login"} />;
     }
     if (AuthService.auth.state === "loading") {
-      return "/";
+      return <></>;
     }
     if (AuthService.auth.user.user_role.name === "hr") {
-      return "/admin/employees";
+      return <Navigate to={"/admin/employees"} />;
     }
-    return "/";
   }, [AuthService.auth.state]);
 
   useLayoutEffect(() => {
@@ -56,7 +71,8 @@ const App = observer(() => {
               {RoutesStore.routes.map((route, index) => (
                 <Route key={index} path={route.path} element={<route.component />} />
               ))}
-              <Route path="*" element={<Navigate to={routeFallback} />} />
+              <Route path="/" element={defaultPage} />
+              <Route path="*" element={routeFallback} />
             </Routes>
           </CSSTransition>
         </SwitchTransition>

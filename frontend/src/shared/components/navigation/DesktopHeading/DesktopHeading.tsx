@@ -33,18 +33,33 @@ export const DesktopHeading = observer(() => {
         <Logo className="w-3/4 max-w-[150px]" />
         <nav className="flex-1 h-full flex flex-col overflow-y-hidden overflow-x-visible w-full">
           <ul className="flex flex-col gap-1 mt-10 overflow-y-auto overflow-x-visible">
-            <li
-              className={twMerge(
-                "flex text-text-primary/30 justify-between items-center px-4 py-3 w-full cursor-default rounded-xl select-none"
-              )}>
-              Профиль
-              {UserStore.points && (
-                <div className="flex items-center gap-1 text-text-primary/60">
-                  <LightningIcon className="text-primary" width={24} />
-                  {UserStore.points}
-                </div>
+            <NavLink
+              to="/me"
+              className={({ isActive }) =>
+                twMerge(
+                  "flex justify-between px-4 py-3 w-full hover:text-text-primary hover:bg-text-primary/5 rounded-xl text-text-primary/60",
+                  isActive && "!text-onPrimary !bg-primary"
+                )
+              }>
+              {({ isActive }) => (
+                <>
+                  Профиль
+                  {UserStore.points && (
+                    <div
+                      className={twMerge(
+                        "flex items-center gap-1 text-text-primary/60",
+                        isActive && "text-onPrimary"
+                      )}>
+                      <LightningIcon
+                        className={twMerge("text-primary", isActive && "text-onPrimary")}
+                        width={24}
+                      />
+                      {UserStore.points}
+                    </div>
+                  )}
+                </>
               )}
-            </li>
+            </NavLink>
             {RoutesStore.routes
               .filter((r) => r.showInNav)
               .map((item, i) => (

@@ -24,11 +24,11 @@ export const OnboardingPage = observer(() => {
       {vm.isLoading ? (
         <Loading />
       ) : vm.course === null ? (
-        <div className="flex justify-center items-center w-full h-48">
+        <div className="appear flex justify-center items-center w-full h-48">
           <p className="text-2xl text-center">Скоро здесь появится курс, подожди еще немного!</p>
         </div>
       ) : (
-        <ul className="p-5 bg-white flex flex-col rounded-2xl">
+        <ul className="appear p-5 bg-white flex flex-col rounded-2xl">
           <Collapsible title={vm.course.title}>
             {vm.course.quizes.map((file, index) => (
               <TaskLink key={index} courseId={vm.course!.id} item={file} />

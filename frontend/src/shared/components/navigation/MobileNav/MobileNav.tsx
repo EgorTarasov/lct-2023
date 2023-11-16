@@ -71,7 +71,10 @@ export const MobileNav = observer(() => {
                   <LightningIcon className="w-6 h-6 text-primary" />
                   <span className="text-base text-text-primary">100</span>
                 </div>
-                <NavLink to={"/me"} aria-label="Перейти в профиль">
+                <NavLink
+                  to={"/me"}
+                  aria-label="Перейти в профиль"
+                  onClick={() => setIsMenuOpen(false)}>
                   <UserIcon className="w-10 h-10 text-primary" />
                 </NavLink>
               </div>

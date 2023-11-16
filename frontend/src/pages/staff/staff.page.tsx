@@ -3,6 +3,7 @@ import SearchIcon from "@/assets/search.svg";
 import { Input } from "@/ui";
 import { useState } from "react";
 import { ContactListSection } from "./section/contactList.section.tsx";
+import { MeetingSection } from "./section/meeting.section.tsx";
 
 export const StaffPage = () => {
   const [search, setSearch] = useState("");
@@ -24,7 +25,7 @@ export const StaffPage = () => {
           },
           {
             title: "Знакомства",
-            element: <p>В разработке</p>
+            element: <MeetingSection />
           }
         ]}
       />

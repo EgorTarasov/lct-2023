@@ -41,6 +41,15 @@ const userRoutes: RouteType[] = [
     showInNav: true
   },
   {
+    path: "/me",
+    component: () => (
+      <PrivateRoute>
+        <ProfilePage />
+      </PrivateRoute>
+    ),
+    title: "Профиль"
+  },
+  {
     path: "/onboarding",
     component: () => (
       <PrivateRoute>
@@ -211,6 +220,15 @@ const adminRoutes: RouteType[] = [
     ),
     showInNav: true,
     title: "Аналитика"
+  },
+  {
+    path: "/me",
+    component: () => (
+      <PrivateRoute>
+        <ProfilePage />
+      </PrivateRoute>
+    ),
+    title: "Профиль"
   }
 ];
 
