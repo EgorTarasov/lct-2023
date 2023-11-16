@@ -16,6 +16,7 @@ export class EmployeesPageViewModel {
   public positions: CommonDto.Named<number>[] = [];
   public selectedPosition: CommonDto.Named<number> | null = null;
   public tasks: { userId: number; tasks: TaskDto.Item[] }[] = [];
+  public isUserLoading = false;
   isLoading = true;
 
   constructor() {
@@ -38,16 +39,22 @@ export class EmployeesPageViewModel {
   async registerUser(item: UserUpdate): Promise<boolean> {
     if (!this.selectedPosition) return false;
 
-    await AdminEndpoint.registerUser({
-      first_name: item.first_name,
-      last_name: item.last_name,
-      middle_name: item.middle_name,
-      email: item.email,
-      number: item.phone,
-      adaptation_target: item.goal,
-      starts_work_at: "2023-12-12",
-      position_id: this.selectedPosition.id
-    });
+    this.isUserLoading = true;
+
+    try {
+      await AdminEndpoint.registerUser({
+        first_name: item.first_name,
+        last_name: item.last_name,
+        middle_name: item.middle_name,
+        email: item.email,
+        number: item.phone,
+        adaptation_target: item.goal,
+        starts_work_at: "2023-12-12",
+        position_id: this.selectedPosition.id
+      });
+    } finally {
+      this.isUserLoading = false;
+    }
 
     return true;
   }

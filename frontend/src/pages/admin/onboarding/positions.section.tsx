@@ -23,80 +23,76 @@ export const PositionsSection: FCVM<AdminOnboardingPageViewModel> = observer(({ 
     );
   };
 
-  console.log(toJS(vm.courses));
-
   return (
-    <>
-      <section className="flex flex-col gap-4 mt-4">
-        <h2 className={"text-2xl font-medium sm:text-2xl"}>Онбординг по специальностям</h2>
-        <Input
-          placeholder="Поиск по специальностям"
-          value={vm.query}
-          onChange={(v) => (vm.query = v)}
-        />
-        <ul className="flex flex-col gap-6">
-          {vm.filteredPositions.map((position, index) => (
-            <li key={index} className="flex flex-col">
-              <h3 className="text-2xl font-medium w-fit">{position.name}</h3>
-              <div className="flex flex-col gap-3">
-                <div className="appear flex flex-col gap-6">
-                  <div
-                    className="grid gap-4"
-                    style={{
-                      gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))"
-                    }}>
-                    <div className="flex flex-col bg-white px-8 rounded-2xl py-5">
-                      <DragDropFile
-                        onUpload={(files) => position.uploadedFiles.push(...files)}
-                        dropZone={
-                          <span>
-                            Перетащите сюда или выберите <b>.docx</b>
-                            <br />
-                            или <b>текстовый файл</b>
-                          </span>
-                        }
-                        acceptableFormats={[".docx"]}
-                      />
-                      <h5 className="text-lg font-medium my-4">Обучение</h5>
-                      <DropdownMultiple<CourseDto.Result>
-                        options={vm.courses}
-                        render={(v) => v.name}
-                        onChange={(v) => (position.updatedCourses = v.map((vv) => vv.id))}
-                        value={vm.courses.filter((v) =>
-                          position.updatedCourses.some((vv) => vv === v.id)
-                        )}
-                      />
-                      {isUpdatedCoursesDiffers(position) && (
-                        <Button
-                          className="mt-6"
-                          onClick={() => vm.updatePosition(position)}
-                          disabled={vm.isLoading}>
-                          Сохранить
-                        </Button>
+    <section className="flex flex-col gap-4 mt-4">
+      <h2 className={"text-2xl font-medium sm:text-2xl"}>Онбординг по специальностям</h2>
+      <Input
+        placeholder="Поиск по специальностям"
+        value={vm.query}
+        onChange={(v) => (vm.query = v)}
+      />
+      <ul className="flex flex-col gap-6">
+        {vm.filteredPositions.map((position, index) => (
+          <li key={index} className="appear flex flex-col">
+            <h3 className="text-2xl font-medium w-fit">{position.name}</h3>
+            <div className="flex flex-col gap-3">
+              <div className="appear flex flex-col gap-6">
+                <div
+                  className="grid gap-4"
+                  style={{
+                    gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))"
+                  }}>
+                  <div className="flex flex-col bg-white px-8 rounded-2xl py-5">
+                    <DragDropFile
+                      onUpload={(files) => position.uploadedFiles.push(...files)}
+                      dropZone={
+                        <span>
+                          Перетащите сюда или выберите <b>.docx</b>
+                          <br />
+                          или <b>текстовый файл</b>
+                        </span>
+                      }
+                      acceptableFormats={[".docx"]}
+                    />
+                    <h5 className="text-lg font-medium my-4">Обучение</h5>
+                    <DropdownMultiple<CourseDto.Result>
+                      options={vm.courses}
+                      render={(v) => v.name}
+                      onChange={(v) => (position.updatedCourses = v.map((vv) => vv.id))}
+                      value={vm.courses.filter((v) =>
+                        position.updatedCourses.some((vv) => vv === v.id)
                       )}
-                    </div>
-                    <ul className="flex flex-col gap-3">
-                      <h5 className="text-lg font-medium">Загруженные файлы</h5>
-                      {position.files.map((file, index) => (
-                        <AdminTaskCard key={index} file={file} />
-                      ))}
-                      {position.uploadedFiles.map((file, index) => (
-                        <UploadedFile
-                          key={index}
-                          title={file.name}
-                          onRemove={() => position.uploadedFiles.splice(index, 1)}
-                          fileSize={file.size}
-                        />
-                      ))}
-                    </ul>
+                    />
+                    {isUpdatedCoursesDiffers(position) && (
+                      <Button
+                        className="mt-6"
+                        onClick={() => vm.updatePosition(position)}
+                        disabled={vm.isLoading}>
+                        Сохранить
+                      </Button>
+                    )}
                   </div>
+                  <ul className="flex flex-col gap-3">
+                    <h5 className="text-lg font-medium">Загруженные файлы</h5>
+                    {position.files.map((file, index) => (
+                      <AdminTaskCard key={index} file={file} />
+                    ))}
+                    {position.uploadedFiles.map((file, index) => (
+                      <UploadedFile
+                        key={index}
+                        title={file.name}
+                        onRemove={() => position.uploadedFiles.splice(index, 1)}
+                        fileSize={file.size}
+                      />
+                    ))}
+                  </ul>
                 </div>
               </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 });
 // <DialogBase

@@ -16,7 +16,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const NotFound = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-full">
+    <div className="appear flex flex-col items-center justify-center h-full">
       <h1 className="text-4xl">404</h1>
       <h2 className="text-2xl">Страница не найдена</h2>
     </div>
@@ -29,13 +29,19 @@ const App = observer(() => {
     if (AuthService.auth.state === "anonymous") {
       return <Navigate to={"/login"} />;
     }
+    return <NotFound />;
+  }, [AuthService.auth.state]);
+
+  const defaultPage = useMemo(() => {
+    if (AuthService.auth.state === "anonymous") {
+      return <Navigate to={"/login"} />;
+    }
     if (AuthService.auth.state === "loading") {
-      return <NotFound />;
+      return <></>;
     }
     if (AuthService.auth.user.user_role.name === "hr") {
-      return <NotFound />;
+      return <Navigate to={"/admin/employees"} />;
     }
-    return <NotFound />;
   }, [AuthService.auth.state]);
 
   useLayoutEffect(() => {
@@ -65,6 +71,7 @@ const App = observer(() => {
               {RoutesStore.routes.map((route, index) => (
                 <Route key={index} path={route.path} element={<route.component />} />
               ))}
+              <Route path="/" element={defaultPage} />
               <Route path="*" element={routeFallback} />
             </Routes>
           </CSSTransition>

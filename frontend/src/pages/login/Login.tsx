@@ -7,7 +7,7 @@ import { AuthDto } from "api/models/auth.model.ts";
 import { Link, useNavigate } from "react-router-dom";
 import { ThemeService } from "@/stores/theme.service.ts";
 import { observer } from "mobx-react-lite";
-import { MOCK_USER } from "@/constants/mocks";
+import { MOCK_HR, MOCK_USER } from "@/constants/mocks";
 import { PasswordField } from "@/components/fields/PasswordField";
 import { TLoginButton, TLoginButtonSize, TUser } from "react-telegram-auth";
 
@@ -16,6 +16,7 @@ export const Login = observer(() => {
   const [showError, setShowError] = useState<boolean>(false);
   const [authData, setAuthData] = useState<AuthDto.Login>(MOCK_USER);
   const [isLoading, setIsLoading] = useState(false);
+  const [showTestHr, setShowTestHr] = useState(false);
 
   const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -56,13 +57,22 @@ export const Login = observer(() => {
   const handleUsernameChange = (value: string) => {
     setAuthData({ ...authData, username: value });
   };
+
+  const fillTestData = () => {
+    if (showTestHr) {
+      setAuthData(MOCK_USER);
+    } else {
+      setAuthData(MOCK_HR);
+    }
+    setShowTestHr((v) => !v);
+  };
+
   return (
     <div className={"w-full h-full flex items-center justify-center bg-white"}>
       <div className={"w-[300px] p-5 flex flex-col items-center"}>
         <div className={"mb-5 w-full flex items-center justify-center"}>
           <Logo />
         </div>
-
         <form
           onSubmit={handleFormSubmit}
           aria-label="Два поля: почта и пароль, либо вход через Telegram"
@@ -93,7 +103,13 @@ export const Login = observer(() => {
               placeholder={"Введите пароль"}
               onChange={handlePasswordChange}
             />
-            <div className={"flex items-center justify-end"}>
+            <div className={"flex items-center justify-between"}>
+              <button
+                type="button"
+                className="text-text-primary/60 text-sm hover:text-text-primary transition-colors duration-200 underline hover:no-underline"
+                onClick={fillTestData}>
+                Тестовый {showTestHr ? "юзер" : "HR"}
+              </button>
               <Link
                 to="/reset-password"
                 className={

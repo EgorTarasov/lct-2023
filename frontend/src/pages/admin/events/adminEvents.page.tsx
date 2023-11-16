@@ -301,9 +301,9 @@ export const AdminEventsPage = observer(() => {
             label={"Категория"}
           />
           <Button
-            className={
-              "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
-            }
+            // className={
+            //   "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
+            // }
             disabled={isLoading}>
             Добавить мероприятие
           </Button>

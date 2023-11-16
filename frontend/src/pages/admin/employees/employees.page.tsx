@@ -392,12 +392,13 @@ export const EmployeesPage = observer(() => {
             }}
             value={vm.selectedPosition ? [vm.selectedPosition] : []}
           />
-          <button
-            className={
-              "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
-            }>
+          <Button
+            disabled={vm.isUserLoading}
+            // className={
+            //   "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
+          >
             Добавить сотрудника
-          </button>
+          </Button>
         </form>
       </DialogBase>
     </>
