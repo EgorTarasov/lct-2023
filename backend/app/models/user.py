@@ -51,6 +51,15 @@ class UserProfileDto(UserDto):
     telegram: TelegramLoginData | None
 
 
+class UserForSurveyDto(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int = Field(..., alias="id")
+    first_name: str = Field(..., min_length=2, max_length=50)
+    last_name: str = Field(..., min_length=2, max_length=50)
+    middle_name: str = Field(None, min_length=2, max_length=50)
+    fact: UserFactDto
+
+
 class UserTeam(BaseModel):
     lead: UserDto
     director: UserDto
