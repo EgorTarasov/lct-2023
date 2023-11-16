@@ -11,7 +11,7 @@ export const Button: React.FC<ButtonProps> = ({ className, appearance = "primary
       className={twMerge(
         "h-10 w-full rounded-md transition-all flex items-center justify-center",
         appearance === "primary"
-          ? "bg-primary hover:brightness-125 text-onPrimary"
+          ? "bg-primary hover:brightness-110 text-onPrimary"
           : "border border-text-primary/20 hover:bg-text-primary/5",
         rest.disabled &&
           appearance === "primary" &&

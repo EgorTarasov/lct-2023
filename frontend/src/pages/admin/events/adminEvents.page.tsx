@@ -20,18 +20,22 @@ interface IAdminEventCardProps {
   vm: AdminEventsViewModel;
 }
 
-const typeMap = {
-  sport: 1,
-  education: 2,
-  charity: 3,
-  art: 4
-} as Record<EventDto.EventType, number>;
+function formatTime(date: Date): string {
+  // Get hours, minutes and seconds
+  const hours: string = date.getHours().toString().padStart(2, "0");
+  const minutes: string = date.getMinutes().toString().padStart(2, "0");
+  const seconds: string = date.getSeconds().toString().padStart(2, "0");
+
+  // Concatenate time in hh:mm:ss format
+  return `${hours}:${minutes}:${seconds}`;
+}
 
 type CourseFormFields = "title" | "place" | "type_id" | "date" | "time" | "duration" | "points";
 const AdminEventCard = (x: IAdminEventCardProps) => {
   const [selectedType, setSelectedType] = useState<EventDto.BackendEventType | null>(null);
   const [deadlineDate, setDeadlineDate] = useState<Date | null>(x.item.deadline);
   const [isEditMode, setEditMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { locale, textColor } = useMemo(() => getEventMap(x.item.category), [x.item]);
   const ariaLabel = useMemo(
     () =>
@@ -53,8 +57,13 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
       type_id: selectedType?.id ?? 1,
       starts_at: date.toISOString()
     };
-    await x.vm.updateEvent(x.item.id, template);
-    setEditMode(false);
+    setIsLoading(true);
+    try {
+      await x.vm.updateEvent(x.item.id, template);
+      setEditMode(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
   const handleDeleteEvent = () => {
     x.vm?.removeEvent(x.item.id);
@@ -126,7 +135,7 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
           <div className="flex gap-4">
             <div className="flex flex-col">
               <label htmlFor="deadline" className="text-text-primary/60">
-                Дедлайн
+                День
               </label>
               <DatePicker
                 aria-label="День проведения"
@@ -142,13 +151,14 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
               required
               id="time"
               label={"Время"}
+              step="1"
               type={"time"}
-              defaultValue={new Date(x.item.deadline).toLocaleTimeString()}
+              defaultValue={formatTime(new Date(x.item.deadline))}
             />
             <Input
               placeholder="600"
               required
-              label={"Трудозатрность (мин)"}
+              label={"Длительность (мин)"}
               type={"number"}
               defaultValue={x.item.durationMin.toString()}
             />
@@ -158,18 +168,22 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
             required
             id="place"
             label={"Место проведения"}
-            defaultValue={x.item.place}
+            defaultValue={new Date(x.item.deadline).toLocaleTimeString()}
           />
           <DropdownMultiple<EventDto.BackendEventType | null>
             value={[selectedType]}
+            options={x.vm.eventTypes}
+            render={(option) => option?.name ?? "Не выбрано"}
+            label="Категория"
             onChange={(value) => setSelectedType(value.at(-1) ?? null)}
           />
-            className={
-              "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
-            }
-            disabled={!deadlineDate}>
+          <Button
+            // className={
+            //   "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
+            // }
+            disabled={isLoading}>
             Сохранить изменения
-          </button>
+          </Button>
         </form>
       </DialogBase>
     </>
@@ -181,6 +195,8 @@ export const AdminEventsPage = observer(() => {
   const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [selectedType, setSelectedType] = useState<EventDto.BackendEventType | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleCreateEvent = async (e: FormEvent<HTMLFormElement>) => {
     if (!deadlineDate) return;
     const data = e.currentTarget.elements as unknown as Record<CourseFormFields, HTMLInputElement>;
@@ -194,8 +210,13 @@ export const AdminEventsPage = observer(() => {
       type_id: selectedType?.id ?? 1,
       starts_at: date.toISOString()
     };
-    await vm.createEvent(template);
-    setShowCreateDialog(false);
+    setIsLoading(true);
+    try {
+      await vm.createEvent(template);
+      setShowCreateDialog(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (vm.isLoading) return <Loading />;
@@ -212,11 +233,16 @@ export const AdminEventsPage = observer(() => {
           </Button>
         </div>
         <Input
+          className="max-w-xs"
           placeholder="Поиск по мероприятиям"
           value={vm.query}
           onChange={(v) => (vm.query = v)}
         />
-        <ul className="grid gap items-center gap-4 grid-cols-1 desktop:grid-cols-2">
+        <ul
+          className="grid gap items-center gap-4"
+          style={{
+            gridTemplateColumns: "repeat(auto-fit, minmax(256px, 1fr))"
+          }}>
           {vm.filteredEvents.map((event, i) => (
             <AdminEventCard key={i} item={event} vm={vm} />
           ))}
@@ -234,7 +260,7 @@ export const AdminEventsPage = observer(() => {
           <div className="flex gap-4">
             <div className="flex flex-col">
               <label htmlFor="deadline" className="text-text-primary/60">
-                Дедлайн
+                День
               </label>
               <DatePicker
                 aria-label="День проведения"
@@ -252,7 +278,13 @@ export const AdminEventsPage = observer(() => {
               label={"Время"}
               type={"time"}
             />
-            <Input placeholder="600" required label={"Трудозатрность (мин)"} type={"number"} />
+            <Input
+              id="duration"
+              placeholder="600"
+              required
+              label={"Длительность (мин)"}
+              type={"number"}
+            />
           </div>
           <Input
             placeholder="Место проведения"
@@ -268,13 +300,13 @@ export const AdminEventsPage = observer(() => {
             render={(option) => option.name}
             label={"Категория"}
           />
-          <button
+          <Button
             className={
               "w-full bg-text-primary/5 rounded-lg py-3 text-text-primary/60 font-medium text-lg"
             }
-            disabled={!deadlineDate}>
+            disabled={isLoading}>
             Добавить мероприятие
-          </button>
+          </Button>
         </form>
       </DialogBase>
     </>
