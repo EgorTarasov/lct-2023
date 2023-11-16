@@ -11,7 +11,7 @@ from app.config import config
 from app.models.action import ActionCreate, ActionType
 from app.models.interest import InterestDto, InterestUpdate
 from app.models.token import Token
-from app.models.user import UserCreate, UserDto, UserLogin, UserTeam
+from app.models.user import UserCreate, UserDto, UserLogin, UserTeam, UserForSurveyDto
 from app.models.position import PositionCreate, PositionDto
 from app.models.role import RoleCreate, RoleDto
 from app.auth import PasswordManager, JWTEncoder
@@ -235,3 +235,25 @@ class UserController:
         token.user.password = PasswordManager.hash_password(new_password)
         self.db.add(token.user)
         self.db.commit()
+
+    async def generate_token(self, user_id: int) -> str:
+        user = await crud.user.get_user_by_id(self.db, user_id)
+        if not user.fact:
+            raise Exception("Сначала заполните факт о себе")
+        token = str(uuid.uuid4())
+        await crud.user.assign_token_to_user(self.db, user_id, token)
+        return token
+
+    async def get_user_with_survey_by_token(self, token: str) -> UserForSurveyDto:
+        db_fact_for_survey = await crud.user.get_token(self.db, token)
+        return UserForSurveyDto.model_validate(db_fact_for_survey.user)
+
+    async def check_survey_by_token(self, token: str, answer: str) -> bool:
+        db_fact_for_survey = await crud.user.get_token(self.db, token)
+        if not db_fact_for_survey:
+            raise Exception("Опрос уже пройден")
+        if db_fact_for_survey.user.fact.answer == answer:
+            self.db.delete(db_fact_for_survey)
+            self.db.commit()
+            return True
+        return False

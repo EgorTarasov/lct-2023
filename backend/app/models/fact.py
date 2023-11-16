@@ -24,3 +24,13 @@ class SqlUserFact(Base):
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     # user = relationship("SqlUser")
+
+
+class SqlFactForSurvey(Base):
+    __tablename__ = "survey_about_fact"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    token: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
+
+    user = relationship("SqlUser")

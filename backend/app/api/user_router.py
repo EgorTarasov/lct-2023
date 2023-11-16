@@ -1,19 +1,18 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status, File
+import uuid
 from sqlalchemy.orm import Session
 
 from app import crud
 from app.auth.dependency import get_current_user
-
 from app.auth.jwt import UserTokenData
 from app.models.fact import UserFactCreate, UserFactDto, SqlUserFact
 from app.models.interest import InterestUpdate, InterestDto
 from app.models.position import PositionCreate, PositionDto
 from app.models.role import RoleCreate, RoleDto
 from app.controllers.user_controller import UserController
-
 from app.core.sql import Sql
-from app.models.user import UserDto, UserTeam, UserProfileDto
+from app.models.user import UserDto, UserTeam, UserProfileDto, UserForSurveyDto
 from app.models.file import FileDto
 
 router = APIRouter(prefix="/user", tags=["user"])
@@ -78,6 +77,43 @@ async def update_fact(
     except Exception as e:
         logging.error(e)
         raise HTTPException(status_code=404, detail="Факт не найден")
+
+
+@router.post("/fact/generate-token", response_model=str)
+async def generate_token(
+    db: Session = Depends(Sql.get_session),
+    user: UserTokenData = Depends(get_current_user)
+):
+    try:
+        token = await UserController(db).generate_token(user.user_id)
+        return token
+    except Exception as e:
+        logging.error(e)
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.post("/fact/survey", response_model=UserForSurveyDto)
+async def get_survey_by_token(
+    token: str,
+    db: Session = Depends(Sql.get_session),
+    user: UserTokenData = Depends(get_current_user)
+):
+    user = await UserController(db).get_user_with_survey_by_token(token)
+    return user
+
+
+@router.post("/fact/check-survey", response_model=bool)
+async def check_survey(
+    token: str,
+    answer: str,
+    db: Session = Depends(Sql.get_session),
+    user: UserTokenData = Depends(get_current_user)
+):
+    try:
+        return await UserController(db).check_survey_by_token(token, answer)
+    except Exception as e:
+        logging.error(e)
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.get("/role", response_model=RoleDto)

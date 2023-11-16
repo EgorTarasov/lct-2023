@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.auth import PasswordManager
-from app.models.fact import SqlUserFact
+from app.models.fact import SqlUserFact, SqlFactForSurvey
 from app.models.user import *
 from app.models.mentee import mentor_mentee
 
@@ -133,3 +133,17 @@ async def get_fact_by_id(db: Session, fact_id: int) -> SqlUserFact:
         return fact
     else:
         raise Exception("Fact not found")
+
+
+async def assign_token_to_user(db: Session, user_id: int, token: str):
+    db_token = SqlFactForSurvey(token=token, user_id=user_id)
+
+    db.add(db_token)
+    db.commit()
+    db.refresh(db_token)
+
+
+async def get_token(db: Session, token: str) -> SqlFactForSurvey:
+    db_fact_for_survey = db.query(SqlFactForSurvey).\
+        where(SqlFactForSurvey.token == token).one_or_none()
+    return db_fact_for_survey
