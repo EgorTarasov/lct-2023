@@ -83,7 +83,8 @@ class SqlUser(Base):
     fact_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("user_facts.id", ondelete="NO ACTION"),
-        nullable=False,
+        nullable=True,
+        default=None
     )
 
     user_role = relationship("SqlRole")
