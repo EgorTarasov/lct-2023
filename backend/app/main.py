@@ -1,11 +1,8 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
 from contextlib import asynccontextmanager
 import logging
-import hashlib
-import hmac
 
 from app.api import main_router
 from app.config import config
@@ -15,8 +12,6 @@ from app.models.base import Base
 from app import crud
 from app.models.position import PositionCreate
 from app.models.role import RoleCreate
-from app.controllers.course_controller import CourseController
-from app.models.course import CourseCreate
 
 
 async def load_data(sql: Sql):
@@ -41,8 +36,8 @@ async def load_data(sql: Sql):
         await crud.position.create(db, PositionCreate(name="Design"))
         await crud.position.create(db, PositionCreate(name="Engineering"))
         await crud.position.create(db, PositionCreate(name="Project Management"))
-
         await UserController(db).prepare_test_users()
+
 
 
 @asynccontextmanager

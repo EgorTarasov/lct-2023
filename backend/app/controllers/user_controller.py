@@ -176,6 +176,7 @@ class UserController:
                 ),
             ]
             crud.user.create_users(self.db, users, config.admin_password)
+            await crud.user.assign_mentee(self.db, 1, 4)
         except Exception as e:
             raise e
 
