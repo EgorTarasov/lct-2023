@@ -10,6 +10,8 @@ class EventCreate(BaseModel):
     title: str
     place: str
     type_id: int
+    duration: int = 0
+    points: int = 0
     starts_at: dt.datetime
 
 
@@ -32,6 +34,9 @@ class SqlEvent(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     title: Mapped[str] = mapped_column(Text)
     place: Mapped[str] = mapped_column(Text)
+    duration: Mapped[int] = mapped_column(Integer)  # продолжительность в часах
+    points: Mapped[int] = mapped_column(Integer)  # баллы за поход на мероприятие
+
     starts_at: Mapped[dt.datetime] = mapped_column(DateTime)
     type_id: Mapped[int] = mapped_column(ForeignKey("event_type.id"), nullable=False)
 
