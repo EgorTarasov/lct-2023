@@ -5,7 +5,7 @@ from sqlalchemy import ForeignKey, Integer, Text, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from .base import Base
-from .fact import UserFactDto
+from .fact import UserFactDto, SqlUserFact
 from .interest import interest_user, InterestDto
 from .mentee import mentor_mentee
 from .position import PositionDto
@@ -89,16 +89,16 @@ class SqlUser(Base):
         nullable=True,
         default=None,
     )
-    # fact_id: Mapped[int] = mapped_column(
-    #     Integer,
-    #     ForeignKey("user_facts.id", ondelete="NO ACTION"),
-    #     nullable=True,
-    #     default=None
-    # )
+    fact_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("user_facts.id", ondelete="NO ACTION"),
+        nullable=True,
+        default=None,
+    )
 
     user_role = relationship("SqlRole")
     position = relationship("SqlPosition", back_populates="users")
-    fact: Mapped["SqlUserFact"] = relationship("SqlUserFact")
+    fact: Mapped["SqlUserFact"] = relationship("SqlUserFact", foreign_keys=SqlUserFact.user_id)
     interests: Mapped[list["SqlInterest"]] = relationship(
         secondary=interest_user, back_populates="users"
     )

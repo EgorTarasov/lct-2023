@@ -75,8 +75,8 @@ export namespace EventDto {
       id: dto.id,
       category: (
         {
-          1: "education",
-          2: "sport",
+          1: "sport",
+          2: "education",
           3: "charity",
           4: "art"
         } as Record<number, EventType>
@@ -86,7 +86,8 @@ export namespace EventDto {
       durationMin: 0,
       points: 0,
       place: dto.place,
-      imgSrc: null
+      imgSrc: null,
+      isEnrolled: dto.is_enrolled
     };
   };
 

@@ -15,6 +15,7 @@ from app.models.quiz import (
 from app import crud, utils
 from app.auth.jwt import UserTokenData
 from app.controllers.file_controller import FileController
+from app.worker import generate_quiz
 
 
 class QuizController:
@@ -22,11 +23,17 @@ class QuizController:
         self.db = db
 
     async def create_quiz(self, file: UploadFile, name: str):
+        # создаем пустой quiz и передаем его id в worker
         f = FileController(self.db)
         db_file = await f.save_file(await file.read(), file.filename)
         quiz = utils.load_questions(file.filename, db_file.id)
+
+        # quiz = QuizCreate.model_validate(data)
+
         quiz.title = name
-        db_quiz = await crud.quiz.create_quiz(self.db, quiz)
+        db_quiz = crud.quiz.create_quiz(self.db, quiz)
+        if db_quiz.description_text == "":
+            generate_quiz.delay(db_quiz.id, db_file.id)
         return QuizDto.model_validate(db_quiz)
 
     async def get_quizes(self) -> list[QuizDescription]:
@@ -85,9 +92,7 @@ class QuizController:
         else:
             return QuestionInfo.model_validate(db_question)
 
-    async def submit_answer(
-        self, question_id: int, user: UserTokenData, answer: str
-    ):
+    async def submit_answer(self, question_id: int, user: UserTokenData, answer: str):
         db_question = await crud.quiz.get_question(self.db, question_id)
 
         db_answer = await crud.quiz.create_answer(
