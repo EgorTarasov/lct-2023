@@ -35,15 +35,29 @@ export const DesktopHeading = observer(() => {
           <ul className="flex flex-col gap-1 mt-10 overflow-y-auto overflow-x-visible">
             <NavLink
               to="/me"
-              className={twMerge(
-                "flex justify-between px-4 py-3 w-full hover:text-text-primary hover:bg-text-primary/5 rounded-xl text-text-primary/60"
-              )}>
-              Профиль
-              {UserStore.points && (
-                <div className="flex items-center gap-1 text-text-primary/60">
-                  <LightningIcon className="text-primary" width={24} />
-                  {UserStore.points}
-                </div>
+              className={({ isActive }) =>
+                twMerge(
+                  "flex justify-between px-4 py-3 w-full hover:text-text-primary hover:bg-text-primary/5 rounded-xl text-text-primary/60",
+                  isActive && "!text-onPrimary !bg-primary"
+                )
+              }>
+              {({ isActive }) => (
+                <>
+                  Профиль
+                  {UserStore.points && (
+                    <div
+                      className={twMerge(
+                        "flex items-center gap-1 text-text-primary/60",
+                        isActive && "text-onPrimary"
+                      )}>
+                      <LightningIcon
+                        className={twMerge("text-primary", isActive && "text-onPrimary")}
+                        width={24}
+                      />
+                      {UserStore.points}
+                    </div>
+                  )}
+                </>
               )}
             </NavLink>
             {RoutesStore.routes

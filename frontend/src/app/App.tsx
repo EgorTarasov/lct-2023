@@ -16,7 +16,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const NotFound = () => {
   return (
-    <div className="appear flex flex-col items-center justify-center h-full">
+    <div className="appear flex delay-1000 flex-col items-center justify-center h-full">
       <h1 className="text-4xl">404</h1>
       <h2 className="text-2xl">Страница не найдена</h2>
     </div>

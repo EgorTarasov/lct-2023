@@ -220,6 +220,15 @@ const adminRoutes: RouteType[] = [
     ),
     showInNav: true,
     title: "Аналитика"
+  },
+  {
+    path: "/me",
+    component: () => (
+      <PrivateRoute>
+        <ProfilePage />
+      </PrivateRoute>
+    ),
+    title: "Профиль"
   }
 ];
 

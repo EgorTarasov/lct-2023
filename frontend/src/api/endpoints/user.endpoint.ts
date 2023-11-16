@@ -12,4 +12,8 @@ export namespace UserEndpoint {
   export const getMentees = async () => {
     return await api.get<UserDto.Item[]>("/api/mentee/my");
   };
+
+  export const profile = async () => {
+    return await api.get<UserDto.Current>("/api/user/profile");
+  };
 }
