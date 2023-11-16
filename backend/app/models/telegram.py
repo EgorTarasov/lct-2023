@@ -1,3 +1,4 @@
+import datetime as dt
 from pydantic import BaseModel
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import Integer, Text, ForeignKey
@@ -11,8 +12,8 @@ class TelegramLoginData(BaseModel):
     last_name: str | None = None
     username: str | None = None
     photo_url: str | None = None
-    auth_date: int
-    hash: str
+    auth_date: int = int(dt.datetime.timestamp(dt.datetime.now()))
+    hash: str | None = None
 
 
 class SqlTelegram(Base):

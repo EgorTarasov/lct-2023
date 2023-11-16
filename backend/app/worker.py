@@ -15,6 +15,7 @@ from app.models.quiz import QuizCreate, SqlQuiz
 from app.models.course import BaseCourse
 from app.models.file import SqlFile
 
+
 celery = Celery(__name__, broker=config.rabbitmq_url)
 
 email_client = EmailClient(
@@ -85,7 +86,7 @@ def generate_quiz(quiz_id: int, file_id: int):
 if __name__ == "__main__":
     print(create_test_openai("./proscom/check-points.docx"))
 
-
+  
 @celery.task
 def notify_user_about_registration(fullname: str, email: str, password: str):
     logging.debug("sending email about registration")

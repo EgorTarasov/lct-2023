@@ -13,8 +13,9 @@ from app.core.sql import Sql
 from app.config import config
 from app.utils import check_telegram_response
 from app.auth.dependency import get_current_user
-from app.auth.jwt import UserTokenData
+from app.auth.jwt import UserTokenData, JWTEncoder
 from app.models.telegram import TelegramLoginData
+from telegram.bot import get_link
 
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -67,31 +68,37 @@ async def add_telegram(
     return await controller.add_account(telegramData, user)
 
 
-@router.get("/telegram")
-async def login_telegram(
-    id: str,
-    hash: str,
-    first_name: str | None = None,
-    last_name: str | None = None,
-    username: str | None = None,
-    photo_url: str | None = None,
-    auth_date: str | None = None,
-):
-    # print("login_telegram")
-    telegram_data = {
-        "id": id,
-        "first_name": first_name,
-        "last_name": last_name,
-        "username": username,
-        "photo_url": photo_url,
-        "auth_date": auth_date,
-        "hash": hash,
-    }
-    if check_telegram_response(telegram_data, config.telegram_bot_token):
-        # Authorize user
-        return telegram_data
-    else:
-        return "Authorization failed"
+@router.get("/telegram-link")
+async def telegram_link(user: UserTokenData = Depends(get_current_user)):
+
+    return get_link(user.user_id)
+
+
+# @router.get("/telegram")
+# async def login_telegram(
+#     id: str,
+#     hash: str,
+#     first_name: str | None = None,
+#     last_name: str | None = None,
+#     username: str | None = None,
+#     photo_url: str | None = None,
+#     auth_date: str | None = None,
+# ):
+#     # print("login_telegram")
+#     telegram_data = {
+#         "id": id,
+#         "first_name": first_name,
+#         "last_name": last_name,
+#         "username": username,
+#         "photo_url": photo_url,
+#         "auth_date": auth_date,
+#         "hash": hash,
+#     }
+#     if check_telegram_response(telegram_data, config.telegram_bot_token):
+#         # Authorize user
+#         return telegram_data
+#     else:
+#         return "Authorization failed"
 
 
 @router.post("/send-recover-password")
