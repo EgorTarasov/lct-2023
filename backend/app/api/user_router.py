@@ -196,13 +196,13 @@ async def create_position(
 @position_router.post("/{position_id}/file")
 async def upload_file_for_position(
     position_id: int,
-    data: list[UploadFile] = File(None),
+    files: list[UploadFile] = File(None),
     user: UserTokenData = Depends(get_current_user),
     db: Session = Depends(Sql.get_session),
 ) -> list[FileDto]:  #
 
     try:
-        files = await UserController(db).add_position_file(data, position_id)
+        files = await UserController(db).add_position_file(files, position_id)
         return files
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

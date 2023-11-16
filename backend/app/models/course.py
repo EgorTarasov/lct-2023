@@ -1,10 +1,10 @@
+import datetime as dt
 import typing as tp
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, Text, ForeignKey
+from sqlalchemy import Integer, Text, ForeignKey, DateTime
 
 from app.models.file import FileDto, SqlFile
-
 from .base import Base
 from .quiz import SqlQuiz, QuizDescription
 
@@ -14,11 +14,12 @@ if tp.TYPE_CHECKING:
 
 class BaseCourse(BaseModel):
     name: str = Field(...)
-    duration: int = Field(...)
+    points: int = Field(100)
+    deadline_at: dt.datetime = Field(dt.datetime.now() + dt.timedelta(days=7))
 
 
 class CourseCreate(BaseCourse):
-    quzes: list[int] | str
+    quizes: list[int] | str
 
 
 class CourseDto(BaseCourse):
@@ -33,7 +34,8 @@ class SqlCourse(Base):
 
     id: Mapped[int] = mapped_column(Integer, autoincrement=True, primary_key=True)
     name: Mapped[str] = mapped_column(Text)
-    duration: Mapped[int] = mapped_column(Integer)  # продолжительность в стори поинтах
+    points: Mapped[int] = mapped_column(Integer)
+    deadline_at: Mapped[dt.datetime] = mapped_column(DateTime)  # дата и время дедлайна
 
     positions: Mapped[list["SqlPosition"]] = relationship(
         "SqlPosition", secondary="position_course"

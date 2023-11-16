@@ -62,23 +62,20 @@ class CourseController:
         files: list[UploadFile] | None,
     ) -> CourseDto:
         db_course = await crud.course.get(self.db, payload.id)
+        for quiz in db_course.quizes:
+            self.db.delete(quiz)
+        for file in db_course.quizes:
+            self.db.delete(file)
+        # course_id,
+        self.db.commit()
         q = QuizController(self.db)
+
         quizes = [await q.create_quiz(file, file.filename) for file in files]
         db_quizes = crud.quiz.get_quizes(self.db, [quiz.id for quiz in quizes])
-
         db_course = await crud.course.assign_quizes(self.db, db_course, db_quizes)
         if files:
             f_controller = FileController(self.db)
             db_files = [crud.file.get(self.db, q.file.id) for q in quizes]
-            # db_files = [
-            #     await f_controller.save_file(await file.read(), file.filename)
-            #     for file in files
-            # ]
-
-            # if utils.check_content_type(filetype):
-            #     db_files = await f_controller.save_files(file, filename)
-            # else:
-            #     db_files = [await f_controller.save_file(file, filename)]
             db_course = await crud.course.assign_files(self.db, db_course, db_files)
 
         return CourseDto.model_validate(db_course)

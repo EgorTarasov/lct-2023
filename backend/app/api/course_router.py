@@ -18,10 +18,10 @@ router = APIRouter(prefix="/course", tags=["course"])
 
 @router.post("/")
 async def create_course(
-    data: list[UploadFile],
-    payload: BaseCourse = Depends(),
-    user: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        data: list[UploadFile],
+        payload: BaseCourse = Depends(),
+        user: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ):
     if user.role_id == 1:
         raise HTTPException(
@@ -46,8 +46,8 @@ async def create_course(
 
 @router.get("/")
 async def get_all_courses(
-    _: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        _: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ) -> list[CourseDto]:
     try:
         return await CourseController(db).get_all_courses()
@@ -59,8 +59,8 @@ async def get_all_courses(
 
 @router.get("/onboarding")
 async def get_onboarding(
-    user: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        user: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ) -> CourseDto:
     try:
         return await CourseController(db).get_course(1)
@@ -72,9 +72,9 @@ async def get_onboarding(
 
 @router.post("/onboarding")
 async def create_onboarding(
-    files: list[UploadFile],
-    user: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        files: list[UploadFile],
+        user: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ):
     if user.role_id == 1:
         raise HTTPException(
@@ -118,8 +118,8 @@ async def create_onboarding(
 
 @router.get("/my")
 async def get_my_courses(
-    user: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        user: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ) -> list[CourseDto]:
     try:
         return await CourseController(db).get_courses(user.user_id)
@@ -131,9 +131,9 @@ async def get_my_courses(
 
 @router.get("/id/{course_id}")
 async def get_course(
-    course_id: int,
-    _: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        course_id: int,
+        _: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ) -> CourseDto:
     try:
         return await CourseController(db).get_course(course_id)
@@ -145,9 +145,9 @@ async def get_course(
 
 @router.get("/for-position/{position_id}", response_model=list[CourseDto])
 async def get_courses_by_position(
-    position_id: int,
-    _: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        position_id: int,
+        _: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ) -> list[CourseDto]:
     try:
         return await CourseController(db).get_courses_by_position(position_id)
@@ -159,8 +159,8 @@ async def get_courses_by_position(
 
 @router.get("/get-onboarding-progress", response_model=int)
 async def get_progress(
-    user: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        user: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ) -> int:
     """Возвращает процент завершенности онбординга = кол-во правильно пройденных тестов / кол-во тестов"""
     return await CourseController(db).get_course_progress(user.user_id, 1)
@@ -168,26 +168,26 @@ async def get_progress(
 
 @router.put("/{course_id}")
 async def edit_course(
-    payload: CourseDto,
-    _: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        data: list[UploadFile],
+        course_id: int,
+        _: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ):
-    for f in payload.files:
+    course = await CourseController(db).get_course(course_id)
+    for f in data:
         print(f.filename)
         if not f.filename.split(".")[-1] in ["docx"]:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail="Поддерживаемые форматы '.zip' '.docx'",
             )
-    course = await CourseController(db).get_course(payload.id)
-
-    return await CourseController(db).create_course()
+    return await CourseController(db).update_course(course, data)
 
 
 @router.delete("/{course_id}")
 async def delete_course(
-    course_id: int,
-    _: UserTokenData = Depends(get_current_user),
-    db: Session = Depends(Sql.get_session),
+        course_id: int,
+        _: UserTokenData = Depends(get_current_user),
+        db: Session = Depends(Sql.get_session),
 ):
     return await CourseController(db).delete_course(course_id)
