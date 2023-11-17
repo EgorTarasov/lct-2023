@@ -171,7 +171,7 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
             required
             id="place"
             label={"Место проведения"}
-            defaultValue={new Date(x.item.deadline).toLocaleTimeString()}
+            defaultValue={x.item.place}
           />
           <DropdownMultiple<EventDto.BackendEventType | null>
             value={[selectedType]}
