@@ -1,5 +1,5 @@
 import { FCVM } from "@/utils/fcvm";
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { AnalyticsViewModel } from "./analytics.vm";
 import { observer } from "mobx-react-lite";
 
@@ -18,15 +18,19 @@ export const GraphSection: FCVM<AnalyticsViewModel> = observer(({ vm }) => {
         registrations: number;
       } */}
         {vm.mockEventData && (
-          <ResponsiveContainer height={300}>
-            <BarChart data={vm.mockEventData}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="attendance" fill="#8884d8" />
-              <Bar dataKey="registrations" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer>
+          <div className="flex flex-col">
+            <p className="text-lg m">Статистика посещений</p>
+            <ResponsiveContainer height={300}>
+              <BarChart data={vm.mockEventData}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar name="Посетило мероприятий" dataKey="attendance" fill="#8884d8" />
+                <Bar name="Зарегистрировалось" dataKey="registrations" fill="#82ca9d" />
+                <Legend />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         )}
       </div>
     </div>
