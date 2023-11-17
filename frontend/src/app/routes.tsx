@@ -258,15 +258,15 @@ class routesStore {
   constructor() {
     makeAutoObservable(this);
     autorun(() => {
-      if (AuthService.auth.state === "loading" || AuthService.auth.state === "anonymous") {
-        this._routes = globalRoutes;
-        return;
+      const routes = [...globalRoutes];
+      if (AuthService.auth.state === "authorized") {
+        if (AuthService.auth.user.user_role.name === "hr") {
+          routes.push(...adminRoutes);
+        } else {
+          routes.push(...userRoutes);
+        }
       }
-      if (AuthService.auth.user.user_role.name === "hr") {
-        this._routes = adminRoutes;
-        return;
-      }
-      this._routes = userRoutes;
+      this._routes = routes;
     });
   }
 
