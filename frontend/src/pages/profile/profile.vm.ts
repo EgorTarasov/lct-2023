@@ -3,6 +3,7 @@ import { SurveyEndpoint } from "api/endpoints/survey.endpoint";
 import { UserEndpoint } from "api/endpoints/user.endpoint";
 import { EventDto } from "api/models/event.model";
 import { UserDto } from "api/models/user.model";
+import api from "api/utils/api";
 import { makeAutoObservable } from "mobx";
 
 export class ProfilePageViewModel {
@@ -72,4 +73,10 @@ export class ProfilePageViewModel {
       this.factLoading = false;
     }
   };
+
+  public async connectTelegram() {
+    const link = await api.get<string>("/api/auth/telegram-link");
+
+    window.open(link);
+  }
 }
