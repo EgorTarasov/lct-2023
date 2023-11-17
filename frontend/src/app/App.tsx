@@ -5,7 +5,7 @@ import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-
 import { ThemeService } from "@/stores/theme.service.ts";
 import { observer } from "mobx-react-lite";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import { RoutesStore, RoutesWithoutNav } from "./routes";
+import { RoutesStore, RoutesWithoutNav, globalRoutes } from "./routes";
 import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { SkipToContent } from "@/components/SkipToContent";
 import { DesktopHeading, MobileNav } from "@/components/navigation";
