@@ -13,7 +13,7 @@ import Collapsible from "@/ui/Collapsible";
 import { EventCard } from "@/components/cards/event-card.widget";
 
 const contactCard =
-  "flex items-center gap-2 p-3 border border-text-primary/20 rounded-lg bg-white text-sm";
+  "flex items-center gap-2 p-3 border border-text-primary/20 rounded-lg bg-white text-sm overflow-hidden";
 
 export const ProfilePage = observer(() => {
   const [vm] = useState(() => new ProfilePageViewModel());
@@ -46,20 +46,33 @@ export const ProfilePage = observer(() => {
             gridTemplateColumns: "repeat(auto-fit, minmax(128px, 1fr))"
           }}>
           <li className={twMerge(contactCard)}>
-            <PhoneIcon className="w-4 h-4" />
-            <a href={`tel:${vm.user.number}`}>{vm.user.number}</a>
+            <PhoneIcon className="w-4 h-4 min-w-[16px] min-h-[16px]" />
+            <a className="text-ellipsis overflow-hidden" href={`tel:${vm.user.number}`}>
+              {vm.user.number}
+            </a>
           </li>
           <li className={twMerge(contactCard)}>
-            <EmailIcon className="w-4 h-4" />
-            <a href={`email:${vm.user.email}`}>{vm.user.email}</a>
+            <EmailIcon className="w-4 h-4 min-w-[16px] min-h-[16px]" />
+            <a className="text-ellipsis overflow-hidden" href={`mailto:${vm.user.email}`}>
+              {vm.user.email}
+            </a>
           </li>
           {vm.user.telegram?.username && (
             <li className={twMerge(contactCard)}>
-              <TelegramIcon className="w-4 h-4" />
-              <a href={`tel:${vm.user.telegram}`}>{vm.user.telegram.username}</a>
+              <TelegramIcon className="w-4 h-4 min-w-[16px] min-h-[16px]" />
+              <a
+                className="text-ellipsis overflow-hidden"
+                href={`https://t.me/${vm.user.telegram.username.replace("@", "")}`}>
+                {vm.user.telegram.username}
+              </a>
             </li>
           )}
         </ul>
+        <Button
+          className="h-[45px] items-center flex bg-[#2AABEE] text-white gap-1"
+          onClick={() => vm.connectTelegram()}>
+          <TelegramIcon className="min-w-[24px] min-h-[24px]" /> Подключить телеграм
+        </Button>
         {mentor && (
           <div className="flex flex-col gap-3">
             <h4 className="text-lg">Мой лид</h4>
