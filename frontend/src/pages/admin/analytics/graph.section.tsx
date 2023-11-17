@@ -67,41 +67,47 @@ export const GraphSection: FCVM<AnalyticsViewModel> = observer(({ vm }) => {
           </ResponsiveContainer>
         </div>
       </div>
-      <div className="flex flex-col max-w-[calc(100vw-48px)]">
-        <p className="text-lg m">Статистика онбординга</p>
-        <ResponsiveContainer height={300}>
-          <PieChart>
-            <Pie
-              data={vm.mockOnboarding}
-              labelLine={false}
-              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-              outerRadius={80}
-              fill="#8884d8"
-              dataKey="value">
-              {vm.mockOnboarding.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip
-              formatter={(value, name) => [value, name]}
-              labelFormatter={(value) => `Статус: ${value}`}
-            />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-      <div className="flex flex-col">
-        <p className="text-lg m">Настроение</p>
-        <ResponsiveContainer height={300}>
-          <RadarChart outerRadius={90} data={mockSatisfaction}>
-            <PolarGrid />
-            <PolarAngleAxis dataKey="subject" />
-            <PolarRadiusAxis angle={30} domain={[0, 14]} />
-            <Radar name="Кирилл" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-            <Radar name="Егор" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
-            <Legend />
-            <Tooltip />
-          </RadarChart>
-        </ResponsiveContainer>
+      <div
+        className="grid gap items-center gap-4"
+        style={{
+          gridTemplateColumns: "repeat(auto-fit, minmax(512px, 1fr))"
+        }}>
+        <div className="flex flex-col">
+          <p className="text-lg m">Статистика онбординга</p>
+          <ResponsiveContainer height={300}>
+            <PieChart>
+              <Pie
+                data={vm.mockOnboarding}
+                labelLine={false}
+                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value">
+                {vm.mockOnboarding.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={(value, name) => [value, name]}
+                labelFormatter={(value) => `Статус: ${value}`}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="flex flex-col">
+          <p className="text-lg m">Настроение</p>
+          <ResponsiveContainer height={300}>
+            <RadarChart outerRadius={90} data={mockSatisfaction}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="subject" />
+              <PolarRadiusAxis angle={30} domain={[0, 14]} />
+              <Radar name="Кирилл" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+              <Radar name="Егор" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
+              <Legend />
+              <Tooltip />
+            </RadarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
