@@ -36,7 +36,7 @@ export const ProfilePage = observer(() => {
             <Avatar />
           </div>
           <div className="flex flex-col">
-            <span className="text-primary capitalize">{vm.user.adaptation_target}</span>
+            <span className="text-primary capitalize">{vm.user.user_role.name}</span>
             <h3 className="text-2xl font-medium">{`${vm.user.last_name} ${vm.user.first_name} ${vm.user.middle_name}`}</h3>
           </div>
         </div>
@@ -68,13 +68,15 @@ export const ProfilePage = observer(() => {
             </li>
           )}
         </ul>
-        <Button
-          className="h-[45px] items-center flex bg-[#2AABEE] text-white gap-1"
-          onClick={() => vm.connectTelegram()}>
-          <TelegramIcon className="min-w-[24px] min-h-[24px]" /> Подключить телеграм
-        </Button>
+        {!vm.user.telegram && (
+          <Button
+            className="h-[45px] items-center flex bg-[#2AABEE] text-white gap-1"
+            onClick={() => vm.connectTelegram()}>
+            <TelegramIcon className="min-w-[24px] min-h-[24px]" /> Подключить телеграм
+          </Button>
+        )}
         {mentor && (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             <h4 className="text-lg">Мой лид</h4>
             <StaffCard
               email={mentor.email}
@@ -95,7 +97,7 @@ export const ProfilePage = observer(() => {
           <Chip title="Волонтёрство" />
           <Chip title="Дополнительное обучение" />
         </div>
-        <h4 className="my-3">Интересные факты обо мне</h4>
+        <h4 className="mb-3 mt-4">Интересные факты обо мне</h4>
         <form
           className="flex flex-col"
           onSubmit={(e) => {
@@ -127,6 +129,7 @@ export const ProfilePage = observer(() => {
           )}
         </form>
       </div>
+      <div className="h-2" />
       {vm.events && vm.events.length > 0 && (
         <Collapsible title="Регистрации на мероприятия">
           <ul

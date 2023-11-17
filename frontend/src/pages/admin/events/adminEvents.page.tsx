@@ -73,12 +73,12 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
   return (
     <>
       <article
-        className="flex flex-row gap-4 p-4 bg-white rounded-2xl border border-text-primary/20 relative"
+        className="flex flex-row h-full gap-4 p-4 bg-white rounded-2xl border border-text-primary/20 relative"
         aria-label={ariaLabel}>
         <div className="flex flex-col gap-2 w-full">
           <span className={`text-sm ${textColor}`}>{locale}</span>
           <h4 className="leading-5 text-lg max-w-[80%]">{x.item.title}</h4>
-          <ul className="flex flex-wrap gap-2 items-center">
+          <ul className="flex flex-wrap gap-2 items-center mt-auto">
             <IconText icon={CalendarIcon} alt="Дедлайн" text={convertDate(x.item.deadline)} />
             <IconText
               icon={ClockIcon}
