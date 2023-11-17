@@ -14,11 +14,11 @@ export namespace SurveyEndpoint {
     return await api.post<string>("/api/user/fact/generate-token");
   };
 
-  const getSurveyByToken = async (x: SurverDto.SurveyToken) => {
-    return await api.post<SurverDto.Survey>(`/api/user/fact/suervey/?token=${x.token}`);
+  export const getSurveyByToken = async (uid: string) => {
+    return await api.post<SurverDto.Survey>(`/api/user/fact/survey?token=${uid}`);
   };
 
-  const checkSurvey = async (x: SurverDto.CheckSurvey) => {
+  export const checkSurvey = async (x: SurverDto.CheckSurvey) => {
     return await api.post<boolean>(
       `/api/user/fact/check-survey?token=${x.token}&answer=${x.answer}`
     );
