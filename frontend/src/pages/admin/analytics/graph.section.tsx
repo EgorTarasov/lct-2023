@@ -9,6 +9,11 @@ import {
   LineChart,
   Pie,
   PieChart,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -16,7 +21,7 @@ import {
 } from "recharts";
 import { AnalyticsViewModel } from "./analytics.vm";
 import { observer } from "mobx-react-lite";
-import { COLORS } from "./mock_data";
+import { COLORS, mockSatisfaction } from "./mock_data";
 
 export const GraphSection: FCVM<AnalyticsViewModel> = observer(({ vm }) => {
   return (
@@ -25,13 +30,8 @@ export const GraphSection: FCVM<AnalyticsViewModel> = observer(({ vm }) => {
       <div
         className="grid gap items-center gap-4"
         style={{
-          gridTemplateColumns: "repeat(auto-fit, minmax(324px, 1fr))"
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))"
         }}>
-        {/* {
-        name: string;
-        attendance: number;
-        registrations: number;
-      } */}
         {vm.mockEventData && (
           <div className="flex flex-col">
             <p className="text-lg m">Статистика посещений</p>
@@ -66,7 +66,13 @@ export const GraphSection: FCVM<AnalyticsViewModel> = observer(({ vm }) => {
             </LineChart>
           </ResponsiveContainer>
         </div>
-        <div className="flex flex-col col-span-2">
+      </div>
+      <div
+        className="grid gap items-center gap-4"
+        style={{
+          gridTemplateColumns: "repeat(auto-fit, minmax(512px, 1fr))"
+        }}>
+        <div className="flex flex-col">
           <p className="text-lg m">Статистика онбординга</p>
           <ResponsiveContainer height={300}>
             <PieChart>
@@ -86,6 +92,20 @@ export const GraphSection: FCVM<AnalyticsViewModel> = observer(({ vm }) => {
                 labelFormatter={(value) => `Статус: ${value}`}
               />
             </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="flex flex-col">
+          <p className="text-lg m">Настроение</p>
+          <ResponsiveContainer height={300}>
+            <RadarChart outerRadius={90} data={mockSatisfaction}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="subject" />
+              <PolarRadiusAxis angle={30} domain={[0, 14]} />
+              <Radar name="Кирилл" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+              <Radar name="Егор" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
+              <Legend />
+              <Tooltip />
+            </RadarChart>
           </ResponsiveContainer>
         </div>
       </div>
