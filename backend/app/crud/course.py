@@ -14,11 +14,11 @@ async def update_endpoints(
     print(db_course)
     if not db_course:
         db_course = SqlCourse(
-            name="Общий инбординг",
+            name="Общий онбординг",
             duration=0,
         )
     else:
-        db_course.name = "Общий инбординг"
+        db_course.name = "Общий онбординг"
         db_course.duration = 0
         db_course.quizes = []
     db.add(db_course)
