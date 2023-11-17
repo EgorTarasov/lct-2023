@@ -30,7 +30,7 @@ function formatTime(date: Date): string {
   return `${hours}:${minutes}:${seconds}`;
 }
 
-type CourseFormFields = "title" | "place" | "type_id" | "date" | "time" | "duration" | "points";
+type CourseFormFields = "title" | "place" | "type_id" | "date" | "time" | "duration";
 const AdminEventCard = (x: IAdminEventCardProps) => {
   const [selectedType, setSelectedType] = useState<EventDto.BackendEventType | null>(null);
   const [deadlineDate, setDeadlineDate] = useState<Date | null>(x.item.deadline);
@@ -51,11 +51,17 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
     const date = new Date(deadlineDate);
     date.setHours(parseInt(timeParts[0]));
     date.setMinutes(parseInt(timeParts[1]));
+
+    if (isNaN(Number(data.duration.value))) {
+      return;
+    }
+
     const template: EventDto.Template = {
       title: data.title.value,
       place: data.place.value,
       type_id: selectedType?.id ?? 1,
-      starts_at: date.toISOString()
+      starts_at: date.toISOString(),
+      duration: Number(data.duration.value)
     };
     setIsLoading(true);
     try {
@@ -73,24 +79,20 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
   return (
     <>
       <article
-        className="flex flex-row gap-4 p-4 bg-white rounded-2xl border border-text-primary/20 relative"
+        className="flex flex-row h-full gap-4 p-4 bg-white rounded-2xl border border-text-primary/20 relative"
         aria-label={ariaLabel}>
         <div className="flex flex-col gap-2 w-full">
           <span className={`text-sm ${textColor}`}>{locale}</span>
           <h4 className="leading-5 text-lg max-w-[80%]">{x.item.title}</h4>
-          <ul className="flex flex-wrap gap-2 items-center">
+          <ul className="flex flex-wrap gap-2 items-center mt-auto">
             <IconText icon={CalendarIcon} alt="Дедлайн" text={convertDate(x.item.deadline)} />
-            <IconText
-              icon={ClockIcon}
-              alt="Время выполнения"
-              text={x.item.durationMin.toString()}
-            />
-            <IconText
+            <IconText icon={ClockIcon} alt="Время выполнения" text={`${x.item.durationMin} мин`} />
+            {/* <IconText
               icon={LightningIcon}
               alt="Баллы"
               text={x.item.points.toString()}
               iconPrimary
-            />
+            /> */}
           </ul>
           {x.item.place && (
             <IconText icon={MarkerIcon} text={x.item.place} alt="Место проведения" />
@@ -158,6 +160,7 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
             <Input
               placeholder="600"
               required
+              id="duration"
               label={"Длительность (мин)"}
               type={"number"}
               defaultValue={x.item.durationMin.toString()}
@@ -168,7 +171,7 @@ const AdminEventCard = (x: IAdminEventCardProps) => {
             required
             id="place"
             label={"Место проведения"}
-            defaultValue={new Date(x.item.deadline).toLocaleTimeString()}
+            defaultValue={x.item.place}
           />
           <DropdownMultiple<EventDto.BackendEventType | null>
             value={[selectedType]}
@@ -204,11 +207,14 @@ export const AdminEventsPage = observer(() => {
     const date = new Date(deadlineDate);
     date.setHours(parseInt(timeParts[0]));
     date.setMinutes(parseInt(timeParts[1]));
+    if (isNaN(Number(data.duration.value))) return null;
+
     const template: EventDto.Template = {
       title: data.title.value,
       place: data.place.value,
       type_id: selectedType?.id ?? 1,
-      starts_at: date.toISOString()
+      starts_at: date.toISOString(),
+      duration: Number(data.duration.value)
     };
     setIsLoading(true);
     try {

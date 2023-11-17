@@ -164,7 +164,11 @@ export const AdminEducationPage = observer(() => {
             Добавить курс
           </Button>
         </div>
-        <Input placeholder="Поиск по курсам" onChange={(val) => (vm.query = val)} />
+        <Input
+          className="max-w-xs"
+          placeholder="Поиск по курсам"
+          onChange={(val) => (vm.query = val)}
+        />
         <ul className="grid gap items-center gap-4 grid-cols-1 desktop:grid-cols-2">
           {vm.filteredCourses.map((v, i) => (
             <CourseCard key={i} item={v} vm={vm} />

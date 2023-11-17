@@ -57,6 +57,7 @@ export namespace EventDto {
       id: number;
       name: string;
     };
+    duration: number;
   }
 
   export const getRussianCategory = (category: EventType): string => {
@@ -83,7 +84,7 @@ export namespace EventDto {
       )[dto.type_id],
       title: dto.title,
       deadline: new Date(dto.starts_at),
-      durationMin: 0,
+      durationMin: dto.duration,
       points: 0,
       place: dto.place,
       imgSrc: null,
@@ -96,6 +97,7 @@ export namespace EventDto {
     place: string;
     type_id: number;
     starts_at: string; //date-time
+    duration: number;
   }
 
   export interface BackendEventType {

@@ -33,7 +33,9 @@ export const PositionsSection: FCVM<AdminOnboardingPageViewModel> = observer(({ 
       />
       <ul className="flex flex-col gap-6">
         {vm.filteredPositions.map((position, index) => (
-          <li key={index} className="appear flex flex-col">
+          <li
+            key={index}
+            className="appear flex flex-col p-3 sm:p-0 sm:border-none rounded-xl border border-text-primary/20">
             <h3 className="text-2xl font-medium w-fit">{position.name}</h3>
             <div className="flex flex-col gap-3">
               <div className="appear flex flex-col gap-6">
