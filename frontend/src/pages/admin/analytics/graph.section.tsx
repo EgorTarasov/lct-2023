@@ -1,12 +1,27 @@
 import { FCVM } from "@/utils/fcvm";
-import { Bar, BarChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
+} from "recharts";
 import { AnalyticsViewModel } from "./analytics.vm";
 import { observer } from "mobx-react-lite";
+import { COLORS } from "./mock_data";
 
 export const GraphSection: FCVM<AnalyticsViewModel> = observer(({ vm }) => {
   return (
     <div className="flex flex-col">
-      <h2 className="text-2xl">Сводка</h2>
+      <h2 className="text-2xl mb-4">Сводка</h2>
       <div
         className="grid gap items-center gap-4"
         style={{
@@ -32,6 +47,47 @@ export const GraphSection: FCVM<AnalyticsViewModel> = observer(({ vm }) => {
             </ResponsiveContainer>
           </div>
         )}
+        <div className="flex flex-col">
+          <p className="text-lg m">Новые сотрудники</p>
+          <ResponsiveContainer height={300}>
+            <LineChart data={vm.mockRegistrationsData}>
+              <XAxis dataKey="date" name="Дата" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Line
+                name="Количество новых сотрудников"
+                type="monotone"
+                dataKey="registrations"
+                stroke="#8884d8"
+                activeDot={{ r: 8 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="flex flex-col col-span-2">
+          <p className="text-lg m">Статистика онбординга</p>
+          <ResponsiveContainer height={300}>
+            <PieChart>
+              <Pie
+                data={vm.mockOnboarding}
+                labelLine={false}
+                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value">
+                {vm.mockOnboarding.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={(value, name) => [value, name]}
+                labelFormatter={(value) => `Статус: ${value}`}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
