@@ -50,8 +50,8 @@ class Config(BaseSettings):
         "team_2": "kuznetsova.hr@mail.ru",
     }
     # TELEGRAM_BOT_TOKEN
-    telegram_bot_token: str 
-    telegram_bot_name: str 
+    telegram_bot_token: str
+    telegram_bot_name: str
 
     api_key: str
 
